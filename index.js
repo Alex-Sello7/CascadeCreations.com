@@ -1,27 +1,60 @@
 // ===== DOM READY =====
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ===== CINEMATIC LOADER =====
+    // ===== CINEMATIC LOADER - FIXED =====
     const loadingScreen = document.getElementById('loadingScreen');
     const loaderPct = document.getElementById('loaderPct');
     let pct = 0;
+    let loaderCompleted = false;
+    
+    // Progress bar animation
     const pctTimer = setInterval(() => {
-        pct = Math.min(pct + Math.random() * 4 + 1, 99);
-        if (loaderPct) loaderPct.textContent = Math.floor(pct) + '%';
+        if (!loaderCompleted) {
+            pct = Math.min(pct + Math.random() * 4 + 1, 99);
+            if (loaderPct) loaderPct.textContent = Math.floor(pct) + '%';
+        }
     }, 60);
 
-    window.addEventListener('load', function () {
+    // Function to hide loader
+    function hideLoader() {
+        if (loaderCompleted) return;
+        loaderCompleted = true;
         clearInterval(pctTimer);
         if (loaderPct) loaderPct.textContent = '100%';
-        // Reduced from 900ms to 400ms
+        
+        // Add a small delay for smooth transition
         setTimeout(() => {
-            if (loadingScreen) loadingScreen.classList.add('hidden');
-        }, 400);
-    });
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+                // Remove from DOM after transition to prevent any interaction issues
+                setTimeout(() => {
+                    if (loadingScreen && loadingScreen.parentNode) {
+                        loadingScreen.style.display = 'none';
+                    }
+                }, 900);
+            }
+        }, 300);
+    }
 
-    // ===== FLIP CARDS: CLICK TO FLIP (not hover) =====
+    // Check if page is already loaded
+    if (document.readyState === 'complete') {
+        hideLoader();
+    } else {
+        window.addEventListener('load', hideLoader);
+        
+        // Fallback: force hide after 3 seconds max (in case load event doesn't fire)
+        setTimeout(() => {
+            if (!loaderCompleted) {
+                console.log('Loader fallback triggered');
+                hideLoader();
+            }
+        }, 3000);
+    }
+
+    // ===== FLIP CARDS: CLICK TO FLIP - SINGLE ACTIVE CARD =====
     (function initClickFlipCards() {
         const flipCards = document.querySelectorAll('.service-flip-card');
+        let currentlyFlippedCard = null;
         
         flipCards.forEach(card => {
             // Remove hover flip behavior
@@ -39,29 +72,44 @@ document.addEventListener('DOMContentLoaded', function () {
             card.addEventListener('click', function(e) {
                 // Prevent toggling if clicking on the ENQUIRE link (to allow navigation)
                 if (e.target.closest('.flip-cta')) {
-                    // Let the link handle navigation
                     return;
                 }
                 
                 const innerElem = this.querySelector('.flip-card-inner');
-                if (innerElem) {
-                    // Toggle the flip state
-                    if (innerElem.style.transform === 'rotateY(180deg)') {
-                        innerElem.style.transform = 'rotateY(0deg)';
-                    } else {
-                        innerElem.style.transform = 'rotateY(180deg)';
+                if (!innerElem) return;
+                
+                // Check if this card is currently flipped
+                const isFlipped = innerElem.style.transform === 'rotateY(180deg)';
+                
+                // If there's a currently flipped card that is not this one, flip it back
+                if (currentlyFlippedCard && currentlyFlippedCard !== this) {
+                    const prevInner = currentlyFlippedCard.querySelector('.flip-card-inner');
+                    if (prevInner) {
+                        prevInner.style.transform = 'rotateY(0deg)';
                     }
+                }
+                
+                // Toggle the clicked card
+                if (isFlipped) {
+                    // If clicking the already flipped card, flip it back
+                    innerElem.style.transform = 'rotateY(0deg)';
+                    currentlyFlippedCard = null;
+                } else {
+                    // Flip this card and set it as the active one
+                    innerElem.style.transform = 'rotateY(180deg)';
+                    currentlyFlippedCard = this;
                 }
             });
         });
     })();
 
     // ===== HERO CANVAS =====
-    // PERF: ribbon count 20->12, point count 80->48, pauses when tab hidden
     const heroCanvas = document.getElementById('heroCanvas');
     if (heroCanvas) {
         const ctx = heroCanvas.getContext('2d');
         let W, H, t = 0, animId;
+        let animationActive = true;
+        let heroFrame = 0;
 
         function resizeCanvas() {
             W = heroCanvas.width = heroCanvas.offsetWidth;
@@ -78,6 +126,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function drawScene() {
+            if (!ctx || !animationActive) return;
+
+            // Throttle to ~30 fps — skip every other rAF tick
+            heroFrame++;
+            if (heroFrame % 2 !== 0) {
+                animId = requestAnimationFrame(drawScene);
+                return;
+            }
+
             ctx.clearRect(0, 0, W, H);
 
             const bg = ctx.createLinearGradient(0, 0, W * 0.7, H);
@@ -88,7 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
             ctx.fillRect(0, 0, W, H);
 
             const cx = W * 0.62, cy = H * 0.48;
-            const numRibbons = 12; // was 20
+            // Reduced from 12 → 8 ribbons; 48 pts → 32 pts per ribbon
+            const numRibbons = 8;
+            const steps = 32;
 
             for (let r = numRibbons; r >= 0; r--) {
                 const progress = r / numRibbons;
@@ -98,8 +157,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const thickness = 16 + Math.sin(progress * Math.PI) * 30;
 
                 const pts = [];
-                for (let i = 0; i <= 48; i++) { // was 80
-                    const angle = (i / 48) * Math.PI * 2;
+                for (let i = 0; i <= steps; i++) {
+                    const angle = (i / steps) * Math.PI * 2;
                     pts.push({
                         x: cx + Math.cos(angle) * radiusX + Math.cos(angle * 1.8 + phaseOffset * 0.7) * W * 0.04,
                         y: cy + Math.sin(angle) * radiusY + Math.sin(angle * 2.5 + phaseOffset) * H * 0.055
@@ -109,9 +168,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const alpha = 0.1 + Math.sin(progress * Math.PI) * 0.25;
                 const grad = ctx.createLinearGradient(cx - radiusX, cy, cx + radiusX, cy);
                 grad.addColorStop(0, waveColor(r, numRibbons, t, alpha * 0.5));
-                grad.addColorStop(0.3, waveColor(r + 2, numRibbons, t, alpha));
-                grad.addColorStop(0.6, waveColor(r + 4, numRibbons, t, alpha * 1.1));
-                grad.addColorStop(1, waveColor(r + 6, numRibbons, t, alpha * 0.5));
+                grad.addColorStop(0.5, waveColor(r + 2, numRibbons, t, alpha));
+                grad.addColorStop(1, waveColor(r + 4, numRibbons, t, alpha * 0.5));
 
                 ctx.beginPath();
                 ctx.moveTo(pts[0].x, pts[0].y);
@@ -124,14 +182,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.stroke();
             }
 
-            for (let r = 0; r < 4; r++) {
-                const progress = 0.35 + r * 0.07;
+            // Reduced highlight passes from 4 → 2
+            for (let r = 0; r < 2; r++) {
+                const progress = 0.38 + r * 0.1;
                 const phaseOffset = progress * Math.PI * 2.8 + t * 0.45;
                 const radiusX = W * (0.18 + progress * 0.15);
                 const radiusY = H * (0.27 + progress * 0.1);
                 const pts = [];
-                for (let i = 0; i <= 48; i++) {
-                    const angle = (i / 48) * Math.PI * 2;
+                for (let i = 0; i <= steps; i++) {
+                    const angle = (i / steps) * Math.PI * 2;
                     pts.push({
                         x: cx + Math.cos(angle) * radiusX + Math.cos(angle * 1.8 + phaseOffset * 0.7) * W * 0.04,
                         y: cy + Math.sin(angle) * radiusY + Math.sin(angle * 2.5 + phaseOffset) * H * 0.055
@@ -141,14 +200,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.moveTo(pts[0].x, pts[0].y);
                 for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
                 ctx.closePath();
-                ctx.strokeStyle = `rgba(255,255,255,${0.05 + r * 0.018})`;
+                ctx.strokeStyle = `rgba(255,255,255,${0.05 + r * 0.02})`;
                 ctx.lineWidth = 2.5 + r * 1.2;
                 ctx.stroke();
             }
 
             const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.4);
             glow.addColorStop(0, 'rgba(0,180,216,0.12)');
-            glow.addColorStop(0.5, 'rgba(0,119,182,0.05)');
             glow.addColorStop(1, 'transparent');
             ctx.fillStyle = glow;
             ctx.fillRect(0, 0, W, H);
@@ -157,146 +215,76 @@ document.addEventListener('DOMContentLoaded', function () {
             const oy = cy - H * 0.2 + Math.cos(t * 0.5) * H * 0.03;
             const og = ctx.createRadialGradient(ox, oy, 0, ox, oy, W * 0.06);
             og.addColorStop(0, 'rgba(255,107,43,0.45)');
-            og.addColorStop(0.5, 'rgba(255,107,43,0.12)');
             og.addColorStop(1, 'transparent');
             ctx.fillStyle = og;
             ctx.beginPath();
             ctx.arc(ox, oy, W * 0.06, 0, Math.PI * 2);
             ctx.fill();
 
-            t += 0.030;
+            t += 0.014; // slightly faster step to compensate for halved frame rate
             animId = requestAnimationFrame(drawScene);
         }
 
-        resizeCanvas();
-        drawScene();
+        function startAnimation() {
+            if (!animationActive) return;
+            resizeCanvas();
+            drawScene();
+        }
+        
+        function stopAnimation() {
+            if (animId) {
+                cancelAnimationFrame(animId);
+                animId = null;
+            }
+        }
 
-        // PERF: pause canvas when tab is hidden
+        resizeCanvas();
+        startAnimation();
+
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) { cancelAnimationFrame(animId); animId = null; }
-            else if (!animId) drawScene();
+            if (document.hidden) { 
+                stopAnimation();
+                animationActive = false;
+            }
+            else {
+                animationActive = true;
+                startAnimation();
+            }
         });
 
         let resizeTimer;
         window.addEventListener('resize', () => {
-            cancelAnimationFrame(animId);
+            stopAnimation();
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => { resizeCanvas(); drawScene(); }, 150);
+            resizeTimer = setTimeout(() => { 
+                resizeCanvas(); 
+                if (animationActive && !document.hidden) startAnimation();
+            }, 150);
         });
     }
 
-    // ===== CTA CANVAS WAVES =====
-    // PERF: fewer waves, wider point step, every-other-frame rendering, pauses offscreen/hidden
-    function initCtaCanvas(canvasId, variant) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
+    // ===== CTA PARALLAX SCROLL =====
+    (function initCtaParallax() {
+        const ctaSections = document.querySelectorAll('.cta-parallax');
+        if (!ctaSections.length) return;
 
-        const ctx = canvas.getContext('2d');
-        let W, H, t = 0, animId = null, frameCount = 0;
-        let isVisible = false;
+        const isMobile = () => window.innerWidth <= 768;
 
-        function resize() {
-            W = canvas.width = canvas.offsetWidth;
-            H = canvas.height = canvas.offsetHeight;
-        }
-
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                isVisible = e.isIntersecting;
-                if (isVisible && !animId) loop();
+        function updateParallax() {
+            if (!isMobile()) return;
+            ctaSections.forEach(section => {
+                const img = section.querySelector('.cta-parallax-img');
+                if (!img) return;
+                const rect = section.getBoundingClientRect();
+                const progress = rect.top / window.innerHeight;
+                const shift = progress * 40;
+                img.style.transform = `translateY(${shift}px)`;
             });
-        }, { threshold: 0.05 });
-        observer.observe(canvas.parentElement);
-
-        function draw() {
-            ctx.clearRect(0, 0, W, H);
-
-            const bg = ctx.createLinearGradient(0, 0, W, H);
-            bg.addColorStop(0, variant === 1 ? '#020b18' : '#030610');
-            bg.addColorStop(1, variant === 1 ? '#040d1a' : '#050a16');
-            ctx.fillStyle = bg;
-            ctx.fillRect(0, 0, W, H);
-
-            const numWaves = variant === 1 ? 10 : 9; // was 14/12
-
-            for (let w = 0; w < numWaves; w++) {
-                const prog = w / numWaves;
-                const yBase = H * (0.15 + prog * 0.7);
-                const amp = H * (0.04 + Math.sin(prog * Math.PI) * 0.08);
-                const freq = variant === 1 ? (0.008 + prog * 0.004) : (0.012 + prog * 0.006);
-                const speed = variant === 1 ? t * (0.4 + prog * 0.3) : t * (0.5 + prog * 0.25) * -1;
-
-                let hue, sat, lit, alpha;
-                if (variant === 1) {
-                    const isOrange = w === Math.floor(numWaves * 0.55);
-                    hue = isOrange ? 20 : 185 + prog * 30;
-                    sat = isOrange ? 88 : 75;
-                    lit = isOrange ? 58 : 60 + Math.sin(prog * Math.PI) * 12;
-                    alpha = isOrange ? 0.55 : 0.08 + Math.sin(prog * Math.PI) * 0.28;
-                } else {
-                    const isOrange = w === 2;
-                    hue = isOrange ? 22 : 195 + prog * 25;
-                    sat = isOrange ? 85 : 70;
-                    lit = isOrange ? 56 : 55 + Math.sin(prog * Math.PI) * 10;
-                    alpha = isOrange ? 0.45 : 0.07 + Math.sin(prog * Math.PI) * 0.25;
-                }
-
-                const lineWidth = variant === 1
-                    ? 1.5 + Math.sin(prog * Math.PI) * 5
-                    : 1.2 + Math.sin(prog * Math.PI) * 4;
-
-                ctx.beginPath();
-                for (let x = 0; x <= W + 4; x += 4) { // was x += 3
-                    const y = yBase
-                        + Math.sin(x * freq + speed) * amp
-                        + Math.sin(x * freq * 0.5 + speed * 0.7 + prog) * amp * 0.4;
-                    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                }
-
-                const grad = ctx.createLinearGradient(0, 0, W, 0);
-                grad.addColorStop(0, `hsla(${hue},${sat}%,${lit}%,0)`);
-                grad.addColorStop(0.15, `hsla(${hue},${sat}%,${lit}%,${alpha})`);
-                grad.addColorStop(0.5, `hsla(${hue + 15},${sat}%,${lit + 8}%,${alpha * 1.2})`);
-                grad.addColorStop(0.85, `hsla(${hue},${sat}%,${lit}%,${alpha})`);
-                grad.addColorStop(1, `hsla(${hue},${sat}%,${lit}%,0)`);
-
-                ctx.strokeStyle = grad;
-                ctx.lineWidth = lineWidth;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
-
-            const gX1 = variant === 1 ? W * 0.15 : W * 0.85;
-            const gX2 = variant === 1 ? W * 0.82 : W * 0.18;
-
-            const g1 = ctx.createRadialGradient(gX1, H * 0.5, 0, gX1, H * 0.5, W * 0.35);
-            g1.addColorStop(0, 'rgba(0,180,216,0.1)'); g1.addColorStop(1, 'transparent');
-            ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
-
-            const g2 = ctx.createRadialGradient(gX2, H * 0.5, 0, gX2, H * 0.5, W * 0.28);
-            g2.addColorStop(0, 'rgba(255,107,43,0.09)'); g2.addColorStop(1, 'transparent');
-            ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-
-            t += 0.020;
         }
 
-        function loop() {
-            if (!isVisible || document.hidden) { animId = null; return; }
-            frameCount++;
-            if (frameCount % 2 === 0) draw(); // PERF: render every other frame (~30 fps)
-            animId = requestAnimationFrame(loop);
-        }
-
-        resize();
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && isVisible && !animId) loop();
-        });
-        let resizeTimer;
-        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); });
-    }
-
-    initCtaCanvas('ctaCanvas1', 1);
-    initCtaCanvas('ctaCanvas2', 2);
+        window.addEventListener('scroll', () => requestAnimationFrame(updateParallax), { passive: true });
+        updateParallax();
+    })();
 
     // ===== ETA SECTION CANVAS =====
     function initEtaCanvas() {
@@ -306,17 +294,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const ctx = canvas.getContext('2d');
         let W, H, t = 0, animId = null;
         let isVisible = false;
+        let animationActive = true;
         
         function resize() {
             W = canvas.width = canvas.offsetWidth;
             H = canvas.height = canvas.offsetHeight;
         }
         
-        // Observer for visibility
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 isVisible = e.isIntersecting;
-                if (isVisible && !animId) loop();
+                if (isVisible && !animId && animationActive) loop();
                 else if (!isVisible && animId) {
                     cancelAnimationFrame(animId);
                     animId = null;
@@ -331,14 +319,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!ctx) return;
             ctx.clearRect(0, 0, W, H);
             
-            // Subtle gradient background
             const bgGrad = ctx.createLinearGradient(0, 0, W, H);
             bgGrad.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
             bgGrad.addColorStop(1, 'rgba(0, 119, 182, 0.02)');
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, W, H);
             
-            // Draw floating particles
             const particleCount = 30;
             for (let i = 0; i < particleCount; i++) {
                 const x = (Math.sin(t * 0.3 + i) * 0.5 + 0.5) * W;
@@ -351,7 +337,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.fill();
             }
             
-            // Draw flowing wave lines
             const numWaves = 5;
             for (let w = 0; w < numWaves; w++) {
                 const offset = w / numWaves;
@@ -371,11 +356,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.stroke();
             }
             
-            t += 0.02;
+            t += 0.010;
         }
         
         function loop() {
-            if (!isVisible || document.hidden) {
+            if (!isVisible || !animationActive || document.hidden) {
                 animId = null;
                 return;
             }
@@ -383,19 +368,29 @@ document.addEventListener('DOMContentLoaded', function () {
             animId = requestAnimationFrame(loop);
         }
         
+        function startLoop() {
+            if (isVisible && !animId && animationActive && !document.hidden) loop();
+        }
+        
         resize();
         window.addEventListener('resize', () => {
             cancelAnimationFrame(animId);
             resize();
-            if (isVisible) loop();
+            startLoop();
         });
         
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && isVisible && !animId) loop();
+            if (!document.hidden && isVisible && animationActive && !animId) {
+                loop();
+            } else if (document.hidden && animId) {
+                cancelAnimationFrame(animId);
+                animId = null;
+            }
         });
+        
+        startLoop();
     }
     
-    // Initialize ETA canvas
     initEtaCanvas();
 
     // ===== ETA SECTION PROGRESS BARS ANIMATION =====
@@ -409,7 +404,6 @@ document.addEventListener('DOMContentLoaded', function () {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     progressBars.forEach(bar => {
-                        // Get the target width from CSS variable
                         const targetWidth = getComputedStyle(bar).getPropertyValue('--bar-w');
                         if (targetWidth && !bar.style.width) {
                             bar.style.width = targetWidth;
@@ -422,7 +416,6 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(etaSection);
     }
     
-    // Initialize ETA progress bars
     initEtaProgressBars();
 
     // ===== NAVIGATION =====
@@ -540,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const aboutStats = document.querySelector('.about-stats');
     if (aboutStats) counterObserver.observe(aboutStats);
 
-    // ===== FORM SUBMISSION =====
+    // ===== FORM SUBMISSION - AJAX to PHP =====
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async function (e) {
@@ -549,32 +542,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
+            
             try {
                 const formData = new FormData(this);
-                const data = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone') || 'Not provided',
-                    message: formData.get('message')
-                };
                 const response = await fetch(this.action, {
                     method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                    body: formData
                 });
-                if (response.ok) {
-                    showAlert("Success! Your message has been sent. We'll get back to you within 24 hours.", 'success');
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    showAlert('Success! Your message has been sent. We\'ll get back to you within 24 hours.', 'success');
                     this.reset();
                 } else {
-                    const subject = encodeURIComponent('Cascade Creations Inquiry');
-                    const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`);
-                    window.location.href = `mailto:atsello4@gmail.com?subject=${subject}&body=${body}`;
-                    showAlert('Email client opened. Please send the pre-filled email.', 'success');
-                    this.reset();
+                    throw new Error(result.message || 'Failed to send message');
                 }
             } catch (error) {
                 console.error('Form submission error:', error);
-                showAlert('Oops! Something went wrong. Please try again or contact us directly.', 'error');
+                showAlert(error.message || 'Oops! Something went wrong. Please try again or contact us directly.', 'error');
             } finally {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
@@ -582,53 +568,54 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value.trim();
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                showAlert('Please enter a valid email address.', 'error'); return;
-            }
-            showAlert('Thank you for subscribing to our newsletter!', 'success');
-            emailInput.value = '';
-        });
-    }
-
     // ===== ANIMATE ON DISPLAY (AOD) =====
-    // PERF: single shared observer — replaces both per-element and per-section observers
     (function () {
         const aodElements = document.querySelectorAll('[data-aod]');
         if (!aodElements.length) return;
 
+        // Track pending timeouts so we can cancel them if element leaves before delay fires
+        const pendingTimers = new WeakMap();
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const el = entry.target;
+
                 if (entry.isIntersecting) {
-                    setTimeout(() => {
+                    // Element is genuinely in view — schedule the reveal
+                    const delay = parseInt(el.dataset.aodDelay || 0);
+                    const timer = setTimeout(() => {
+                        // Only animate in if still intersecting (check via class absence)
                         el.classList.add('aod-in');
                         el.classList.remove('aod-out');
-                    }, parseInt(el.dataset.aodDelay || 0));
+                        // Once shown, stop observing so scroll-back never hides it again
+                        observer.unobserve(el);
+                    }, delay);
+                    pendingTimers.set(el, timer);
                 } else {
-                    el.classList.remove('aod-in');
-                    el.classList.add('aod-out');
+                    // Not in view — cancel any pending show timer to prevent torn state
+                    const pending = pendingTimers.get(el);
+                    if (pending !== undefined) {
+                        clearTimeout(pending);
+                        pendingTimers.delete(el);
+                    }
+                    // Only apply the exit state if the element was never shown yet
+                    if (!el.classList.contains('aod-in')) {
+                        el.classList.add('aod-out');
+                    }
                 }
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+        }, {
+            // Require 20% of the element to be inside the viewport before triggering,
+            // and add a 60px bottom margin so elements just peeking at the edge don't fire.
+            threshold: 0.20,
+            rootMargin: '0px 0px -60px 0px'
+        });
 
         aodElements.forEach(el => observer.observe(el));
     })();
 
-
     // ===== SECTION PULSE CANVASES =====
-    // Matching the hero canvas aesthetic: animated sinusoidal ribbon loops.
-    // White sections (about, process, aod)  → deep teal/navy strokes, visible on light bg
-    // Dark sections  (services, why, contact) → bright cyan + orange strokes, vivid on dark bg
     (function initSectionPulses() {
-
-        // Config per section: { id, anchor (where canvas is injected), theme }
-        // theme: 'light' = white bg sections, 'dark' = dark bg sections
         const SECTIONS = [
             { selector: '.about-section', theme: 'light', corner: 'topRight' },
             { selector: '.process-section', theme: 'light', corner: 'bottomLeft' },
@@ -636,53 +623,55 @@ document.addEventListener('DOMContentLoaded', function () {
             { selector: '.aod-section', theme: 'light', corner: 'center' },
             { selector: '.why-section', theme: 'dark', corner: 'bottomRight' },
             { selector: '.contact-section', theme: 'light', corner: 'topRight' },
+            { selector: '.work-section', theme: 'dark', corner: 'center' },
+            { selector: '.why-us-section', theme: 'light', corner: 'topLeft' },
         ];
 
-        // Palette for light (white bg) sections — dark teal strokes pop on white
         function lightColor(waveIdx, totalWaves, t, alpha) {
             const hues = [195, 205, 210, 200, 190, 215, 202];
             const sats = [85, 80, 75, 88, 82, 78, 86];
-            const lits = [28, 32, 25, 30, 35, 27, 31];   // dark = visible on white
+            const lits = [28, 32, 25, 30, 35, 27, 31];
             const i = waveIdx % hues.length;
             const hShift = Math.sin(t * 0.35 + waveIdx * 0.6) * 8;
             return `hsla(${hues[i] + hShift}, ${sats[i]}%, ${lits[i]}%, ${alpha})`;
         }
 
-        // Palette for dark sections — bright cyan + occasional orange pop
         function darkColor(waveIdx, totalWaves, t, alpha, isOrange) {
             if (isOrange) return `hsla(20, 90%, 58%, ${alpha})`;
             const hues = [185, 195, 205, 190, 200, 210, 188];
             const sats = [82, 78, 75, 85, 80, 72, 88];
-            const lits = [62, 58, 65, 60, 68, 55, 63];   // bright = vivid on dark
+            const lits = [62, 58, 65, 60, 68, 55, 63];
             const i = waveIdx % hues.length;
             const hShift = Math.sin(t * 0.4 + waveIdx * 0.5) * 10;
             return `hsla(${hues[i] + hShift}, ${sats[i]}%, ${lits[i]}%, ${alpha})`;
         }
 
         function initPulse(sectionEl, theme, corner) {
-            // Create & inject canvas
             const canvas = document.createElement('canvas');
             canvas.className = 'section-pulse-canvas';
             sectionEl.insertBefore(canvas, sectionEl.firstChild);
 
             const ctx = canvas.getContext('2d');
             let W, H, t = 0, animId = null, isVisible = false, frameCount = 0;
+            let animationActive = true;
 
             function resize() {
                 W = canvas.width = sectionEl.offsetWidth;
                 H = canvas.height = sectionEl.offsetHeight;
             }
 
-            // Observe visibility — only animate when in viewport
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(e => {
                     isVisible = e.isIntersecting;
-                    if (isVisible && !animId) loop();
+                    if (isVisible && !animId && animationActive) loop();
+                    else if (!isVisible && animId) {
+                        cancelAnimationFrame(animId);
+                        animId = null;
+                    }
                 });
             }, { threshold: 0.05 });
             observer.observe(sectionEl);
 
-            // Compute focal origin based on corner config
             function getOrigin() {
                 switch (corner) {
                     case 'topRight': return { cx: W * 0.88, cy: H * 0.12 };
@@ -695,13 +684,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function draw() {
+                if (!ctx) return;
                 ctx.clearRect(0, 0, W, H);
 
                 const { cx, cy } = getOrigin();
-                const numRibbons = 10;
+                // Reduced from 10 → 6 ribbons; 48 pts → 28 pts per ribbon
+                const numRibbons = 6;
+                const steps = 28;
                 const isLight = theme === 'light';
 
-                // Draw ribbons from outermost inward so inner ones paint on top
                 for (let r = numRibbons; r >= 0; r--) {
                     const progress = r / numRibbons;
                     const phaseOffset = progress * Math.PI * 2.6 + t * 0.42;
@@ -709,9 +700,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const radiusY = H * (0.18 + progress * 0.14);
                     const thickness = 10 + Math.sin(progress * Math.PI) * 22;
 
-                    // Build ribbon points as sinusoidal closed loop
                     const pts = [];
-                    const steps = 48;
                     for (let i = 0; i <= steps; i++) {
                         const angle = (i / steps) * Math.PI * 2;
                         pts.push({
@@ -723,21 +712,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     const baseAlpha = isLight
-                        ? 0.06 + Math.sin(progress * Math.PI) * 0.16   // more opaque on white
-                        : 0.08 + Math.sin(progress * Math.PI) * 0.22;  // brighter on dark
+                        ? 0.06 + Math.sin(progress * Math.PI) * 0.16
+                        : 0.08 + Math.sin(progress * Math.PI) * 0.22;
 
                     const isOrange = !isLight && r === Math.floor(numRibbons * 0.4);
 
                     const grad = ctx.createLinearGradient(cx - radiusX, cy, cx + radiusX, cy);
                     if (isLight) {
                         grad.addColorStop(0, lightColor(r, numRibbons, t, baseAlpha * 0.4));
-                        grad.addColorStop(0.3, lightColor(r + 2, numRibbons, t, baseAlpha));
-                        grad.addColorStop(0.6, lightColor(r + 4, numRibbons, t, baseAlpha * 1.1));
+                        grad.addColorStop(0.5, lightColor(r + 2, numRibbons, t, baseAlpha));
                         grad.addColorStop(1, lightColor(r, numRibbons, t, baseAlpha * 0.4));
                     } else {
                         grad.addColorStop(0, darkColor(r, numRibbons, t, baseAlpha * 0.4, false));
-                        grad.addColorStop(0.3, darkColor(r + 2, numRibbons, t, baseAlpha, isOrange));
-                        grad.addColorStop(0.6, darkColor(r + 4, numRibbons, t, baseAlpha * 1.1, isOrange));
+                        grad.addColorStop(0.5, darkColor(r + 2, numRibbons, t, baseAlpha, isOrange));
                         grad.addColorStop(1, darkColor(r, numRibbons, t, baseAlpha * 0.4, false));
                     }
 
@@ -752,7 +739,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     ctx.stroke();
                 }
 
-                // Soft inner glow at focal origin
                 const glowColor = isLight
                     ? 'rgba(0, 119, 182, 0.10)'
                     : 'rgba(0, 180, 216, 0.13)';
@@ -762,18 +748,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, W, H);
 
-                t += 0.20;
+                t += 0.045; // faster step to compensate for lower frame rate
             }
 
             function loop() {
-                if (!isVisible || document.hidden) { animId = null; return; }
+                if (!isVisible || !animationActive || document.hidden) { 
+                    animId = null; 
+                    return; 
+                }
                 frameCount++;
-                if (frameCount % 2 === 0) draw(); // ~30 fps, matches CTA canvas perf approach
+                // Draw every 3rd frame (~20 fps) — these are subtle bg decorations
+                if (frameCount % 3 === 0) draw();
                 animId = requestAnimationFrame(loop);
             }
 
             document.addEventListener('visibilitychange', () => {
-                if (!document.hidden && isVisible && !animId) loop();
+                if (!document.hidden && isVisible && animationActive && !animId) {
+                    loop();
+                } else if (document.hidden && animId) {
+                    cancelAnimationFrame(animId);
+                    animId = null;
+                }
             });
 
             let resizeTimer;
@@ -785,27 +780,73 @@ document.addEventListener('DOMContentLoaded', function () {
             resize();
         }
 
-        // Boot all section pulses
         SECTIONS.forEach(({ selector, theme, corner }) => {
             const el = document.querySelector(selector);
             if (el) initPulse(el, theme, corner);
         });
-
     })();
 
     // ===== SET CURRENT YEAR =====
     const yearEl = document.getElementById('currentYear');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // ===== STUDIO LINK =====
-    const studioLink = document.querySelector('a[href*="CascadeComingSoon"]');
-    if (studioLink) {
-        studioLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            showAlert('Direct contact: atsello4@gmail.com or 072 078 6569', 'success');
+    // ===== LAZY BACKGROUND IMAGES =====
+    // Loads data-bg="url" only when element is close to entering the viewport
+    (function initLazyBg() {
+        const lazyBgEls = document.querySelectorAll('[data-bg]');
+        if (!lazyBgEls.length) return;
+
+        const bgObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const url = el.dataset.bg;
+                    if (url) {
+                        el.style.backgroundImage = `url('${url}')`;
+                        el.removeAttribute('data-bg');
+                    }
+                    bgObserver.unobserve(el);
+                }
+            });
+        }, {
+            // Start loading 200px before element enters view so there's no visible pop-in
+            rootMargin: '200px 0px',
+            threshold: 0
         });
-    }
-});
+
+        lazyBgEls.forEach(el => bgObserver.observe(el));
+    })();
+
+    // ===== OUR WORK — TILE CLICK + BG SWITCHER =====
+    (function initWorkSection() {
+        const tiles = document.querySelectorAll('.work-tile');
+        const bgSlides = document.querySelectorAll('.work-bg-slide');
+        if (!tiles.length) return;
+
+        function activateTile(index) {
+            tiles.forEach((t, i) => {
+                t.classList.toggle('is-active', i === index);
+                t.setAttribute('aria-expanded', i === index ? 'true' : 'false');
+            });
+            bgSlides.forEach((s, i) => {
+                s.classList.toggle('is-active', i === index);
+            });
+        }
+
+        tiles.forEach((tile, i) => {
+            tile.addEventListener('click', () => activateTile(i));
+            tile.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    activateTile(i);
+                }
+            });
+        });
+
+        activateTile(0);
+    })();
+
+});  // end DOMContentLoaded
 
 // ===== UTILITIES =====
 function throttle(func, limit) {
