@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alex-sello7.github.io/CascadeCreations.com/sitemap.xml
