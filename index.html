@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Cascade Creations · Advancing Digital Aesthetics</title>
     <meta name="title" content="Cascade Creations | Advancing Digital Aesthetics">
@@ -13,7 +13,7 @@
     <meta name="keywords"
         content="web development, web design, digital solutions, web applications, responsive design, frontend, backend, South Africa">
     <meta name="author" content="Cascade Creations">
-    <meta name="theme-color" content="#1e3c5c">
+    <meta name="theme-color" content="#0b1120">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alex-sello7.github.io/CascadeMainWebsite/">
     <meta property="og:title" content="Cascade Creations | Advancing Digital Aesthetics">
@@ -28,47 +28,76 @@
     <meta property="twitter:description"
         content="We craft fluid digital experiences that cascade from concept to reality.">
     <meta property="twitter:image" content="https://alex-sello7.github.io/CascadeMainWebsite/img/cclogo.png">
-    <!-- Production: canonical URL + robots -->
     <link rel="canonical" href="https://alex-sello7.github.io/CascadeMainWebsite/">
     <meta name="robots" content="index, follow">
-    <!-- Preconnect to external origins for faster DNS + TLS -->
+    
+    <!-- Preconnects -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome: load only solid + brands subset to cut ~70 KB -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Syne:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="shortcut icon" href="imgs/cclogo.png" type="image/x-icon">
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="index.js" as="script">
-    <link rel="preload" href="imgs/CascadeCreations.png" as="image" fetchpriority="high">
-
     <!-- Critical CSS inline (prevents FOUC) -->
     <style>
-        :root { --cyan:#00b4d8; --teal:#0077b6; --orange:#ff6b2b; --bg-deep:#03050a; }
-        body { margin:0; font-family:'DM Sans',sans-serif; background:var(--bg-deep); }
-        .loading-screen { position:fixed; inset:0; background:var(--bg-deep); z-index:9999; }
-        .navbar { position:fixed; top:0; width:100%; z-index:1000; }
+        :root {
+            --cyan: #06b6d4;
+            --cyan-dark: #0891b2;
+            --teal: #0f766e;
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --bg-deep: #020617;
+            --bg-mid: #0f172a;
+            --bg-surface: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-subtle: rgba(100, 116, 139, 0.3);
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
     </style>
-
-    <!-- Main stylesheet -->
+    
     <link rel="stylesheet" href="styles.css">
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
 </head>
 
 <body>
-    <!-- Skip navigation for keyboard/screen-reader users -->
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
-    <!-- Structured data — LocalBusiness + WebSite -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -107,12 +136,12 @@
     }
     </script>
 
-    <!-- No-JS fallback banner -->
     <noscript>
-      <div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#023e8a;color:#fff;text-align:center;padding:0.75rem 1rem;font-family:sans-serif;font-size:0.9rem;">
-        For the best experience, please enable JavaScript. Some features may not work without it.
+      <div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#0891b2;color:#fff;text-align:center;padding:0.75rem 1rem;font-family:sans-serif;font-size:0.9rem;">
+        For the best experience, please enable JavaScript.
       </div>
     </noscript>
+
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loader-wrap">
@@ -152,712 +181,674 @@
     </nav>
 
     <main id="main-content">
-    <!-- Hero Section -->
-    <section id="home" class="hero-section">
-        <canvas id="heroCanvas"></canvas>
-        <div class="hero-overlay">
-            <div class="hero-container">
-                <div class="hero-left">
-                    <div class="hero-badge" data-aod data-aod-delay="0">
-                        <span class="badge-dot"></span>
-                        <span>Cascade Creations</span>
-                    </div>
-                    <h1 class="hero-title" data-aod data-aod-delay="100">
-                        Advancing <span class="gradient-text">Digital</span><br>
-                        Aesthetics
-                    </h1>
-                    <p class="hero-description" data-aod data-aod-delay="200">
-                        From concept to deployment, we craft high-performance web applications
-                        that combine cutting-edge technology with exceptional user experiences.
-                        Transform your digital presence with our expert team.
-                    </p>
-                    <div class="hero-buttons" data-aod data-aod-delay="300">
-                        <a href="#contact" class="btn-hero btn-hero-primary">
-                            <span>Start Your Project</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <a href="#services" class="btn-hero btn-hero-secondary">
-                            <i class="fas fa-play-circle"></i>
-                            <span>View Services</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="hero-right" data-aod data-aod-delay="200">
-                    <div class="hero-logo-container">
-                        <div class="hero-logo-glow"></div>
-                        <img src="imgs/CascadeCreations.png" alt="Cascade Creations Logo" class="hero-logo-image" decoding="async" fetchpriority="high">
-                        <div class="hero-logo-orbit"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Bouncing scroll hint -->
-        <a href="#about" class="hero-chevron" aria-label="Scroll to next section">
-            <i class="fas fa-chevron-down"></i>
-            <i class="fas fa-chevron-down"></i>
-        </a>
-    </section>
-
-    <!-- ══════════ ABOUT ══════════ -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-aod data-aod-delay="0">Who We Are</span>
-                <h2 class="section-title" data-aod data-aod-delay="80">Digital Craftsmen Creating Tomorrow's Web</h2>
-                <p class="section-description" data-aod data-aod-delay="150">We combine artistic vision with technical
-                    expertise to build digital solutions that not only look stunning but perform exceptionally.</p>
-            </div>
-            <div class="about-stats" data-aod data-aod-delay="210">
-                <div class="about-stat">
-                    <span class="stat-number" data-count="50">0</span>
-                    <span class="stat-label">Projects Delivered</span>
-                </div>
-                <div class="about-stat">
-                    <span class="stat-number" data-count="98">0</span>
-                    <span class="stat-label">Client Satisfaction %</span>
-                </div>
-                <div class="about-stat">
-                    <span class="stat-number" data-count="5">0</span>
-                    <span class="stat-label">Years Experience</span>
-                </div>
-            </div>
-            <div class="about-content">
-                <div class="about-text" data-aod data-aod-delay="270" data-aod-dir="left">
-                    <h3>Creating Solutions That Cascade</h3>
-                    <p>At Cascade Creations, we believe in the power of fluid design and seamless functionality. Our
-                        approach ensures every project flows naturally from concept to completion.</p>
-                    <div class="about-features">
-                        <div class="feature"><i class="fas fa-bolt"></i>
-                            <div>
-                                <h4>Fast Delivery</h4>
-                                <p>Rapid development without compromising quality</p>
-                            </div>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <canvas id="heroCanvas"></canvas>
+            <div class="hero-overlay">
+                <div class="hero-container">
+                    <div class="hero-left">
+                        <div class="hero-badge" data-aod data-aod-delay="0">
+                            <span class="badge-dot"></span>
+                            <span>Cascade Creations</span>
                         </div>
-                        <div class="feature"><i class="fas fa-shield-alt"></i>
-                            <div>
-                                <h4>Secure & Reliable</h4>
-                                <p>Enterprise-grade security in every project</p>
-                            </div>
-                        </div>
-                        <div class="feature"><i class="fas fa-mobile-alt"></i>
-                            <div>
-                                <h4>Mobile First</h4>
-                                <p>Optimized for all devices and screen sizes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-visual" data-aod data-aod-delay="330" data-aod-dir="right">
-                    <div class="tech-stack">
-                        <div class="tech-item"><i class="fab fa-html5"></i><span>HTML5</span></div>
-                        <div class="tech-item"><i class="fab fa-css3-alt"></i><span>CSS3</span></div>
-                        <div class="tech-item"><i class="fab fa-js"></i><span>JavaScript</span></div>
-                        <div class="tech-item"><i class="fab fa-react"></i><span>React</span></div>
-                        <div class="tech-item"><i class="fab fa-node-js"></i><span>Node.js</span></div>
-                        <div class="tech-item"><i class="fab fa-php"></i><span>PHP</span></div>
-                        <div class="tech-item"><i class="fas fa-database"></i><span>Database</span></div>
-                        <div class="tech-item"><i class="fas fa-code"></i><span>JSON</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════ CTA 1 ══════════ -->
-    <section class="cta-section cta-parallax" id="ctaParallax1">
-        <div class="cta-parallax-img" data-bg="imgs/img8.jpg" aria-hidden="true"></div>
-        <div class="cta-parallax-overlay" aria-hidden="true"></div>
-        <div class="container">
-            <div class="cta-content">
-                <h2 data-aod data-aod-delay="0">Ready to Start Your Project?</h2>
-                <p data-aod data-aod-delay="100">Join dozens of satisfied clients who've transformed their digital
-                    presence with us.</p>
-                <a href="#contact" class="btn btn-orange btn-large" data-aod data-aod-delay="200">
-                    <span>Get in Touch</span><i class="fas fa-paper-plane"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════ PROCESS ══════════ -->
-    <section id="process" class="process-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-aod data-aod-delay="0">The Process</span>
-                <h2 class="section-title" data-aod data-aod-delay="80">From Concept to Launch</h2>
-            </div>
-            <div class="process-timeline">
-                <div class="process-step" data-aod data-aod-delay="150" data-aod-dir="left">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Discovery & Strategy</h3>
-                        <p>We start by understanding your goals, audience, and requirements to create a comprehensive
-                            project roadmap.</p>
-                    </div>
-                </div>
-                <div class="process-step" data-aod data-aod-delay="230" data-aod-dir="left">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>Design & Prototyping</h3>
-                        <p>Creating wireframes and prototypes that align with your brand and user experience goals.</p>
-                    </div>
-                </div>
-                <div class="process-step" data-aod data-aod-delay="310" data-aod-dir="left">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3>Development</h3>
-                        <p>Building robust, scalable solutions using modern technologies and following best practices.
+                        <h1 class="hero-title" data-aod data-aod-delay="100">
+                            Advancing <span class="gradient-text">Digital</span><br>
+                            Aesthetics
+                        </h1>
+                        <p class="hero-description" data-aod data-aod-delay="200">
+                            From concept to deployment, we craft high-performance web applications
+                            that combine cutting-edge technology with exceptional user experiences.
+                            Transform your digital presence with our expert team.
                         </p>
-                    </div>
-                </div>
-                <div class="process-step" data-aod data-aod-delay="390" data-aod-dir="left">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
-                        <h3>Testing & Quality Assurance</h3>
-                        <p>Rigorous testing across multiple devices and browsers to ensure flawless performance.</p>
-                    </div>
-                </div>
-                <div class="process-step" data-aod data-aod-delay="470" data-aod-dir="left">
-                    <div class="step-number">05</div>
-                    <div class="step-content">
-                        <h3>Launch & Support</h3>
-                        <p>Deployment and ongoing support to ensure your solution continues to perform optimally.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════ SERVICES with FLIP CARDS══════════ -->
-    <section id="services" class="services-section">
-        <div class="scan-line"></div>
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-aod data-aod-delay="0">Our Expertise</span>
-                <h2 class="section-title" data-aod data-aod-delay="80">Comprehensive Digital Solutions</h2>
-            </div>
-            <div class="services-grid">
-                <!-- Card 1: Web Development -->
-                <div class="service-flip-card" data-aod data-aod-delay="150">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/img1.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-code"></i>
-                                </div>
-                                <h3>Web Development</h3>
-                                <p>Custom websites and web applications built with modern technologies.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/img1.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>Web Development</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Responsive Design</li>
-                                    <li><i class="fas fa-check-circle"></i> Performance Optimization</li>
-                                    <li><i class="fas fa-check-circle"></i> SEO Friendly</li>
-                                    <li><i class="fas fa-check-circle"></i> CMS Integration</li>
-                                    <li><i class="fas fa-check-circle"></i> API Development</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
+                        <div class="hero-buttons" data-aod data-aod-delay="300">
+                            <a href="#contact" class="btn-hero btn-hero-primary">
+                                <span>Start Your Project</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="#services" class="btn-hero btn-hero-secondary">
+                                <i class="fas fa-play-circle"></i>
+                                <span>View Services</span>
+                            </a>
                         </div>
                     </div>
-                </div>
-
-                <!-- Card 2: UI/UX Design -->
-                <div class="service-flip-card" data-aod data-aod-delay="220">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/ui.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-paintbrush"></i>
-                                </div>
-                                <h3>UI/UX Design</h3>
-                                <p>User-centered designs that are both beautiful and functional.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/ui.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>UI/UX Design</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Wireframing & Prototyping</li>
-                                    <li><i class="fas fa-check-circle"></i> User Research & Testing</li>
-                                    <li><i class="fas fa-check-circle"></i> Interaction Design</li>
-                                    <li><i class="fas fa-check-circle"></i> Visual Design Systems</li>
-                                    <li><i class="fas fa-check-circle"></i> Accessibility Compliance</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3: E-commerce -->
-                <div class="service-flip-card" data-aod data-aod-delay="290">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/ecommerce.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </div>
-                                <h3>E-commerce</h3>
-                                <p>Complete e-commerce solutions that drive sales.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/ecommerce.jpg" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>E-commerce Solutions</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Payment Integration</li>
-                                    <li><i class="fas fa-check-circle"></i> Inventory Management</li>
-                                    <li><i class="fas fa-check-circle"></i> Analytics Dashboard</li>
-                                    <li><i class="fas fa-check-circle"></i> Secure Checkout</li>
-                                    <li><i class="fas fa-check-circle"></i> Multi-vendor Support</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Mobile Apps -->
-                <div class="service-flip-card" data-aod data-aod-delay="360">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/mobapp.webp" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <h3>Mobile Apps</h3>
-                                <p>Cross-platform mobile applications for iOS and Android.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/mobapp.webp" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>Mobile Applications</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Native & Cross-platform</li>
-                                    <li><i class="fas fa-check-circle"></i> Push Notifications</li>
-                                    <li><i class="fas fa-check-circle"></i> App Store Deployment</li>
-                                    <li><i class="fas fa-check-circle"></i> Offline Capabilities</li>
-                                    <li><i class="fas fa-check-circle"></i> Biometric Authentication</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5: Dashboards & Web Apps -->
-                <div class="service-flip-card" data-aod data-aod-delay="430">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/img4.avif" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <h3>Dashboards & Web Apps</h3>
-                                <p>Data-driven dashboards and custom web applications for complex business needs.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/img4.avif" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>Dashboards & Web Apps</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Real-time Analytics</li>
-                                    <li><i class="fas fa-check-circle"></i> Data Visualization</li>
-                                    <li><i class="fas fa-check-circle"></i> Admin Panels & CRUD</li>
-                                    <li><i class="fas fa-check-circle"></i> API Integrations</li>
-                                    <li><i class="fas fa-check-circle"></i> Scalable Architecture</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 6: Website Revamp -->
-                <div class="service-flip-card" data-aod data-aod-delay="500">
-                    <div class="flip-card-inner">
-                        <div class="flip-front"
-                            data-bg="imgs/revamp.png" style="background-size: cover; background-position: center;">
-                            <div class="flip-front-content">
-                                <div class="service-icon">
-                                    <i class="fas fa-sync-alt"></i>
-                                </div>
-                                <h3>Website Revamp</h3>
-                                <p>Breathe new life into outdated websites with modern design and technology.</p>
-                                <div class="flip-hint">Explore</div>
-                            </div>
-                        </div>
-                        <div class="flip-back"
-                            data-bg="imgs/revamp.png" style="background-size: cover; background-position: center;">
-                            <div class="flip-back-blur-overlay"></div>
-                            <div class="flip-back-content">
-                                <h3>Website Revamp</h3>
-                                <ul class="back-features">
-                                    <li><i class="fas fa-check-circle"></i> Modern UI/UX Redesign</li>
-                                    <li><i class="fas fa-check-circle"></i> Performance Optimization</li>
-                                    <li><i class="fas fa-check-circle"></i> Mobile Responsiveness</li>
-                                    <li><i class="fas fa-check-circle"></i> SEO Enhancement</li>
-                                    <li><i class="fas fa-check-circle"></i> Content Migration</li>
-                                    <li><i class="fas fa-check-circle"></i> Speed & Security Upgrades</li>
-                                </ul>
-                                <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
-                            </div>
+                    <div class="hero-right" data-aod data-aod-delay="200">
+                        <div class="hero-logo-container">
+                            <div class="hero-logo-glow"></div>
+                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations Logo" class="hero-logo-image" decoding="async" fetchpriority="high">
+                            <div class="hero-logo-orbit"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            <a href="#about" class="hero-chevron" aria-label="Scroll to next section">
+                <i class="fas fa-chevron-down"></i>
+                
+            </a>
+        </section>
 
-    <!-- ══════════ WHY CHOOSE US ══════════ -->
-    <section id="why-us" class="why-us-section">
-        <!-- Canvas injected here by JS (light theme, topLeft corner) -->
-        <div class="container">
-
-            <div class="section-header">
-                <span class="section-subtitle" data-aod data-aod-delay="0">Why Cascade Creations</span>
-                <h2 class="section-title" data-aod data-aod-delay="80">Built Different, <em>By Design</em></h2>
-                <p class="section-description" data-aod data-aod-delay="150">There's no shortage of web developers out there. Here's why clients keep choosing us — and coming back.</p>
+        <!-- About Section -->
+        <section id="about" class="about-section has-parallax">
+            <div class="parallax-bg" data-parallax-speed="0.4" data-bg="imgs/img8.jpg" aria-hidden="true"></div>
+            
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-aod data-aod-delay="0">Who We Are</span>
+                    <h2 class="section-title" data-aod data-aod-delay="80">Digital Craftsmen Creating Tomorrow's Web</h2>
+                    <p class="section-description" data-aod data-aod-delay="150">We combine artistic vision with technical expertise to build digital solutions that not only look stunning but perform exceptionally.</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-text" data-aod data-aod-delay="270" data-aod-dir="left">
+                        <h3>Creating Solutions That Cascade</h3>
+                        <p>At Cascade Creations, we believe in the power of fluid design and seamless functionality. Our approach ensures every project flows naturally from concept to completion.</p>
+                        <div class="about-features">
+                            <div class="feature"><i class="fas fa-bolt"></i>
+                                <div>
+                                    <h4>Fast Delivery</h4>
+                                    <p>Rapid development without compromising quality</p>
+                                </div>
+                            </div>
+                            <div class="feature"><i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <h4>Secure & Reliable</h4>
+                                    <p>Enterprise-grade security in every project</p>
+                                </div>
+                            </div>
+                            <div class="feature"><i class="fas fa-mobile-alt"></i>
+                                <div>
+                                    <h4>Mobile First</h4>
+                                    <p>Optimized for all devices and screen sizes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-visual" data-aod data-aod-delay="330" data-aod-dir="right">
+                       <div class="tech-stack">
+    <div class="tech-item">
+        <i class="fab fa-html5"></i>
+        <span>HTML5</span>
+    </div>
+    <div class="tech-item">
+        <i class="fab fa-css3-alt"></i>
+        <span>CSS3</span>
+    </div>
+    <div class="tech-item">
+        <i class="fab fa-js"></i>
+        <span>JavaScript</span>
+    </div>
+    <div class="tech-item">
+        <i class="fab fa-react"></i>
+        <span>React</span>
+    </div>
+    <div class="tech-item">
+        <i class="fab fa-node-js"></i>
+        <span>Node.js</span>
+    </div>
+    <div class="tech-item">
+        <i class="fas fa-code"></i>
+        <span>PHP</span>
+    </div>
+    <div class="tech-item">
+        <i class="fas fa-database"></i>
+        <span>Database</span>
+    </div>
+    <div class="tech-item">
+        <i class="fas fa-code"></i>
+        <span>JSON</span>
+    </div>
+</div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="why-grid">
-
-                <!-- Card 01 — featured -->
-                <div class="why-card why-card--featured" data-aod data-aod-delay="0">
-                    <div class="wc-icon-wrap">
-                        <div class="wc-icon"><i class="fas fa-gem"></i></div>
-                    </div>
-                    <div class="wc-num">01</div>
-                    <h3 class="wc-title">Design That Actually Converts</h3>
-                    <p class="wc-desc">Beautiful isn't enough. Every visual decision — layout, colour, typography, spacing — is made to guide your visitor toward action. Form and function, always together.</p>
-                    <div class="wc-proof">
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Conversion-focused layouts</span>
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Data-informed design choices</span>
-                    </div>
-                </div>
-
-                <!-- Card 02 -->
-                <div class="why-card" data-aod data-aod-delay="80">
-                    <div class="wc-icon-wrap">
-                        <div class="wc-icon"><i class="fas fa-bolt"></i></div>
-                    </div>
-                    <div class="wc-num">02</div>
-                    <h3 class="wc-title">Speed You Can Feel</h3>
-                    <p class="wc-desc">Bloated themes are a thing of the past. We write lean, optimised code — so your site loads fast, ranks well, and never frustrates a visitor.</p>
-                    <div class="wc-proof">
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Performance-first development</span>
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> SEO-ready structure</span>
-                    </div>
-                </div>
-
-                <!-- Card 03 -->
-                <div class="why-card" data-aod data-aod-delay="160">
-                    <div class="wc-icon-wrap">
-                        <div class="wc-icon"><i class="fas fa-mobile-alt"></i></div>
-                    </div>
-                    <div class="wc-num">03</div>
-                    <h3 class="wc-title">Mobile-First, Always</h3>
-                    <p class="wc-desc">Over 60% of web traffic is mobile. We design and build for the smallest screen first — then scale up — so the experience is flawless on every device.</p>
-                    <div class="wc-proof">
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Responsive across all breakpoints</span>
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Touch-optimised interactions</span>
-                    </div>
-                </div>
-
-                <!-- Card 04 -->
-                <div class="why-card" data-aod data-aod-delay="240">
-                    <div class="wc-icon-wrap">
-                        <div class="wc-icon"><i class="fas fa-handshake"></i></div>
-                    </div>
-                    <div class="wc-num">04</div>
-                    <h3 class="wc-title">One Point of Contact</h3>
-                    <p class="wc-desc">You work directly with Alex — the designer and the developer. No account managers, no miscommunication. Your vision stays intact from brief to launch.</p>
-                    <div class="wc-proof">
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Direct collaboration</span>
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> No middlemen or delays</span>
-                    </div>
-                </div>
-
-                <!-- Card 05 -->
-                <div class="why-card" data-aod data-aod-delay="80">
-                    <div class="wc-icon-wrap wc-icon-wrap--orange">
-                        <div class="wc-icon wc-icon--orange"><i class="fas fa-clock"></i></div>
-                    </div>
-                    <div class="wc-num">05</div>
-                    <h3 class="wc-title">Delivery You Can Rely On</h3>
-                    <p class="wc-desc">Deadlines are commitments, not suggestions. We plan carefully, communicate proactively, and deliver on time — every time.</p>
-                    <div class="wc-proof">
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Clear project milestones</span>
-                        <span class="wc-proof-item"><i class="fas fa-check"></i> Regular progress updates</span>
-                    </div>
-                </div>
-
-                <!-- Card 06 — CTA card -->
-                <div class="why-card why-card--cta" data-aod data-aod-delay="160">
-                    <div class="wc-cta-glow"></div>
-                    <div class="wc-cta-icon"><i class="fas fa-arrow-right"></i></div>
-                    <h3>Ready to Get Started?</h3>
-                    <p>Let's talk about your project and see what we can build together.</p>
-                    <a href="#contact" class="wc-cta-btn">
-                        <i class="fas fa-paper-plane"></i> Start a Conversation
+        <!-- CTA 1 (Dark - Original) -->
+        <section class="cta-section cta-parallax" id="ctaParallax1">
+            <div class="cta-parallax-img" data-bg="imgs/img7.avif" aria-hidden="true"></div>
+            <div class="cta-parallax-overlay" aria-hidden="true"></div>
+            <div class="container">
+                <div class="cta-content">
+                    <h2 data-aod data-aod-delay="0">Ready to Start Your Project?</h2>
+                    <p data-aod data-aod-delay="100">Join dozens of satisfied clients who've transformed their digital presence with us.</p>
+                    <a href="#contact" class="btn btn-orange btn-large" data-aod data-aod-delay="200">
+                        <span>Get in Touch</span><i class="fas fa-paper-plane"></i>
                     </a>
                 </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-        <!-- ══════════ OUR WORK / PORTFOLIO ══════════ -->
-    <section id="work" class="work-section">
-        <div class="work-bg-layer" id="workBgLayer" aria-hidden="true">
-            <div class="work-bg-slide is-active" data-project="0" data-bg="imgs/madid.jpg"></div>
-            <div class="work-bg-slide" data-project="1" data-bg="imgs/digitalize the sky a.png"></div>
-            <div class="work-bg-slide" data-project="2" data-bg="imgs/hero1.jpg"></div>
-            <div class="work-bg-slide" data-project="3" data-bg="imgs/about1.jpg"></div>
-        </div>
-
-        <div class="work-inner container">
-            <div class="work-header">
-                <span class="section-subtitle"><i class="fas fa-layer-group"></i> Portfolio</span>
-                <h2 class="section-title">Projects We're Proud Of</h2>
-                <p class="section-description">Each build tells a story — research, late nights, and the quiet satisfaction when everything clicks. Click a project to explore.</p>
-            </div>
-
-            <div class="work-grid" id="workGrid">
-
-                <!-- TILE 01: Seamless Travel -->
-                <div class="work-tile is-active" data-index="0" tabindex="0" role="button" aria-label="View Seamless Travel project">
-                    <span class="tile-corner tile-corner--tl"></span>
-                    <span class="tile-corner tile-corner--tr"></span>
-                    <span class="tile-corner tile-corner--bl"></span>
-                    <span class="tile-corner tile-corner--br"></span>
-                    <div class="tile-index">01</div>
-                    <div class="tile-body">
-                        <div class="tile-type-badge"><i class="fas fa-paint-brush"></i> Revamp Concept</div>
-                        <h3 class="tile-title">Seamless Travel</h3>
-                        <p class="tile-brief">A fluid website revamp for a travel brand — modern booking experience, destination-first design.</p>
-                        <div class="tile-tags">
-                            <span class="ptag"><i class="fas fa-palette"></i> Web Design</span>
-                            <span class="ptag"><i class="fas fa-vector-square"></i> UI/UX</span>
-                            <span class="ptag"><i class="fas fa-plane"></i> Travel</span>
+        <!-- Process Section -->
+        <section id="process" class="process-section has-parallax">
+            <div class="parallax-bg" data-parallax-speed="0.35" data-bg="imgs/img8.jpg" aria-hidden="true"></div>
+            <div class="parallax-overlay" aria-hidden="true"></div>
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-aod data-aod-delay="0">The Process</span>
+                    <h2 class="section-title" data-aod data-aod-delay="80">From Concept to Launch</h2>
+                </div>
+                <div class="process-timeline">
+                    <div class="process-step" data-aod data-aod-delay="150" data-aod-dir="left">
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <h3>Discovery & Strategy</h3>
+                            <p>We start by understanding your goals, audience, and requirements to create a comprehensive project roadmap.</p>
                         </div>
                     </div>
-                    <div class="tile-detail">
-                        <div class="tile-highlights">
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Full visual redesign with modern aesthetics</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Responsive mobile-first layout</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Smooth scroll animations &amp; micro-interactions</div>
+                    <div class="process-step" data-aod data-aod-delay="230" data-aod-dir="left">
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <h3>Design & Prototyping</h3>
+                            <p>Creating wireframes and prototypes that align with your brand and user experience goals.</p>
                         </div>
-                        <div class="tile-ctas">
-                            <a href="https://alex-sello7.github.io/Seamless-Travel/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
-                                <i class="fas fa-external-link-alt"></i> View Live Site
-                            </a>
+                    </div>
+                    <div class="process-step" data-aod data-aod-delay="310" data-aod-dir="left">
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <h3>Development</h3>
+                            <p>Building robust, scalable solutions using modern technologies and following best practices.</p>
+                        </div>
+                    </div>
+                    <div class="process-step" data-aod data-aod-delay="390" data-aod-dir="left">
+                        <div class="step-number">04</div>
+                        <div class="step-content">
+                            <h3>Testing & Quality Assurance</h3>
+                            <p>Rigorous testing across multiple devices and browsers to ensure flawless performance.</p>
+                        </div>
+                    </div>
+                    <div class="process-step" data-aod data-aod-delay="470" data-aod-dir="left">
+                        <div class="step-number">05</div>
+                        <div class="step-content">
+                            <h3>Launch & Support</h3>
+                            <p>Deployment and ongoing support to ensure your solution continues to perform optimally.</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- TILE 02: Ousadia Tech -->
-                <div class="work-tile" data-index="1" tabindex="0" role="button" aria-label="View Ousadia Tech project">
-                    <span class="tile-corner tile-corner--tl"></span>
-                    <span class="tile-corner tile-corner--tr"></span>
-                    <span class="tile-corner tile-corner--bl"></span>
-                    <span class="tile-corner tile-corner--br"></span>
-                    <div class="tile-index">02</div>
-                    <div class="tile-body">
-                        <div class="tile-type-badge tile-type-badge--orange"><i class="fas fa-hammer"></i> Full Build</div>
-                        <h3 class="tile-title">Ousadia Tech Solutions</h3>
-                        <p class="tile-brief">Bold digital identity for a tech firm — confidence, capability, and the audacious spirit of the brand.</p>
-                        <div class="tile-tags">
-                            <span class="ptag"><i class="fas fa-code"></i> Web Development</span>
-                            <span class="ptag"><i class="fas fa-fingerprint"></i> Branding</span>
-                            <span class="ptag"><i class="fas fa-microchip"></i> Tech</span>
-                        </div>
-                    </div>
-                    <div class="tile-detail">
-                        <div class="tile-highlights">
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> End-to-end design &amp; development</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Services showcase with pricing structure</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Animated canvas backgrounds &amp; AOD system</div>
-                        </div>
-                        <div class="tile-ctas">
-                            <div class="tile-btn-disabled"><i class="fas fa-hourglass-half"></i> Link Coming Soon</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TILE 03: Precast Housing -->
-                <div class="work-tile" data-index="2" tabindex="0" role="button" aria-label="View Precast Housing project">
-                    <span class="tile-corner tile-corner--tl"></span>
-                    <span class="tile-corner tile-corner--tr"></span>
-                    <span class="tile-corner tile-corner--bl"></span>
-                    <span class="tile-corner tile-corner--br"></span>
-                    <div class="tile-index">03</div>
-                    <div class="tile-body">
-                        <div class="tile-type-badge tile-type-badge--amber"><i class="fas fa-tools"></i> In Progress</div>
-                        <h3 class="tile-title">Precast Housing Concept</h3>
-                        <p class="tile-brief">Construction-industry presence — solidity meets clean digital trust that converts visitors into enquiries.</p>
-                        <div class="tile-tags">
-                            <span class="ptag"><i class="fas fa-drafting-compass"></i> Web Design</span>
-                            <span class="ptag"><i class="fas fa-hard-hat"></i> Construction</span>
-                            <span class="ptag"><i class="fas fa-building"></i> Real Estate</span>
-                        </div>
-                    </div>
-                    <div class="tile-detail">
-                        <div class="tile-highlights">
-                            <div class="tile-hi"><i class="fas fa-clock"></i> Project catalogue &amp; specification sheets</div>
-                            <div class="tile-hi"><i class="fas fa-clock"></i> Quote request workflow</div>
-                            <div class="tile-hi"><i class="fas fa-clock"></i> Structural gallery with filterable views</div>
-                        </div>
-                        <div class="tile-ctas">
-                            <a href="https://alex-sello7.github.io/Precast_Homes/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
-                                <i class="fas fa-external-link-alt"></i> View Live Site
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TILE 04: BaanTech -->
-                <div class="work-tile" data-index="3" tabindex="0" role="button" aria-label="View BaanTech project">
-                    <span class="tile-corner tile-corner--tl"></span>
-                    <span class="tile-corner tile-corner--tr"></span>
-                    <span class="tile-corner tile-corner--bl"></span>
-                    <span class="tile-corner tile-corner--br"></span>
-                    <div class="tile-index">04</div>
-                    <div class="tile-body">
-                        <div class="tile-type-badge tile-type-badge--green"><i class="fas fa-sync-alt"></i> Revamp</div>
-                        <h3 class="tile-title">BaanTech</h3>
-                        <p class="tile-brief">A full website revamp for an engineering, logistics &amp; construction company — industrial-grade design meets modern web standards.</p>
-                        <div class="tile-tags">
-                            <span class="ptag"><i class="fas fa-wrench"></i> Web Revamp</span>
-                            <span class="ptag"><i class="fas fa-cogs"></i> Engineering</span>
-                            <span class="ptag"><i class="fas fa-briefcase"></i> Corporate</span>
-                        </div>
-                    </div>
-                    <div class="tile-detail">
-                        <div class="tile-highlights">
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Full visual identity &amp; layout overhaul</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Services showcase with tabbed navigation</div>
-                            <div class="tile-hi"><i class="fas fa-check-circle"></i> Project portfolio &amp; contact integration</div>
-                        </div>
-                        <div class="tile-ctas">
-                            <a href="https://baantech.co.za/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
-                                <i class="fas fa-external-link-alt"></i> View Live Site
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-
-    <!-- ══════════ CTA 2 ══════════ -->
-    <section class="cta-section cta-parallax" id="ctaParallax2">
-        <div class="cta-parallax-img" data-bg="imgs/img8.jpg" aria-hidden="true"></div>
-        <div class="cta-parallax-overlay" aria-hidden="true"></div>
-        <div class="container">
-            <div class="cta-content">
-                <h2 data-aod data-aod-delay="0">Ready to Transform Your Digital Presence?</h2>
-                <p data-aod data-aod-delay="100">Let's discuss how we can bring your ideas to life with innovative
-                    digital solutions.</p>
-                <a href="#contact" class="bounce-chevron" data-aod data-aod-delay="200">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-
-
-    <!-- ══════════ CONTACT ══════════ -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-aod data-aod-delay="0">Contact Us</span>
-                <h2 class="section-title" data-aod data-aod-delay="80">Let's Build Something Amazing</h2>
-                <p class="section-description" data-aod data-aod-delay="150">Ready to transform your ideas into digital
-                    reality? Get in touch with our team.</p>
-            </div>
-            <div class="contact-wrapper">
-                <div class="contact-form" data-aod data-aod-delay="220" data-aod-dir="left">
-                    <form id="contactForm" action="send-email.php" method="POST">
-                        <div class="form-group"><input type="text" name="name" placeholder="Your Name" required></div>
-                        <div class="form-group"><input type="email" name="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group"><input type="tel" name="phone" placeholder="Phone Number"></div>
-                        <div class="form-group"><textarea name="message" rows="5"
-                                placeholder="Tell us about your project..." required></textarea></div>
-                        <button type="submit" class="btn btn-primary"><span>Send Message</span><i
-                                class="fas fa-paper-plane"></i></button>
-                    </form>
+        <!-- Services Section with Flip Cards -->
+        <section id="services" class="services-section">
+            <div class="scan-line"></div>
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-aod data-aod-delay="0">Our Expertise</span>
+                    <h2 class="section-title" data-aod data-aod-delay="80">Comprehensive Digital Solutions</h2>
                 </div>
-                <div class="contact-info" data-aod data-aod-delay="320" data-aod-dir="right">
-                    <div class="contact-details">
-                        <div class="contact-item"><i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <h4>Address</h4>
-                                <p>Pretoria, Gauteng<br>South Africa</p>
+                <div class="services-grid">
+                    <!-- Card 1: Web Development -->
+                    <div class="service-flip-card" data-aod data-aod-delay="150">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/img1.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-code"></i></div>
+                                    <h3>Web Development</h3>
+                                    <p>Custom websites and web applications built with modern technologies.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="contact-item"><i class="fas fa-phone"></i>
-                            <div>
-                                <h4>Phone</h4>
-                                <p>+27 72 078 6569</p>
-                            </div>
-                        </div>
-                        <div class="contact-item"><i class="fas fa-envelope"></i>
-                            <div>
-                                <h4>Email</h4>
-                                <p><a href="/cdn-cgi/l/email-protection#9afbeee9fff6f6f5aedafdf7fbf3f6b4f9f5f7"><span class="__cf_email__" data-cfemail="a0c1d4d3c5cccccf94e0c7cdc1c9cc8ec3cfcd">[email&#160;protected]</span></a></p>
-                            </div>
-                        </div>
-                        <div class="contact-item"><i class="fas fa-clock"></i>
-                            <div>
-                                <h4>Business Hours</h4>
-                                <p>Mon-Fri: 8AM-6PM<br>Sat: 9AM-2PM</p>
+                            <div class="flip-back" data-bg="imgs/img1.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>Web Development</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Responsive Design</li>
+                                        <li><i class="fas fa-check-circle"></i> Performance Optimization</li>
+                                        <li><i class="fas fa-check-circle"></i> SEO Friendly</li>
+                                        <li><i class="fas fa-check-circle"></i> CMS Integration</li>
+                                        <li><i class="fas fa-check-circle"></i> API Development</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Card 2: UI/UX Design -->
+                    <div class="service-flip-card" data-aod data-aod-delay="220">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/ui.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-paintbrush"></i></div>
+                                    <h3>UI/UX Design</h3>
+                                    <p>User-centered designs that are both beautiful and functional.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
+                            </div>
+                            <div class="flip-back" data-bg="imgs/ui.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>UI/UX Design</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Wireframing & Prototyping</li>
+                                        <li><i class="fas fa-check-circle"></i> User Research & Testing</li>
+                                        <li><i class="fas fa-check-circle"></i> Interaction Design</li>
+                                        <li><i class="fas fa-check-circle"></i> Visual Design Systems</li>
+                                        <li><i class="fas fa-check-circle"></i> Accessibility Compliance</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: E-commerce -->
+                    <div class="service-flip-card" data-aod data-aod-delay="290">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/ecommerce.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
+                                    <h3>E-commerce</h3>
+                                    <p>Complete e-commerce solutions that drive sales.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
+                            </div>
+                            <div class="flip-back" data-bg="imgs/ecommerce.jpg" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>E-commerce Solutions</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Payment Integration</li>
+                                        <li><i class="fas fa-check-circle"></i> Inventory Management</li>
+                                        <li><i class="fas fa-check-circle"></i> Analytics Dashboard</li>
+                                        <li><i class="fas fa-check-circle"></i> Secure Checkout</li>
+                                        <li><i class="fas fa-check-circle"></i> Multi-vendor Support</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Mobile Apps -->
+                    <div class="service-flip-card" data-aod data-aod-delay="360">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/mobapp.webp" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                                    <h3>Mobile Apps</h3>
+                                    <p>Cross-platform mobile applications for iOS and Android.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
+                            </div>
+                            <div class="flip-back" data-bg="imgs/mobapp.webp" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>Mobile Applications</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Native & Cross-platform</li>
+                                        <li><i class="fas fa-check-circle"></i> Push Notifications</li>
+                                        <li><i class="fas fa-check-circle"></i> App Store Deployment</li>
+                                        <li><i class="fas fa-check-circle"></i> Offline Capabilities</li>
+                                        <li><i class="fas fa-check-circle"></i> Biometric Authentication</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Dashboards & Web Apps -->
+                    <div class="service-flip-card" data-aod data-aod-delay="430">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/img4.avif" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                                    <h3>Dashboards & Web Apps</h3>
+                                    <p>Data-driven dashboards and custom web applications for complex business needs.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
+                            </div>
+                            <div class="flip-back" data-bg="imgs/img4.avif" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>Dashboards & Web Apps</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Real-time Analytics</li>
+                                        <li><i class="fas fa-check-circle"></i> Data Visualization</li>
+                                        <li><i class="fas fa-check-circle"></i> Admin Panels & CRUD</li>
+                                        <li><i class="fas fa-check-circle"></i> API Integrations</li>
+                                        <li><i class="fas fa-check-circle"></i> Scalable Architecture</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6: Website Revamp -->
+                    <div class="service-flip-card" data-aod data-aod-delay="500">
+                        <div class="flip-card-inner">
+                            <div class="flip-front" data-bg="imgs/revamp.png" style="background-size: cover; background-position: center;">
+                                <div class="flip-front-content">
+                                    <div class="service-icon"><i class="fas fa-sync-alt"></i></div>
+                                    <h3>Website Revamp</h3>
+                                    <p>Breathe new life into outdated websites with modern design and technology.</p>
+                                    <div class="flip-hint">Explore</div>
+                                </div>
+                            </div>
+                            <div class="flip-back" data-bg="imgs/revamp.png" style="background-size: cover; background-position: center;">
+                                <div class="flip-back-blur-overlay"></div>
+                                <div class="flip-back-content">
+                                    <h3>Website Revamp</h3>
+                                    <ul class="back-features">
+                                        <li><i class="fas fa-check-circle"></i> Modern UI/UX Redesign</li>
+                                        <li><i class="fas fa-check-circle"></i> Performance Optimization</li>
+                                        <li><i class="fas fa-check-circle"></i> Mobile Responsiveness</li>
+                                        <li><i class="fas fa-check-circle"></i> SEO Enhancement</li>
+                                        <li><i class="fas fa-check-circle"></i> Content Migration</li>
+                                        <li><i class="fas fa-check-circle"></i> Speed & Security Upgrades</li>
+                                    </ul>
+                                    <a href="#contact" class="flip-cta">ENQUIRE <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    </main><!-- /#main-content -->
+        <!-- Why Choose Us Section (LIGHT BACKGROUND) -->
+        <section id="why-us" class="why-us-section has-parallax">
+            <div class="parallax-bg" data-parallax-speed="0.3" data-bg="imgs/img8.jpg" aria-hidden="true"></div>
+           
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-aod data-aod-delay="0">Why Cascade Creations</span>
+                    <h2 class="section-title" data-aod data-aod-delay="80">Built Different, <em>By Design</em></h2>
+                    <p class="section-description" data-aod data-aod-delay="150">There's no shortage of web developers out there. Here's why clients keep choosing us — and coming back.</p>
+                </div>
+
+                <div class="why-grid">
+                    <!-- Card 01 -->
+                    <div class="why-card why-card--featured" data-aod data-aod-delay="0">
+                        <div class="wc-icon-wrap"><div class="wc-icon"><i class="fas fa-gem"></i></div></div>
+                        <div class="wc-num">01</div>
+                        <h3 class="wc-title">Design That Actually Converts</h3>
+                        <p class="wc-desc">Beautiful isn't enough. Every visual decision — layout, colour, typography, spacing — is made to guide your visitor toward action. Form and function, always together.</p>
+                        <div class="wc-proof">
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Conversion-focused layouts</span>
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Data-informed design choices</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 02 -->
+                    <div class="why-card" data-aod data-aod-delay="80">
+                        <div class="wc-icon-wrap"><div class="wc-icon"><i class="fas fa-bolt"></i></div></div>
+                        <div class="wc-num">02</div>
+                        <h3 class="wc-title">Speed You Can Feel</h3>
+                        <p class="wc-desc">Bloated themes are a thing of the past. We write lean, optimised code — so your site loads fast, ranks well, and never frustrates a visitor.</p>
+                        <div class="wc-proof">
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Performance-first development</span>
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> SEO-ready structure</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 03 -->
+                    <div class="why-card" data-aod data-aod-delay="160">
+                        <div class="wc-icon-wrap"><div class="wc-icon"><i class="fas fa-mobile-alt"></i></div></div>
+                        <div class="wc-num">03</div>
+                        <h3 class="wc-title">Mobile-First, Always</h3>
+                        <p class="wc-desc">Over 60% of web traffic is mobile. We design and build for the smallest screen first — then scale up — so the experience is flawless on every device.</p>
+                        <div class="wc-proof">
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Responsive across all breakpoints</span>
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Touch-optimised interactions</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 04 -->
+                    <div class="why-card" data-aod data-aod-delay="240">
+                        <div class="wc-icon-wrap"><div class="wc-icon"><i class="fas fa-handshake"></i></div></div>
+                        <div class="wc-num">04</div>
+                        <h3 class="wc-title">One Point of Contact</h3>
+                        <p class="wc-desc">You work directly with Alex — the designer and the developer. No account managers, no miscommunication. Your vision stays intact from brief to launch.</p>
+                        <div class="wc-proof">
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Direct collaboration</span>
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> No middlemen or delays</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 05 -->
+                    <div class="why-card" data-aod data-aod-delay="80">
+                        <div class="wc-icon-wrap wc-icon-wrap--orange"><div class="wc-icon wc-icon--orange"><i class="fas fa-clock"></i></div></div>
+                        <div class="wc-num">05</div>
+                        <h3 class="wc-title">Delivery You Can Rely On</h3>
+                        <p class="wc-desc">Deadlines are commitments, not suggestions. We plan carefully, communicate proactively, and deliver on time — every time.</p>
+                        <div class="wc-proof">
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Clear project milestones</span>
+                            <span class="wc-proof-item"><i class="fas fa-check"></i> Regular progress updates</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 06 - CTA -->
+                    <div class="why-card why-card--cta" data-aod data-aod-delay="160">
+                        <div class="wc-cta-glow"></div>
+                        <div class="wc-cta-icon"><i class="fas fa-arrow-right"></i></div>
+                        <h3>Ready to Get Started?</h3>
+                        <p>Let's talk about your project and see what we can build together.</p>
+                        <a href="#contact" class="wc-cta-btn"><i class="fas fa-paper-plane"></i> Start a Conversation</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Work / Portfolio Section -->
+        <section id="work" class="work-section">
+            <div class="work-bg-layer" id="workBgLayer" aria-hidden="true">
+                <div class="work-bg-slide is-active" data-project="0" data-bg="imgs/madid.jpg"></div>
+                <div class="work-bg-slide" data-project="1" data-bg="imgs/digitalize the sky a.png"></div>
+                <div class="work-bg-slide" data-project="2" data-bg="imgs/hero1.jpg"></div>
+                <div class="work-bg-slide" data-project="3" data-bg="imgs/about1.jpg"></div>
+            </div>
+
+            <div class="work-inner container">
+                <div class="work-header">
+                    <span class="section-subtitle"><i class="fas fa-layer-group"></i> Portfolio</span>
+                    <h2 class="section-title">Projects We're Proud Of</h2>
+                    <p class="section-description">Each build tells a story — research, late nights, and the quiet satisfaction when everything clicks. Click a project to explore.</p>
+                </div>
+
+                <div class="work-grid" id="workGrid">
+                    <!-- Tile 01 -->
+                    <div class="work-tile is-active" data-index="0" tabindex="0" role="button" aria-label="View Seamless Travel project">
+                        <span class="tile-corner tile-corner--tl"></span>
+                        <span class="tile-corner tile-corner--tr"></span>
+                        <span class="tile-corner tile-corner--bl"></span>
+                        <span class="tile-corner tile-corner--br"></span>
+                        <div class="tile-index">01</div>
+                        <div class="tile-body">
+                            <div class="tile-type-badge"><i class="fas fa-paint-brush"></i> Revamp Concept</div>
+                            <h3 class="tile-title">Seamless Travel</h3>
+                            <p class="tile-brief">A fluid website revamp for a travel brand — modern booking experience, destination-first design.</p>
+                            <div class="tile-tags">
+                                <span class="ptag"><i class="fas fa-palette"></i> Web Design</span>
+                                <span class="ptag"><i class="fas fa-vector-square"></i> UI/UX</span>
+                                <span class="ptag"><i class="fas fa-plane"></i> Travel</span>
+                            </div>
+                        </div>
+                        <div class="tile-detail">
+                            <div class="tile-highlights">
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Full visual redesign with modern aesthetics</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Responsive mobile-first layout</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Smooth scroll animations & micro-interactions</div>
+                            </div>
+                            <div class="tile-ctas">
+                                <a href="https://alex-sello7.github.io/Seamless-Travel/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> View Live Site
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tile 02 -->
+                    <div class="work-tile" data-index="1" tabindex="0" role="button" aria-label="View Ousadia Tech project">
+                        <span class="tile-corner tile-corner--tl"></span>
+                        <span class="tile-corner tile-corner--tr"></span>
+                        <span class="tile-corner tile-corner--bl"></span>
+                        <span class="tile-corner tile-corner--br"></span>
+                        <div class="tile-index">02</div>
+                        <div class="tile-body">
+                            <div class="tile-type-badge tile-type-badge--orange"><i class="fas fa-hammer"></i> Full Build</div>
+                            <h3 class="tile-title">Ousadia Tech Solutions</h3>
+                            <p class="tile-brief">Bold digital identity for a tech firm — confidence, capability, and the audacious spirit of the brand.</p>
+                            <div class="tile-tags">
+                                <span class="ptag"><i class="fas fa-code"></i> Web Development</span>
+                                <span class="ptag"><i class="fas fa-fingerprint"></i> Branding</span>
+                                <span class="ptag"><i class="fas fa-microchip"></i> Tech</span>
+                            </div>
+                        </div>
+                        <div class="tile-detail">
+                            <div class="tile-highlights">
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> End-to-end design & development</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Services showcase with pricing structure</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Animated canvas backgrounds & AOD system</div>
+                            </div>
+                            <div class="tile-ctas">
+                                <div class="tile-btn-disabled"><i class="fas fa-hourglass-half"></i> Link Coming Soon</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tile 03 -->
+                    <div class="work-tile" data-index="2" tabindex="0" role="button" aria-label="View Precast Housing project">
+                        <span class="tile-corner tile-corner--tl"></span>
+                        <span class="tile-corner tile-corner--tr"></span>
+                        <span class="tile-corner tile-corner--bl"></span>
+                        <span class="tile-corner tile-corner--br"></span>
+                        <div class="tile-index">03</div>
+                        <div class="tile-body">
+                            <div class="tile-type-badge tile-type-badge--amber"><i class="fas fa-tools"></i> In Progress</div>
+                            <h3 class="tile-title">Precast Housing Concept</h3>
+                            <p class="tile-brief">Construction-industry presence — solidity meets clean digital trust that converts visitors into enquiries.</p>
+                            <div class="tile-tags">
+                                <span class="ptag"><i class="fas fa-drafting-compass"></i> Web Design</span>
+                                <span class="ptag"><i class="fas fa-hard-hat"></i> Construction</span>
+                                <span class="ptag"><i class="fas fa-building"></i> Real Estate</span>
+                            </div>
+                        </div>
+                        <div class="tile-detail">
+                            <div class="tile-highlights">
+                                <div class="tile-hi"><i class="fas fa-clock"></i> Project catalogue & specification sheets</div>
+                                <div class="tile-hi"><i class="fas fa-clock"></i> Quote request workflow</div>
+                                <div class="tile-hi"><i class="fas fa-clock"></i> Structural gallery with filterable views</div>
+                            </div>
+                            <div class="tile-ctas">
+                                <a href="https://alex-sello7.github.io/Precast_Homes/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> View Live Site
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tile 04 -->
+                    <div class="work-tile" data-index="3" tabindex="0" role="button" aria-label="View BaanTech project">
+                        <span class="tile-corner tile-corner--tl"></span>
+                        <span class="tile-corner tile-corner--tr"></span>
+                        <span class="tile-corner tile-corner--bl"></span>
+                        <span class="tile-corner tile-corner--br"></span>
+                        <div class="tile-index">04</div>
+                        <div class="tile-body">
+                            <div class="tile-type-badge tile-type-badge--green"><i class="fas fa-sync-alt"></i> Revamp</div>
+                            <h3 class="tile-title">BaanTech</h3>
+                            <p class="tile-brief">A full website revamp for an engineering, logistics & construction company — industrial-grade design meets modern web standards.</p>
+                            <div class="tile-tags">
+                                <span class="ptag"><i class="fas fa-wrench"></i> Web Revamp</span>
+                                <span class="ptag"><i class="fas fa-cogs"></i> Engineering</span>
+                                <span class="ptag"><i class="fas fa-briefcase"></i> Corporate</span>
+                            </div>
+                        </div>
+                        <div class="tile-detail">
+                            <div class="tile-highlights">
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Full visual identity & layout overhaul</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Services showcase with tabbed navigation</div>
+                                <div class="tile-hi"><i class="fas fa-check-circle"></i> Project portfolio & contact integration</div>
+                            </div>
+                            <div class="tile-ctas">
+                                <a href="https://baantech.co.za/" target="_blank" rel="noopener noreferrer" class="tile-btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> View Live Site
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      <!-- CTA 2 (WHITE BACKGROUND with visible image) -->
+<section class="cta-white-section" id="ctaWhite">
+    <div class="cta-white-bg" style="background-image: url('imgs/img7.avif');"></div>
+    <div class="container">
+        <div class="cta-white-card" data-aod data-aod-delay="0">
+            <div class="cta-white-icon">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <h2 class="cta-white-title">Ready to Transform Your Digital Presence?</h2>
+            <p class="cta-white-desc">Let's discuss how we can bring your ideas to life with innovative digital solutions.</p>
+            <a href="#contact" class="cta-white-btn">
+                <span>Start a Conversation</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle" data-aod data-aod-delay="0">Contact Us</span>
+                    <h2 class="section-title" data-aod data-aod-delay="80">Let's Build Something Amazing</h2>
+                    <p class="section-description" data-aod data-aod-delay="150">Ready to transform your ideas into digital reality? Get in touch with our team.</p>
+                </div>
+                <div class="contact-wrapper">
+                    <div class="contact-form" data-aod data-aod-delay="220" data-aod-dir="left">
+                        <form id="contactForm" action="send-email.php" method="POST">
+                            <div class="form-group"><input type="text" name="name" placeholder="Your Name" required></div>
+                            <div class="form-group"><input type="email" name="email" placeholder="Your Email" required></div>
+                            <div class="form-group"><input type="tel" name="phone" placeholder="Phone Number"></div>
+                            <div class="form-group"><textarea name="message" rows="5" placeholder="Tell us about your project..." required></textarea></div>
+                            <button type="submit" class="btn btn-primary"><span>Send Message</span><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                    <div class="contact-info" data-aod data-aod-delay="320" data-aod-dir="right">
+                        <div class="contact-details">
+                            <div class="contact-item"><i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Address</h4>
+                                    <p>Pretoria, Gauteng<br>South Africa</p>
+                                </div>
+                            </div>
+                            <div class="contact-item"><i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Phone</h4>
+                                    <p>+27 72 078 6569</p>
+                                </div>
+                            </div>
+                            <div class="contact-item"><i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p><a href="mailto:atsello4@gmail.com"><span class="__cf_email__" data-cfemail="37564542545d5d5e0577505a565e5b1954585a">atsello4@gmail.com</span></a></p>
+                                </div>
+                            </div>
+                            <div class="contact-item"><i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Business Hours</h4>
+                                    <p>Mon-Fri: 8AM-6PM<br>Sat: 9AM-2PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
+        <canvas id="footerCanvas" aria-hidden="true"></canvas>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="footer-logo"><img src="imgs/cclogo.png" alt="Cascade Creations" loading="lazy"></div>
-                    <p>Creating digital solutions that flow naturally. We specialize in building seamless, responsive
-                        web applications.</p>
+                    <p>Creating digital solutions that flow naturally. We specialize in building seamless, responsive web applications.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Quick Links</h4>
@@ -882,21 +873,20 @@
                 <div class="footer-contact-info">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li><i class="fas fa-phone-alt"></i> <a href="tel:+27720786569">+27 72 078 6569</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#2f4e5b5c4a4343401b6f48424e4643014c4042"><span class="__cf_email__" data-cfemail="6e0f1a1d0b0202015a2e09030f0702400d0103">[email&#160;protected]</span></a></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+27720786569">+27 72 078 6569</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:atsello4@gmail.com"><span class="__cf_email__" data-cfemail="37564542545d5d5e0577505a565e5b1954585a">atsello4@gmail.com</span></a></li>
                         <li><i class="fab fa-github"></i> <a href="https://github.com/Alex-Sello7" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; <span id="currentYear"></span> Cascade Creations. All rights reserved.</p>
-                <div class="footer-social"><a href="https://github.com/Alex-Sello7" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                </div>
+                <div class="footer-social"><a href="https://github.com/Alex-Sello7" aria-label="GitHub"><i class="fab fa-github"></i></a></div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS deferred — not needed for first paint -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="index.js" defer></script>
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
