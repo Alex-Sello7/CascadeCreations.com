@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     window.addEventListener('scroll', () => requestAnimationFrame(updateActiveNavLink), { passive: true });
 
-    // ===== HERO CAROUSEL =====
+    // ===== HERO CAROUSEL with smooth sliding transitions =====
     (function initHeroCarousel() {
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.hero-dot');
@@ -113,16 +113,72 @@ document.addEventListener('DOMContentLoaded', function () {
         let current = 0;
         let playing = true;
         let timer = null;
+        let isTransitioning = false;
         const interval = 6000;
 
         function goTo(index) {
-            current = (index + slides.length) % slides.length;
-            slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
-            dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const newIndex = (index + slides.length) % slides.length;
+            const currentSlide = slides[current];
+            const nextSlide = slides[newIndex];
+
+            // Remove all transition classes
+            slides.forEach(s => {
+                s.classList.remove('is-active', 'is-exiting', 'is-entering');
+            });
+
+            // Set current slide as exiting (slides out left)
+            if (currentSlide) {
+                currentSlide.classList.add('is-exiting');
+            }
+
+            // Prepare next slide
+            nextSlide.style.transition = 'none';
+            nextSlide.classList.add('is-active');
+            nextSlide.style.transform = 'translateX(100%) scale(0.95)';
+            nextSlide.style.opacity = '0';
+            nextSlide.style.visibility = 'visible';
+            
+            // Force reflow
+            void nextSlide.offsetWidth;
+            nextSlide.style.transition = '';
+            
+            // Animate next slide in
+            requestAnimationFrame(() => {
+                nextSlide.style.transform = 'translateX(0) scale(1)';
+                nextSlide.style.opacity = '1';
+                nextSlide.classList.add('is-entering');
+            });
+
+            // Update dots
+            dots.forEach((d, i) => {
+                d.classList.toggle('is-active', i === newIndex);
+            });
+
+            // Clean up after animation
+            setTimeout(() => {
+                slides.forEach(s => {
+                    s.classList.remove('is-exiting', 'is-entering');
+                    if (s !== nextSlide) {
+                        s.style.transform = '';
+                        s.style.opacity = '';
+                        s.style.visibility = '';
+                        s.classList.remove('is-active');
+                    }
+                });
+                current = newIndex;
+                isTransitioning = false;
+            }, 750);
         }
 
-        function next() { goTo(current + 1); }
-        function prev() { goTo(current - 1); }
+        function next() { 
+            if (!isTransitioning) goTo(current + 1); 
+        }
+        function prev() { 
+            if (!isTransitioning) goTo(current - 1); 
+        }
 
         function startAutoplay() {
             stopAutoplay();
@@ -160,6 +216,16 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) stopAutoplay();
             else if (playing) startAutoplay();
+        });
+
+        // Ensure first slide is properly positioned
+        slides.forEach((s, i) => {
+            if (i === 0) {
+                s.classList.add('is-active');
+                s.style.transform = 'translateX(0) scale(1)';
+                s.style.opacity = '1';
+                s.style.visibility = 'visible';
+            }
         });
 
         startAutoplay();

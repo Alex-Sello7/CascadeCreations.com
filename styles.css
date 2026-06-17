@@ -355,7 +355,7 @@ section { padding: 64px 0; }
 @media (max-width: 768px) { section { padding: 48px 0; } }
 
 /* =========================================================
-   HERO CAROUSEL - Clean Microsoft-style
+   HERO CAROUSEL - Full-bleed photo background with smooth sliding transitions
    ========================================================= */
 .hero-carousel {
     position: relative;
@@ -364,32 +364,170 @@ section { padding: 64px 0; }
     overflow: hidden;
     background: var(--canvas);
 }
+
 .hero-track {
     position: relative;
-    height: 600px;
+    height: 700px;
     padding-bottom: 56px;
+    overflow: hidden;
 }
+
 .hero-slide {
     position: absolute;
     inset: 0 0 56px 0;
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
+    display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.7s ease;
     pointer-events: none;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+                visibility 0s 0.7s;
+    transform: translateX(100%) scale(0.95);
+    will-change: transform, opacity;
+    /* Background image applied via ::before */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
+/* Full-bleed background image via ::before */
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    transform: scale(1.05);
+}
+
+/* Dark gradient overlay for text readability */
+.hero-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.65) 0%, 
+        rgba(0, 0, 0, 0.40) 40%,
+        rgba(0, 0, 0, 0.35) 60%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+}
+
+/* Active slide - fully visible */
 .hero-slide.is-active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transform: translateX(0) scale(1);
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+                visibility 0s 0s;
 }
+
+/* Active slide background zoom effect */
+.hero-slide.is-active::before {
+    transform: scale(1);
+}
+
+/* Previous slide - slides out to the left */
+.hero-slide.is-exiting {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Next slide - comes in from the right */
+.hero-slide.is-entering {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+                visibility 0s 0s;
+}
+
+/* Slide-specific background images */
+.hero-slide[data-slide="0"]::before {
+    background-image: url('imgs/1slide.avif');
+}
+.hero-slide[data-slide="1"]::before {
+    background-image: url('imgs/4slide.avif');
+}
+.hero-slide[data-slide="2"]::before {
+    background-image: url('imgs/3slide.jpg');
+}
+
+/* Slide content - slight parallax on slide change */
 .hero-slide-copy {
-    padding: 0 64px;
-    max-width: 620px;
+    position: relative;
     z-index: 2;
+    padding: 0 64px;
+    max-width: 660px;
+    color: #ffffff;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    transform: translateY(20px);
+    opacity: 0;
 }
+
+/* Active slide content - fade up */
+.hero-slide.is-active .hero-slide-copy {
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.15s, 
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.15s;
+}
+
+/* Slide content when exiting */
+.hero-slide.is-exiting .hero-slide-copy {
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
+                opacity 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Brand logo animation */
+.hero-slide-brand {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    margin-right: 64px;
+    margin-left: auto;
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+    transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.25s,
+                transform 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.25s;
+}
+
+.hero-slide.is-active .hero-slide-brand {
+    opacity: 0.6;
+    transform: translateX(0) scale(1);
+}
+
+.hero-slide-brand:hover {
+    opacity: 0.9;
+}
+
+.hero-slide-brand img {
+    width: 360px;
+    height: 360px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.2));
+    padding: 0;
+    margin-right: 160px;
+}
+
 .hero-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -398,35 +536,48 @@ section { padding: 64px 0; }
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--primary);
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 16px;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s,
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s;
 }
+
 .hero-eyebrow .dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--primary);
+    background: #ffffff;
 }
+
 .hero-slide-title {
     font-family: var(--font-display);
     font-size: clamp(2.2rem, 4.6vw, 3.6rem);
     font-weight: 600;
     line-height: 1.08;
     letter-spacing: -0.01em;
-    color: var(--ink);
+    color: #ffffff;
     margin: 0 0 16px;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.25s,
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.25s;
 }
+
 .hero-slide-desc {
     font-size: 1.05rem;
-    color: var(--ink-soft);
+    color: rgba(255, 255, 255, 0.85);
     margin: 0 0 28px;
     max-width: 480px;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s,
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
 }
+
 .hero-slide-actions {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.35s,
+                opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.35s;
 }
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -447,6 +598,8 @@ section { padding: 64px 0; }
 .btn-primary:hover { 
     background: var(--primary-dark); 
     color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 120, 212, 0.3);
 }
 .btn-outline {
     background: transparent;
@@ -459,42 +612,15 @@ section { padding: 64px 0; }
 }
 .btn-outline-light {
     background: transparent;
-    border-color: rgba(255,255,255,0.3);
-    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
 }
 .btn-outline-light:hover { 
-    background: #fff; 
+    background: #ffffff; 
     color: var(--ink);
-}
-
-.hero-slide-visual {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-}
-.hero-slide-visual img,
-.hero-slide-visual .visual-fill {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.visual-fill {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Slide-specific backgrounds - Light Microsoft-style */
-.hero-slide[data-slide="0"] { 
-    background: linear-gradient(135deg, #f8f9fa 0%, #e6f2fa 40%, #f0f2f4 100%); 
-}
-.hero-slide[data-slide="1"] { 
-    background: linear-gradient(135deg, #f8f9fa 0%, #e0f5f2 40%, #f0f2f4 100%); 
-}
-.hero-slide[data-slide="2"] { 
-    background: linear-gradient(135deg, #f8f9fa 0%, #f0e8f7 40%, #f0f2f4 100%); 
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
 }
 
 .hero-controls {
@@ -513,20 +639,21 @@ section { padding: 64px 0; }
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--ink);
+    color: #ffffff;
     transition: all var(--fast);
     font-size: 0.8rem;
 }
 .hero-arrow:hover { 
-    background: #fff; 
-    border-color: var(--primary);
-    color: var(--primary);
+    background: rgba(255, 255, 255, 0.2); 
+    border-color: rgba(255, 255, 255, 0.6);
 }
 .hero-dots {
     display: flex;
@@ -538,51 +665,85 @@ section { padding: 64px 0; }
     height: 8px;
     border-radius: 50%;
     border: none;
-    background: var(--line);
+    background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
     transition: all var(--fast);
     padding: 0;
 }
 .hero-dot.is-active {
-    background: var(--primary);
+    background: #ffffff;
     width: 22px;
     border-radius: 4px;
 }
-.hero-play {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--ink);
-    font-size: 0.75rem;
-    transition: all var(--fast);
-}
-.hero-play:hover { 
-    background: #fff; 
-    border-color: var(--primary);
-    color: var(--primary);
-}
 
+/* Responsive adjustments */
 @media (max-width: 1024px) {
     .hero-track { height: 560px; }
-    .hero-slide { grid-template-columns: 1fr; }
-    .hero-slide-visual { display: none; }
-    .hero-slide-copy {
-        padding: 0 32px;
-        max-width: 100%;
-        text-align: left;
+    .hero-slide-brand {
+        margin-right: 32px;
+    }
+    .hero-slide-brand img {
+        width: 90px;
+        height: 90px;
+        padding: 10px;
     }
 }
-@media (max-width: 640px) {
-    .hero-track { height: 540px; }
-    .hero-slide-copy { padding: 0 24px; }
-    .hero-slide-actions { flex-direction: column; align-items: stretch; }
-    .hero-slide-actions .btn { justify-content: center; }
+
+@media (max-width: 768px) {
+    .hero-track { height: 520px; }
+    .hero-slide {
+        justify-content: center;
+        text-align: center;
+    }
+    .hero-slide-copy {
+        padding: 0 24px;
+        max-width: 100%;
+        text-align: center;
+        transform: translateY(30px);
+    }
+    .hero-slide-desc {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .hero-slide-actions {
+        justify-content: center;
+    }
+    .hero-slide-brand {
+        display: none;
+    }
+    .hero-slide-title {
+        font-size: clamp(1.8rem, 5vw, 2.4rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-track { height: 500px; }
+    .hero-slide-copy { padding: 0 20px; }
+    .hero-slide-actions { 
+        flex-direction: column; 
+        align-items: stretch; 
+    }
+    .hero-slide-actions .btn { 
+        justify-content: center; 
+        padding: 12px 20px;
+    }
+    .hero-slide-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+    .hero-slide-desc {
+        font-size: 0.9rem;
+    }
+    .hero-controls {
+        gap: 12px;
+    }
+    .hero-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 0.7rem;
+    }
+    .hero-slide-brand {
+        display: none;
+    }
 }
 
 /* =========================================================
@@ -832,13 +993,11 @@ section { padding: 64px 0; }
     overflow: hidden;
     color: var(--ink);
     transition: all var(--med);
-    /* Background image will be applied via ::before */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* The ::before pseudo-element for background images */
 .mosaic-tile::before {
     content: '';
     position: absolute;
@@ -850,12 +1009,10 @@ section { padding: 64px 0; }
     transition: transform 0.5s var(--ease);
 }
 
-/* Hover zoom effect on the background */
 .mosaic-tile:hover::before {
     transform: scale(1.05);
 }
 
-/* Dark overlay for better text readability */
 .mosaic-tile::after {
     content: '';
     position: absolute;
@@ -871,12 +1028,10 @@ section { padding: 64px 0; }
     transition: opacity 0.3s ease;
 }
 
-/* Reduce overlay on hover to brighten the image */
 .mosaic-tile:hover::after {
     opacity: 0.4;
 }
 
-/* All content should be above the overlay */
 .mosaic-tile .mosaic-icon,
 .mosaic-tile h3,
 .mosaic-tile p {
@@ -884,7 +1039,6 @@ section { padding: 64px 0; }
     z-index: 2;
 }
 
-/* Text color adjustment for dark backgrounds */
 .mosaic-tile h3 {
     font-family: var(--font-display);
     font-size: 1.25rem;
@@ -921,12 +1075,10 @@ section { padding: 64px 0; }
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Hide the img inside the icon and use it as background instead */
 .mosaic-tile .mosaic-icon img {
     display: none;
 }
 
-/* Individual tile background images - Replace these URLs with your actual images */
 .mosaic-tile--1::before {
     background-image: url('imgs/fullstack.jpg');
 }
@@ -940,7 +1092,6 @@ section { padding: 64px 0; }
     background-image: url('imgs/slide1.jpg');
 }
 
-/* Fallback gradient backgrounds if images fail to load */
 .mosaic-tile--1 {
     background: linear-gradient(160deg, #1a1a3e, #2d1b69);
 }
@@ -954,20 +1105,16 @@ section { padding: 64px 0; }
     background: linear-gradient(160deg, #2a1a3e, #4a1b69);
 }
 
-/* Explicit placement: tile1 spans 2x2, tile2 top-right 2x1,
-   tile3+tile4 bottom-right 1x1 each, tile5 moved into row beneath as full-width band */
 .mosaic-tile--1 { grid-column: 1 / 3; grid-row: 1 / 3; }
 .mosaic-tile--2 { grid-column: 3 / 5; grid-row: 1 / 2; }
 .mosaic-tile--3 { grid-column: 3 / 4; grid-row: 2 / 3; }
 .mosaic-tile--4 { grid-column: 4 / 5; grid-row: 2 / 3; }
 
-/* Hover effects - subtle lift */
 .mosaic-tile:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* Mosaic Band (the wide tile at the bottom) */
 .mosaic-band {
     margin-top: 16px;
     border-radius: var(--r-lg);
@@ -980,7 +1127,6 @@ section { padding: 64px 0; }
     background: #1a1a3e;
 }
 
-/* Background image for the mosaic band */
 .mosaic-band::before {
     content: '';
     position: absolute;
@@ -998,7 +1144,6 @@ section { padding: 64px 0; }
     opacity: 0.4;
 }
 
-/* Overlay for the band */
 .mosaic-band::after {
     content: '';
     position: absolute;
