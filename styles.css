@@ -813,7 +813,7 @@ section { padding: 64px 0; }
 }
 
 /* =========================================================
-   CAPABILITY MOSAIC
+   CAPABILITY MOSAIC - With Full Background Images
    ========================================================= */
 .mosaic-section { background: var(--canvas); }
 .mosaic-grid {
@@ -832,43 +832,142 @@ section { padding: 64px 0; }
     overflow: hidden;
     color: var(--ink);
     transition: all var(--med);
+    /* Background image will be applied via ::before */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-.mosaic-tile:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+
+/* The ::before pseudo-element for background images */
+.mosaic-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.5s var(--ease);
 }
+
+/* Hover zoom effect on the background */
+.mosaic-tile:hover::before {
+    transform: scale(1.05);
+}
+
+/* Dark overlay for better text readability */
+.mosaic-tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.1) 0%, 
+        rgba(0, 0, 0, 0.3) 40%,
+        rgba(0, 0, 0, 0.6) 80%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+/* Reduce overlay on hover to brighten the image */
+.mosaic-tile:hover::after {
+    opacity: 0.4;
+}
+
+/* All content should be above the overlay */
+.mosaic-tile .mosaic-icon,
+.mosaic-tile h3,
+.mosaic-tile p {
+    position: relative;
+    z-index: 2;
+}
+
+/* Text color adjustment for dark backgrounds */
 .mosaic-tile h3 {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0 0 6px;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 .mosaic-tile p {
     font-size: 0.88rem;
-    color: var(--ink-soft);
+    color: rgba(255, 255, 255, 0.85);
     margin: 0;
     max-width: 280px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
+
 .mosaic-tile .mosaic-icon {
     position: absolute;
     top: 24px;
     left: 28px;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     font-size: 1.05rem;
-    background: rgba(255,255,255,0.8);
-    color: var(--primary);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/* Hide the img inside the icon and use it as background instead */
+.mosaic-tile .mosaic-icon img {
+    display: none;
+}
+
+/* Individual tile background images - Replace these URLs with your actual images */
+.mosaic-tile--1::before {
+    background-image: url('imgs/fullstack.jpg');
+}
+.mosaic-tile--2::before {
+    background-image: url('imgs/cybersecurity.jpg');
+}
+.mosaic-tile--3::before {
+    background-image: url('imgs/performance.jpg');
+}
+.mosaic-tile--4::before {
+    background-image: url('imgs/slide1.jpg');
+}
+
+/* Fallback gradient backgrounds if images fail to load */
+.mosaic-tile--1 {
+    background: linear-gradient(160deg, #1a1a3e, #2d1b69);
+}
+.mosaic-tile--2 {
+    background: linear-gradient(160deg, #1a2a3e, #1b4a69);
+}
+.mosaic-tile--3 {
+    background: linear-gradient(160deg, #1a3e2a, #1b694a);
+}
+.mosaic-tile--4 {
+    background: linear-gradient(160deg, #2a1a3e, #4a1b69);
+}
+
+/* Explicit placement: tile1 spans 2x2, tile2 top-right 2x1,
+   tile3+tile4 bottom-right 1x1 each, tile5 moved into row beneath as full-width band */
 .mosaic-tile--1 { grid-column: 1 / 3; grid-row: 1 / 3; }
 .mosaic-tile--2 { grid-column: 3 / 5; grid-row: 1 / 2; }
 .mosaic-tile--3 { grid-column: 3 / 4; grid-row: 2 / 3; }
 .mosaic-tile--4 { grid-column: 4 / 5; grid-row: 2 / 3; }
 
+/* Hover effects - subtle lift */
+.mosaic-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Mosaic Band (the wide tile at the bottom) */
 .mosaic-band {
     margin-top: 16px;
     border-radius: var(--r-lg);
@@ -877,35 +976,85 @@ section { padding: 64px 0; }
     align-items: center;
     gap: 24px;
     position: relative;
+    overflow: hidden;
+    background: #1a1a3e;
 }
+
+/* Background image for the mosaic band */
+.mosaic-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('imgs/colab.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.mosaic-band:hover::before {
+    opacity: 0.4;
+}
+
+/* Overlay for the band */
+.mosaic-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, 
+        rgba(26, 26, 62, 0.85) 0%, 
+        rgba(26, 26, 62, 0.5) 50%,
+        rgba(26, 26, 62, 0.85) 100%
+    );
+}
+
 .mosaic-band .mosaic-icon {
-    position: static;
+    position: relative;
+    z-index: 2;
     flex-shrink: 0;
     width: 48px;
     height: 48px;
     overflow: hidden;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+.mosaic-band .mosaic-icon img {
+    display: none;
+}
+
+.mosaic-band-copy {
+    position: relative;
+    z-index: 2;
+}
+
 .mosaic-band-copy h3 { 
     font-family: var(--font-display);
     font-size: 1.2rem; 
-    font-weight: 600; 
-    margin: 0 0 4px; 
+    font-weight: 700; 
+    margin: 0 0 4px;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-.mosaic-band-copy p { font-size: 0.9rem; color: var(--ink-soft); margin: 0; max-width: 560px; }
-
-.mosaic-tile--1 { background: linear-gradient(160deg, #e6f2fa, #cce4f2); }
-.mosaic-tile--2 { background: linear-gradient(160deg, #f0e8f7, #e0d4f0); }
-.mosaic-tile--3 { background: linear-gradient(160deg, #e0f5f2, #c0eee8); }
-.mosaic-tile--4 { 
-    background: var(--night); 
-    color: var(--on-night); 
+.mosaic-band-copy p { 
+    font-size: 0.9rem; 
+    color: rgba(255, 255, 255, 0.8); 
+    margin: 0; 
+    max-width: 560px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
-.mosaic-tile--4 p { color: var(--on-night-soft); }
-.mosaic-tile--4 .mosaic-icon { background: rgba(255,255,255,0.1); color: #e6f2fa; }
-.mosaic-tile--5 { background: linear-gradient(160deg, #fff8e6, #fef0cc); }
 
 @media (max-width: 1024px) {
-    .mosaic-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: 220px 180px 180px; }
+    .mosaic-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        grid-template-rows: 220px 180px 180px; 
+    }
     .mosaic-tile--1 { grid-column: 1 / 3; grid-row: 1 / 2; }
     .mosaic-tile--2 { grid-column: 1 / 3; grid-row: 2 / 3; }
     .mosaic-tile--3 { grid-column: 1 / 2; grid-row: 3 / 4; }
@@ -913,8 +1062,31 @@ section { padding: 64px 0; }
     .mosaic-band { flex-direction: column; text-align: center; }
 }
 @media (max-width: 640px) {
-    .mosaic-grid { grid-template-columns: 1fr; grid-template-rows: none; }
-    .mosaic-tile--1, .mosaic-tile--2, .mosaic-tile--3, .mosaic-tile--4 { grid-column: 1; grid-row: auto; height: 200px; }
+    .mosaic-grid { 
+        grid-template-columns: 1fr; 
+        grid-template-rows: none; 
+    }
+    .mosaic-tile--1, 
+    .mosaic-tile--2, 
+    .mosaic-tile--3, 
+    .mosaic-tile--4 { 
+        grid-column: 1; 
+        grid-row: auto; 
+        height: 200px; 
+    }
+    .mosaic-tile .mosaic-icon {
+        top: 16px;
+        left: 20px;
+        width: 36px;
+        height: 36px;
+    }
+    .mosaic-tile h3 {
+        font-size: 1.1rem;
+    }
+    .mosaic-tile p {
+        font-size: 0.8rem;
+        max-width: 100%;
+    }
 }
 
 /* =========================================================
@@ -1252,7 +1424,7 @@ section { padding: 64px 0; }
 .work-bg-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(26, 26, 26, 0.253) 0%, rgba(26, 26, 26, 0.281) 60%, rgba(26, 26, 26, 0.356) 100%);
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.192) 0%, rgba(26, 26, 26, 0.233) 60%, rgba(26, 26, 26, 0.164) 100%);
     z-index: 1;
 }
 
@@ -1744,6 +1916,45 @@ section { padding: 64px 0; }
 .alert-close { background: none; border: none; color: var(--ink-muted); cursor: pointer; margin-left: auto; }
 
 /* =========================================================
+   ADDITIONAL ENHANCEMENTS
+   ========================================================= */
+
+/* Form validation styles */
+.form-row input.error,
+.form-row textarea.error {
+    border-color: #d13438;
+    box-shadow: 0 0 0 3px rgba(209, 52, 56, 0.15);
+}
+.field-error {
+    display: block;
+    color: #d13438;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* Floating orbs container */
+.hero-carousel {
+    position: relative;
+    overflow: hidden;
+}
+.floating-orb {
+    will-change: transform;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0078d4, #00b4a0, #ffb900);
+    width: 0%;
+    z-index: 999;
+    transition: width 0.1s ease;
+}
+
+/* =========================================================
    GLOBAL UTILITIES
    ========================================================= */
 ::-webkit-scrollbar { width: 8px; }
@@ -1755,4 +1966,21 @@ section { padding: 64px 0; }
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+.parallax-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background-image: url('imgs/img8.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    pointer-events: none;
+    will-change: transform;
+    transform: translateZ(0);
 }
