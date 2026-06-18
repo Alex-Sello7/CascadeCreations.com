@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.classList.add('active');
                 const target = document.querySelector(href);
                 if (target) {
-                    window.scrollTo({ top: target.offsetTop - 56, behavior: 'smooth' });
+                    window.scrollTo({ top: target.offsetTop - 60, behavior: 'smooth' });
                 }
                 if (navList && navList.classList.contains('open')) {
                     navList.classList.remove('open');
@@ -101,20 +101,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     window.addEventListener('scroll', () => requestAnimationFrame(updateActiveNavLink), { passive: true });
 
-    // ===== HERO CAROUSEL with smooth sliding transitions =====
+    // ===== HERO CAROUSEL — Infinite loop with visible dots =====
     (function initHeroCarousel() {
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.hero-dot');
         const prevBtn = document.getElementById('heroPrev');
         const nextBtn = document.getElementById('heroNext');
-        const playBtn = document.getElementById('heroPlay');
         if (!slides.length) return;
 
         let current = 0;
         let playing = true;
         let timer = null;
         let isTransitioning = false;
-        const interval = 6000;
+        const interval = 5000;
 
         function goTo(index) {
             if (isTransitioning) return;
@@ -129,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 s.classList.remove('is-active', 'is-exiting', 'is-entering');
             });
 
-            // Set current slide as exiting (slides out left)
+            // Set current slide as exiting
             if (currentSlide) {
                 currentSlide.classList.add('is-exiting');
             }
@@ -140,11 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
             nextSlide.style.transform = 'translateX(100%) scale(0.95)';
             nextSlide.style.opacity = '0';
             nextSlide.style.visibility = 'visible';
-            
+
             // Force reflow
             void nextSlide.offsetWidth;
             nextSlide.style.transition = '';
-            
+
             // Animate next slide in
             requestAnimationFrame(() => {
                 nextSlide.style.transform = 'translateX(0) scale(1)';
@@ -152,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 nextSlide.classList.add('is-entering');
             });
 
-            // Update dots
+            // Update dots — clearly visible
             dots.forEach((d, i) => {
                 d.classList.toggle('is-active', i === newIndex);
             });
@@ -173,17 +172,19 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 750);
         }
 
-        function next() { 
-            if (!isTransitioning) goTo(current + 1); 
+        function next() {
+            if (!isTransitioning) goTo(current + 1);
         }
-        function prev() { 
-            if (!isTransitioning) goTo(current - 1); 
+
+        function prev() {
+            if (!isTransitioning) goTo(current - 1);
         }
 
         function startAutoplay() {
             stopAutoplay();
             timer = setInterval(next, interval);
         }
+
         function stopAutoplay() {
             if (timer) {
                 clearInterval(timer);
@@ -191,21 +192,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        if (nextBtn) nextBtn.addEventListener('click', () => { next(); startAutoplay(); });
-        if (prevBtn) prevBtn.addEventListener('click', () => { prev(); startAutoplay(); });
+        if (nextBtn) nextBtn.addEventListener('click', () => { next();
+            startAutoplay(); });
+        if (prevBtn) prevBtn.addEventListener('click', () => { prev();
+            startAutoplay(); });
 
         dots.forEach((dot, i) => {
-            dot.addEventListener('click', () => { goTo(i); startAutoplay(); });
+            dot.addEventListener('click', () => { goTo(i);
+                startAutoplay(); });
         });
-
-        if (playBtn) {
-            playBtn.addEventListener('click', () => {
-                playing = !playing;
-                playBtn.innerHTML = playing ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-                playBtn.setAttribute('aria-label', playing ? 'Pause carousel' : 'Play carousel');
-                if (playing) startAutoplay(); else stopAutoplay();
-            });
-        }
 
         const carousel = document.querySelector('.hero-carousel');
         if (carousel) {
@@ -307,6 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!el) return;
             const duration = 800;
             const start = performance.now();
+
             function step(now) {
                 const progress = Math.min((now - start) / duration, 1);
                 el.textContent = Math.round(progress * target);
@@ -316,6 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         let counted = false;
+
         function runCounts() {
             if (counted) return;
             counted = true;
@@ -362,7 +359,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const fallback = document.getElementById('githubFallback');
         const reposStat = document.querySelector('[data-stat="repos"]');
         const ghRepos = document.getElementById('ghRepos');
-        const ghFollowers = document.getElementById('ghFollowers');
         const ghSince = document.getElementById('ghSince');
         if (!section) return;
 
@@ -404,16 +400,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 const lang = repo.language || 'Code';
                 const dotColor = LANG_COLORS[lang] || '#8a939e';
                 return `
-                    <a class="github-card" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
-                        <span class="github-card-name"><i class="fas fa-code-branch"></i> ${escapeHtml(repo.name)}</span>
-                        <p class="github-card-desc">${repo.description ? escapeHtml(repo.description) : 'No description provided.'}</p>
-                        <div class="github-card-meta">
-                            <span><span class="gh-lang-dot" style="background:${dotColor}"></span>${escapeHtml(lang)}</span>
-                            <span><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
-                            <span><i class="fas fa-clock"></i> Updated ${relativeTime(repo.pushed_at)}</span>
-                        </div>
-                    </a>
-                `;
+                        <a class="github-card" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+                            <span class="github-card-name"><i class="fas fa-code-branch"></i> ${escapeHtml(repo.name)}</span>
+                            <p class="github-card-desc">${repo.description ? escapeHtml(repo.description) : 'No description provided.'}</p>
+                            <div class="github-card-meta">
+                                <span><span class="gh-lang-dot" style="background:${dotColor}"></span>${escapeHtml(lang)}</span>
+                                <span><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                                <span><i class="fas fa-clock"></i> Updated ${relativeTime(repo.pushed_at)}</span>
+                            </div>
+                        </a>
+                    `;
             }).join('');
         }
 
@@ -421,7 +417,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const user = data.user;
             const repos = data.repos;
             if (ghRepos) ghRepos.textContent = user.public_repos;
-            if (ghFollowers) ghFollowers.textContent = user.followers;
             if (ghSince) ghSince.textContent = new Date(user.created_at).getFullYear();
             if (reposStat) reposStat.textContent = user.public_repos;
             renderRepos((repos || []).slice(0, 6));
@@ -438,6 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return null;
             }
         }
+
         function setCache(data) {
             try {
                 sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
@@ -510,17 +506,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== FORM VALIDATION WITH REAL-TIME FEEDBACK =====
+    // ===== FORM VALIDATION =====
     (function initFormValidation() {
         const form = document.getElementById('contactForm');
         if (!form) return;
-        
+
         const inputs = form.querySelectorAll('input, textarea');
         inputs.forEach(input => {
-            input.addEventListener('blur', function() {
+            input.addEventListener('blur', function () {
                 validateField(this);
             });
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 if (this.classList.contains('error')) {
                     this.classList.remove('error');
                     const errorMsg = this.parentElement.querySelector('.field-error');
@@ -528,12 +524,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-        
+
         function validateField(field) {
             const value = field.value.trim();
             let isValid = true;
             let errorMessage = '';
-            
+
             if (field.hasAttribute('required') && !value) {
                 isValid = false;
                 errorMessage = 'This field is required';
@@ -544,10 +540,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 isValid = false;
                 errorMessage = 'Please enter a valid phone number';
             }
-            
+
             const existingError = field.parentElement.querySelector('.field-error');
             if (existingError) existingError.remove();
-            
+
             if (!isValid) {
                 field.classList.add('error');
                 const error = document.createElement('span');
@@ -557,12 +553,11 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 field.classList.remove('error');
             }
-            
+
             return isValid;
         }
-        
-        // Validate all fields on submit
-        form.addEventListener('submit', function(e) {
+
+        form.addEventListener('submit', function (e) {
             let allValid = true;
             const inputs = this.querySelectorAll('input, textarea');
             inputs.forEach(input => {
@@ -581,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
     (function addSolutionSkeletons() {
         const track = document.getElementById('solutionsTrack');
         if (!track) return;
-        
+
         const cards = track.querySelectorAll('.solution-card');
         cards.forEach((card, index) => {
             card.style.opacity = '0';
@@ -598,48 +593,45 @@ document.addEventListener('DOMContentLoaded', function () {
     (function initFloatingOrbs() {
         const hero = document.querySelector('.hero-carousel');
         if (!hero) return;
-        
-        // Only add if not already present
         if (hero.querySelector('.floating-orb')) return;
-        
+
         const orbs = [
-            { size: 200, x: '5%', y: '10%', delay: 0, color: 'rgba(124, 58, 237, 0.06)' },
-            { size: 300, x: '80%', y: '60%', delay: 2, color: 'rgba(6, 182, 212, 0.05)' },
-            { size: 150, x: '50%', y: '80%', delay: 4, color: 'rgba(236, 72, 153, 0.06)' },
+            { size: 200, x: '5%', y: '10%', delay: 0, color: 'rgba(0, 102, 204, 0.04)' },
+            { size: 300, x: '80%', y: '60%', delay: 2, color: 'rgba(0, 150, 136, 0.04)' },
+            { size: 150, x: '50%', y: '80%', delay: 4, color: 'rgba(94, 60, 158, 0.04)' },
         ];
-        
+
         orbs.forEach(orb => {
             const el = document.createElement('div');
             el.className = 'floating-orb';
             el.style.cssText = `
-                position: absolute;
-                width: ${orb.size}px;
-                height: ${orb.size}px;
-                border-radius: 50%;
-                background: ${orb.color};
-                left: ${orb.x};
-                top: ${orb.y};
-                filter: blur(60px);
-                pointer-events: none;
-                z-index: 0;
-                animation: floatOrb ${15 + orb.delay}s ease-in-out infinite alternate;
-                animation-delay: ${orb.delay}s;
-            `;
+                    position: absolute;
+                    width: ${orb.size}px;
+                    height: ${orb.size}px;
+                    border-radius: 50%;
+                    background: ${orb.color};
+                    left: ${orb.x};
+                    top: ${orb.y};
+                    filter: blur(60px);
+                    pointer-events: none;
+                    z-index: 0;
+                    animation: floatOrb ${15 + orb.delay}s ease-in-out infinite alternate;
+                    animation-delay: ${orb.delay}s;
+                `;
             hero.appendChild(el);
         });
-        
-        // Add keyframe animation if not exists
+
         if (!document.getElementById('orb-styles')) {
             const style = document.createElement('style');
             style.id = 'orb-styles';
             style.textContent = `
-                @keyframes floatOrb {
-                    0% { transform: translate(0, 0) scale(1); }
-                    33% { transform: translate(30px, -20px) scale(1.1); }
-                    66% { transform: translate(-20px, 30px) scale(0.9); }
-                    100% { transform: translate(10px, -10px) scale(1.05); }
-                }
-            `;
+                    @keyframes floatOrb {
+                        0% { transform: translate(0, 0) scale(1); }
+                        33% { transform: translate(30px, -20px) scale(1.1); }
+                        66% { transform: translate(-20px, 30px) scale(0.9); }
+                        100% { transform: translate(10px, -10px) scale(1.05); }
+                    }
+                `;
             document.head.appendChild(style);
         }
     })();
@@ -648,18 +640,8 @@ document.addEventListener('DOMContentLoaded', function () {
     (function initScrollProgress() {
         const bar = document.createElement('div');
         bar.className = 'scroll-progress';
-        bar.style.cssText = `
-            position: fixed;
-            top: 56px;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #7c3aed, #06b6d4, #ec4899);
-            width: 0%;
-            z-index: 999;
-            transition: width 0.1s ease;
-        `;
         document.body.appendChild(bar);
-        
+
         window.addEventListener('scroll', () => {
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -671,13 +653,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
     (function initSmoothScroll() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
                 const target = document.querySelector(targetId);
                 if (target) {
                     e.preventDefault();
-                    const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 56;
+                    const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 60;
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
@@ -728,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const target = document.querySelector(window.location.hash);
         if (target) {
             setTimeout(() => {
-                window.scrollTo({ top: target.offsetTop - 56, behavior: 'auto' });
+                window.scrollTo({ top: target.offsetTop - 60, behavior: 'auto' });
                 const matchingLink = document.querySelector(`.nav-link[href="${window.location.hash}"]`);
                 if (matchingLink) {
                     navLinks.forEach(l => l.classList.remove('active'));
@@ -747,12 +729,12 @@ window.showAlert = function (message, type) {
     const alert = document.createElement('div');
     alert.className = `alert alert-${type}`;
     alert.innerHTML = `
-        <div class="alert-content">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-            <span>${message}</span>
-            <button class="alert-close" aria-label="Close alert"><i class="fas fa-times"></i></button>
-        </div>
-    `;
+            <div class="alert-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+                <button class="alert-close" aria-label="Close alert"><i class="fas fa-times"></i></button>
+            </div>
+        `;
     document.body.appendChild(alert);
     setTimeout(() => alert.classList.add('show'), 10);
 
