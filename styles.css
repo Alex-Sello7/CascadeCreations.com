@@ -2456,3 +2456,178 @@ section {
     will-change: transform;
     transform: translateZ(0);
 }
+
+/* =========================================================
+   UI ENHANCEMENTS — Added
+   ========================================================= */
+
+/* Hero: auto-play progress bar on active dot */
+.hero-dot.is-active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.4);
+    animation: dotProgress 5s linear forwards;
+}
+@keyframes dotProgress {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+}
+
+/* Hero arrow: stronger hover feedback */
+.hero-arrow:hover {
+    background: rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    transform: scale(1.1);
+}
+.hero-arrow:active {
+    transform: scale(0.95);
+}
+
+/* Solution cards: more pronounced lift on hover */
+.solution-card {
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s ease;
+}
+.solution-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(0, 102, 204, 0.10), 0 4px 12px rgba(0,0,0,0.06);
+    border-color: var(--primary) !important;
+}
+.solution-card:hover .solution-link {
+    color: var(--primary-dark);
+    gap: 10px;
+}
+.solution-link {
+    transition: gap 0.2s ease, color 0.2s ease;
+}
+
+/* Mosaic tiles: subtle glow on hover */
+.mosaic-tile {
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.mosaic-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 102, 204, 0.10);
+}
+
+/* Contact info cards: left accent line on hover */
+.contact-info-card {
+    transition: transform 0.2s var(--ease), border-color 0.2s ease, box-shadow 0.2s ease;
+    border-left: 3px solid transparent;
+}
+.contact-info-card:hover {
+    transform: translateX(4px);
+    border-color: var(--primary) !important;
+    border-left-color: var(--primary) !important;
+    box-shadow: 0 4px 16px rgba(0, 102, 204, 0.08);
+}
+
+/* Form: glowing focus ring & input icon placeholder */
+.form-row input:focus,
+.form-row textarea:focus {
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15), 0 2px 8px rgba(0, 102, 204, 0.08);
+    background: #fafcff;
+}
+.form-row input.error,
+.form-row textarea.error {
+    border-color: var(--acc-red);
+    background: #fff8f8;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08);
+}
+
+/* Submit button: shimmer on hover */
+.btn-submit {
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s ease;
+}
+.btn-submit:hover::after {
+    left: 160%;
+}
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 102, 204, 0.30);
+}
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Stack badges: pop on hover */
+.stack-badge {
+    transition: transform 0.2s var(--ease), background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.stack-badge:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 102, 204, 0.25);
+}
+.stack-badge:hover i {
+    color: #fff;
+}
+
+/* GitHub cards: lift + blue left border */
+.github-card {
+    transition: transform 0.22s var(--ease), border-color 0.22s ease, box-shadow 0.22s ease;
+    border-left: 3px solid transparent !important;
+}
+.github-card:hover {
+    transform: translateY(-4px);
+    border-left-color: var(--primary) !important;
+    box-shadow: 0 12px 32px rgba(0, 102, 204, 0.10) !important;
+}
+
+/* Section eyebrow: subtle underline pulse */
+.section-eyebrow {
+    position: relative;
+}
+
+/* Floating CTA: stronger pop */
+.floating-cta {
+    transition: transform 0.2s var(--ease), box-shadow 0.2s ease;
+}
+.floating-cta:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 16px 40px rgba(0, 102, 204, 0.30);
+}
+
+/* Nav brand: subtle scale on hover */
+.navbar-brand {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.navbar-brand:hover {
+    opacity: 0.85;
+    transform: scale(1.02);
+}
+
+/* Footer links: smooth underline from left */
+.footer a {
+    position: relative;
+    transition: color 0.2s ease;
+}
+.footer ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--primary);
+    transition: width 0.2s ease;
+}
+.footer ul li a:hover::after {
+    width: 100%;
+}
+.footer ul li a:hover {
+    color: var(--primary);
+}

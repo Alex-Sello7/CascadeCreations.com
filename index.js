@@ -115,69 +115,61 @@ document.addEventListener('DOMContentLoaded', function () {
         let isTransitioning = false;
         const interval = 5000;
 
-        function goTo(index) {
+        function goTo(index, direction) {
             if (isTransitioning) return;
             isTransitioning = true;
 
             const newIndex = (index + slides.length) % slides.length;
+            if (newIndex === current) { isTransitioning = false; return; }
+
+            // Determine direction: forward = enter from right, backward = enter from left
+            const dir = direction !== undefined ? direction : (newIndex > current ? 1 : -1);
+            const enterFrom = dir >= 0 ? 'translateX(100%) scale(0.95)' : 'translateX(-100%) scale(0.95)';
+            const exitTo    = dir >= 0 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
+
             const currentSlide = slides[current];
-            const nextSlide = slides[newIndex];
+            const nextSlide    = slides[newIndex];
 
-            // Remove all transition classes
-            slides.forEach(s => {
-                s.classList.remove('is-active', 'is-exiting', 'is-entering');
-            });
-
-            // Set current slide as exiting
-            if (currentSlide) {
-                currentSlide.classList.add('is-exiting');
-            }
-
-            // Prepare next slide
+            // 1. Park incoming slide off-screen instantly (no transition)
             nextSlide.style.transition = 'none';
-            nextSlide.classList.add('is-active');
-            nextSlide.style.transform = 'translateX(100%) scale(0.95)';
-            nextSlide.style.opacity = '0';
+            nextSlide.style.transform  = enterFrom;
+            nextSlide.style.opacity    = '0';
             nextSlide.style.visibility = 'visible';
 
-            // Force reflow
+            // 2. Force reflow so browser commits the start position
             void nextSlide.offsetWidth;
+
+            // 3. Animate incoming slide to centre
             nextSlide.style.transition = '';
+            nextSlide.style.transform  = 'translateX(0) scale(1)';
+            nextSlide.style.opacity    = '1';
 
-            // Animate next slide in
-            requestAnimationFrame(() => {
-                nextSlide.style.transform = 'translateX(0) scale(1)';
-                nextSlide.style.opacity = '1';
-                nextSlide.classList.add('is-entering');
-            });
+            // 4. Animate current slide out
+            currentSlide.style.transition = '';
+            currentSlide.style.transform  = exitTo;
+            currentSlide.style.opacity    = '0';
 
-            // Update dots — clearly visible
-            dots.forEach((d, i) => {
-                d.classList.toggle('is-active', i === newIndex);
-            });
+            // 5. Update dots
+            dots.forEach((d, i) => d.classList.toggle('is-active', i === newIndex));
 
-            // Clean up after animation
+            // 6. Clean up: hand control back to CSS classes
             setTimeout(() => {
                 slides.forEach(s => {
-                    s.classList.remove('is-exiting', 'is-entering');
-                    if (s !== nextSlide) {
-                        s.style.transform = '';
-                        s.style.opacity = '';
-                        s.style.visibility = '';
-                        s.classList.remove('is-active');
-                    }
+                    s.classList.remove('is-active', 'is-exiting', 'is-entering');
+                    s.style.cssText = '';
                 });
+                nextSlide.classList.add('is-active');
                 current = newIndex;
                 isTransitioning = false;
-            }, 750);
+            }, 800);
         }
 
         function next() {
-            if (!isTransitioning) goTo(current + 1);
+            if (!isTransitioning) goTo(current + 1, 1);
         }
 
         function prev() {
-            if (!isTransitioning) goTo(current - 1);
+            if (!isTransitioning) goTo(current - 1, -1);
         }
 
         function startAutoplay() {
@@ -213,13 +205,12 @@ document.addEventListener('DOMContentLoaded', function () {
             else if (playing) startAutoplay();
         });
 
-        // Ensure first slide is properly positioned
+        // Ensure first slide is properly positioned (CSS handles the styling)
         slides.forEach((s, i) => {
+            s.classList.remove('is-active', 'is-exiting', 'is-entering');
+            s.style.cssText = '';
             if (i === 0) {
                 s.classList.add('is-active');
-                s.style.transform = 'translateX(0) scale(1)';
-                s.style.opacity = '1';
-                s.style.visibility = 'visible';
             }
         });
 
@@ -487,14 +478,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 const formData = new FormData(this);
-                const response = await fetch(this.action, { method: 'POST', body: formData });
-                const result = await response.json();
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
 
-                if (response.ok && result.success) {
+                if (response.ok) {
                     showAlert('Success! Your message has been sent. We\'ll get back to you soon.', 'success');
                     this.reset();
                 } else {
-                    throw new Error(result.message || 'Failed to send message');
+                    const result = await response.json().catch(() => ({}));
+                    const msg = (result.errors && result.errors.map(e => e.message).join(', ')) || 'Failed to send message';
+                    throw new Error(msg);
                 }
             } catch (error) {
                 console.error('Form error:', error);
