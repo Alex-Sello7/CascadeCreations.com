@@ -1759,7 +1759,7 @@ section {
 .work-bg-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(15, 20, 25, 0.80) 0%, rgba(15, 20, 25, 0.70) 60%, rgba(15, 20, 25, 0.75) 100%);
+    background: linear-gradient(180deg, rgba(15, 20, 25, 0.315) 0%, rgba(15, 20, 25, 0.295) 60%, rgba(15, 20, 25, 0.253) 100%);
     z-index: 1;
 }
 
