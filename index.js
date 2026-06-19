@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let playing = true;
         let timer = null;
         let isTransitioning = false;
-        const interval = 5000;
+        const interval = 8000;
 
         function goTo(index, direction) {
             if (isTransitioning) return;
