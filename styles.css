@@ -1759,7 +1759,7 @@ section {
 .work-bg-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(15, 20, 25, 0.315) 0%, rgba(15, 20, 25, 0.295) 60%, rgba(15, 20, 25, 0.253) 100%);
+    background: linear-gradient(180deg, rgba(15, 20, 25, 0.80) 0%, rgba(15, 20, 25, 0.70) 60%, rgba(15, 20, 25, 0.75) 100%);
     z-index: 1;
 }
 
@@ -2313,18 +2313,19 @@ section {
     }
     .footer-brand-block {
         grid-column: span 1;
-        align-items: center;
+        align-items: flex-start;
     }
     .footer-brand-block p {
         max-width: 100%;
-        text-align: center;
+        text-align: left;
     }
     .footer-contact-list li {
-        justify-content: center;
+        justify-content: flex-start;
     }
     .footer-bottom {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
     }
 }
 
