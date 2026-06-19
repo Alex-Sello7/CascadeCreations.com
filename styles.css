@@ -602,8 +602,8 @@ section {
 }
 
 .hero-slide-brand img {
-    width: 700px;
-    height: 700px;
+    width: 500px;
+    height: 500px;
     object-fit: contain;
     filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.15));
     padding: 0;

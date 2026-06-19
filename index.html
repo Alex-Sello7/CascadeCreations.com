@@ -57,18 +57,25 @@
             content="https://alex-sello7.github.io/CascadeCreations.com/imgs/cclogo.png">
         <meta name="twitter:image:alt" content="Cascade Creations Logo">
 
+        <!-- Preconnects (deduplicated) -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-            rel="stylesheet">
-
         <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="dns-prefetch" href="https://formspree.io">
+        <link rel="dns-prefetch" href="https://api.github.com">
 
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Preload: first hero slide image (LCP) -->
+        <link rel="preload" as="image" href="imgs/1slide.avif" type="image/avif">
+        <!-- Preload: Font Awesome (render-critical icons in nav/hero) -->
+        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+        <!-- Google Fonts: load async to avoid render-blocking -->
+        <link rel="preload" as="style"
+            href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+            onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
         <style>
             :root {
@@ -240,7 +247,7 @@
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/cclogo.png" alt="Cascade Creations" loading="lazy">
+                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" fetchpriority="high" decoding="async">
                         </div>
                     </div>
 
@@ -264,7 +271,7 @@
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/cclogo.png" alt="Cascade Creations" loading="lazy">
+                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" loading="lazy" decoding="async">
                         </div>
                     </div>
 
@@ -288,7 +295,7 @@
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/cclogo.png" alt="Cascade Creations" loading="lazy">
+                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" loading="lazy" decoding="async">
                         </div>
                     </div>
 
@@ -366,6 +373,8 @@
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/mobapp.webp"
                                     alt="Web Development"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -386,6 +395,8 @@
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/img5.avif" alt="Dashboards"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -407,6 +418,8 @@
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/revamp.png" alt="Custom Systems"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -426,6 +439,8 @@
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/ecommerce.jpg" alt="E-commerce"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -445,6 +460,8 @@
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/ui.jpg" alt="UI/UX Design"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -464,6 +481,8 @@
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
                                 <img src="imgs/img6.avif" alt="Modernisation"
+                                    width="400" height="260"
+                                    loading="lazy" decoding="async"
                                     style="width:100%;height:100%;object-fit:cover;">
                             </div>
                             <div class="solution-body">
@@ -682,6 +701,8 @@
                     <div class="feature-row" data-aod>
                         <div class="feature-visual fv-1"><img
                                 src="imgs/webdesign.webp" alt="Design"
+                                width="560" height="420"
+                                loading="lazy" decoding="async"
                                 style="width:100%;height:100%;object-fit:cover;"></div>
                         <div class="feature-copy">
                             <div class="feature-eyebrow">Design that earns its
@@ -704,6 +725,8 @@
                     <div class="feature-row reverse" data-aod>
                         <div class="feature-visual fv-2"><img
                                 src="imgs/webperfomanca.png" alt="Performance"
+                                width="560" height="420"
+                                loading="lazy" decoding="async"
                                 style="width:100%;height:100%;object-fit:cover;"></div>
                         <div class="feature-copy">
                             <div class="feature-eyebrow">Performance</div>
@@ -723,6 +746,8 @@
                     <div class="feature-row" data-aod>
                         <div class="feature-visual fv-3"><img
                                 src="imgs/webcolab.jpg" alt="Collaboration"
+                                width="560" height="420"
+                                loading="lazy" decoding="async"
                                 style="width:100%;height:100%;object-fit:cover;"></div>
                         <div class="feature-copy">
                             <div class="feature-eyebrow">Direct
