@@ -65,17 +65,22 @@
         <link rel="dns-prefetch" href="https://api.github.com">
 
         <!-- Preload: first hero slide image (LCP) -->
-        <link rel="preload" as="image" href="imgs/1slide.avif" type="image/avif">
+        <link rel="preload" as="image" href="imgs/1slide.avif"
+            type="image/avif">
         <!-- Preload: Font Awesome (render-critical icons in nav/hero) -->
-        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        <link rel="preload" as="style"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+        <noscript><link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
         <!-- Google Fonts: load async to avoid render-blocking -->
         <link rel="preload" as="style"
             href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
             onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+        <noscript><link
+                href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+                rel="stylesheet"></noscript>
 
         <style>
             :root {
@@ -113,6 +118,20 @@
                 width: 100%;
                 z-index: 1000;
                 transition: all 0.2s ease;
+            }
+
+            /* Greyed out option styles */
+            .form-row select option:disabled {
+                color: #a0a0a0;
+                background: #f5f5f5;
+            }
+            .form-row select option.greyed-out {
+                color: #a0a0a0;
+                background: #f5f5f5;
+                font-style: italic;
+            }
+            .form-row select option.greyed-out::before {
+                content: "⛔ ";
             }
         </style>
 
@@ -242,12 +261,15 @@
                             <div class="hero-slide-actions">
                                 <a href="#contact" class="btn btn-primary">Start
                                     a project</a>
-                                <a href="#solutions" class="btn btn-outline-light">See
+                                <a href="#solutions"
+                                    class="btn btn-outline-light">See
                                     what we build</a>
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" fetchpriority="high" decoding="async">
+                            <img src="imgs/CascadeCreations.png"
+                                alt="Cascade Creations" width="180" height="180"
+                                fetchpriority="high" decoding="async">
                         </div>
                     </div>
 
@@ -271,7 +293,9 @@
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" loading="lazy" decoding="async">
+                            <img src="imgs/CascadeCreations.png"
+                                alt="Cascade Creations" width="180" height="180"
+                                loading="lazy" decoding="async">
                         </div>
                     </div>
 
@@ -291,11 +315,14 @@
                                     class="btn btn-primary">Discuss your
                                     idea</a>
                                 <a href="#capabilities"
-                                    class="btn btn-outline-light">Our capabilities</a>
+                                    class="btn btn-outline-light">Our
+                                    capabilities</a>
                             </div>
                         </div>
                         <div class="hero-slide-brand">
-                            <img src="imgs/CascadeCreations.png" alt="Cascade Creations" width="180" height="180" loading="lazy" decoding="async">
+                            <img src="imgs/CascadeCreations.png"
+                                alt="Cascade Creations" width="180" height="180"
+                                loading="lazy" decoding="async">
                         </div>
                     </div>
 
@@ -950,7 +977,8 @@
                         <div class="testimonial-card" data-aod
                             data-aod-delay="80">
                             <i class="fas fa-quote-left testimonial-mark"></i>
-                            <p class="testimonial-quote">The website looks like it
+                            <p class="testimonial-quote">The website looks like
+                                it
                                 was designed by Apple. Every detail was
                                 considered — from the layout to the colours to
                                 how it flows on mobile. Exactly what Ousadia
@@ -989,8 +1017,10 @@
                     <p>Tell us what you're trying to build — we'll help you
                         figure out how to get there.</p>
                     <div class="cta-actions">
-                        <a href="#contact" class="btn btn-primary">Get in touch</a>
-                        <a href="#work" class="btn btn-outline-light">View our work</a>
+                        <a href="#contact" class="btn btn-primary">Get in
+                            touch</a>
+                        <a href="#work" class="btn btn-outline-light">View our
+                            work</a>
                     </div>
                 </div>
             </section>
@@ -1007,78 +1037,359 @@
                             need.</p>
                     </div>
 
-                    <div class="contact-grid">
-                        <div class="contact-form" data-aod data-aod-dir="left">
-                            <form id="contactForm" action="https://formspree.io/f/xjknerpq"
-                                method="POST">
-                                <input type="hidden" name="_subject" value="New enquiry from Cascade Creations website">
-                                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-                                <div class="form-row">
-                                    <label for="cf-name">Name</label>
-                                    <input type="text" id="cf-name" name="name"
-                                        placeholder="Your name" required>
-                                </div>
-                                <div class="form-row">
-                                    <label for="cf-email">Email</label>
-                                    <input type="email" id="cf-email"
-                                        name="email"
-                                        placeholder="you@example.com" required>
-                                </div>
-                                <div class="form-row">
-                                    <label for="cf-phone">Phone
-                                        (optional)</label>
-                                    <input type="tel" id="cf-phone" name="phone"
-                                        placeholder="+27 00 000 0000">
-                                </div>
-                                <div class="form-row">
-                                    <label for="cf-message">Project
-                                        details</label>
-                                    <textarea id="cf-message" name="message"
-                                        rows="5"
-                                        placeholder="Tell us what you're trying to build..."
-                                        required></textarea>
-                                </div>
-                                <button type="submit"
-                                    class="btn btn-submit"><span>Send
-                                        message</span><i
-                                        class="fas fa-paper-plane"></i></button>
-                            </form>
+                    <!-- Contact Tabs -->
+                    <div class="contact-tabs" data-aod>
+                        <div class="contact-tab-headers">
+                            <button class="contact-tab-btn is-active"
+                                data-tab="general">
+                                <i class="fas fa-envelope"></i> Enquiry
+                            </button>
+                            <button class="contact-tab-btn" data-tab="project">
+                                <i class="fas fa-rocket"></i> Start a Project
+                            </button>
                         </div>
-                        <div class="contact-info-list" data-aod
-                            data-aod-dir="right">
-                            <div class="contact-info-card">
-                                <span class="contact-info-icon"><i
-                                        class="fas fa-map-marker-alt"></i></span>
-                                <div>
-                                    <h4>Address</h4>
-                                    <p>Pretoria, Gauteng<br>South Africa</p>
+
+                        <div class="contact-tab-content">
+                            <!-- TAB 1: General Enquiry -->
+                            <div class="contact-tab-panel is-active"
+                                id="tab-general">
+                                <div class="contact-grid">
+                                    <div class="contact-form" data-aod
+                                        data-aod-dir="left">
+                                        <form id="contactForm"
+                                            action="https://formspree.io/f/xjknerpq"
+                                            method="POST">
+                                            <input type="hidden" name="_subject"
+                                                value="New enquiry from Cascade Creations website">
+                                            <input type="text" name="_gotcha"
+                                                style="display:none"
+                                                tabindex="-1"
+                                                autocomplete="off">
+                                            <div class="form-row">
+                                                <label
+                                                    for="cf-name">Name</label>
+                                                <input type="text" id="cf-name"
+                                                    name="name"
+                                                    placeholder="Your name"
+                                                    required>
+                                            </div>
+                                            <div class="form-row">
+                                                <label
+                                                    for="cf-email">Email</label>
+                                                <input type="email"
+                                                    id="cf-email" name="email"
+                                                    placeholder="you@example.com"
+                                                    required>
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="cf-phone">Phone
+                                                    (optional)</label>
+                                                <input type="tel" id="cf-phone"
+                                                    name="phone"
+                                                    placeholder="+27 00 000 0000">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="cf-message">Message</label>
+                                                <textarea id="cf-message"
+                                                    name="message" rows="5"
+                                                    placeholder="Tell us what you're trying to build..."
+                                                    required></textarea>
+                                            </div>
+                                            <button type="submit"
+                                                class="btn btn-submit"><span>Send
+                                                    message</span><i
+                                                    class="fas fa-paper-plane"></i></button>
+                                        </form>
+                                    </div>
+                                    <div class="contact-info-list" data-aod
+                                        data-aod-dir="right">
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-map-marker-alt"></i></span>
+                                            <div>
+                                                <h4>Address</h4>
+                                                <p>Pretoria, Gauteng<br>South
+                                                    Africa</p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-phone"></i></span>
+                                            <div>
+                                                <h4>Phone</h4>
+                                                <p><a
+                                                        href="tel:+27720786569">+27
+                                                        72 078 6569</a></p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-envelope"></i></span>
+                                            <div>
+                                                <h4>Email</h4>
+                                                <p><a
+                                                        href="mailto:atsello4@gmail.com">atsello4@gmail.com</a></p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-clock"></i></span>
+                                            <div>
+                                                <h4>Business hours</h4>
+                                                <p>Mon–Fri: 8am–6pm<br>Sat:
+                                                    9am–2pm</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="contact-info-card">
-                                <span class="contact-info-icon"><i
-                                        class="fas fa-phone"></i></span>
-                                <div>
-                                    <h4>Phone</h4>
-                                    <p><a href="tel:+27720786569">+27 72 078
-                                            6569</a></p>
-                                </div>
-                            </div>
-                            <div class="contact-info-card">
-                                <span class="contact-info-icon"><i
-                                        class="fas fa-envelope"></i></span>
-                                <div>
-                                    <h4>Email</h4>
-                                    <p><a href="mailto:atsello4@gmail.com"><span
-                                                class="__cf_email__"
-                                                data-cfemail="37564542545d5d5e0577505a565e5b1954585a">atsello4@gmail.com</span></a></p>
-                                </div>
-                            </div>
-                            <div class="contact-info-card">
-                                <span class="contact-info-icon"><i
-                                        class="fas fa-clock"></i></span>
-                                <div>
-                                    <h4>Business hours</h4>
-                                    <p>Mon–Fri: 8am–6pm<br>Sat: 9am–2pm</p>
+
+                            <!-- TAB 2: Start a Project -->
+                            <div class="contact-tab-panel" id="tab-project">
+                                <div class="contact-grid">
+                                    <div class="contact-form" data-aod
+                                        data-aod-dir="left">
+                                        <form id="projectForm" novalidate>
+                                            <!-- Personal Details -->
+                                            <div class="form-row">
+                                                <label for="pf-name">Full Name
+                                                    <span
+                                                        class="required">*</span></label>
+                                                <input type="text" id="pf-name"
+                                                    name="name"
+                                                    placeholder="Your full name"
+                                                    required>
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="pf-email">Email
+                                                    Address <span
+                                                        class="required">*</span></label>
+                                                <input type="email"
+                                                    id="pf-email" name="email"
+                                                    placeholder="you@example.com"
+                                                    required>
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="pf-phone">Phone
+                                                    Number</label>
+                                                <input type="tel" id="pf-phone"
+                                                    name="phone"
+                                                    placeholder="+27 00 000 0000">
+                                            </div>
+
+                                            <hr class="form-divider">
+
+                                            <!-- Project Details -->
+                                            <div class="form-row">
+                                                <label
+                                                    for="pf-project-name">Project
+                                                    Name <span
+                                                        class="required">*</span></label>
+                                                <input type="text"
+                                                    id="pf-project-name"
+                                                    name="projectName"
+                                                    placeholder="e.g., My Awesome Website"
+                                                    required>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <label
+                                                    for="pf-project-type">Project
+                                                    Type <span
+                                                        class="required">*</span></label>
+                                                <select id="pf-project-type"
+                                                    name="projectType" required>
+                                                    <option value>Select a
+                                                        project type...</option>
+                                                    <option
+                                                        value="full-build">Full
+                                                        Build (Website / Web
+                                                        App)</option>
+                                                    <option
+                                                        value="revamp">Revamp /
+                                                        Redesign</option>
+                                                    <option
+                                                        value="landing-page">Landing
+                                                        Page</option>
+                                                    <option
+                                                        value="ecommerce">E-commerce
+                                                        Store</option>
+                                                    <option
+                                                        value="dashboard">Dashboard
+                                                        / Analytics</option>
+                                                    <option
+                                                        value="custom-system">Custom
+                                                        Business System</option>
+                                                    <option
+                                                        value="other">Other</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <label
+                                                    for="pf-description">Project
+                                                    Description <span
+                                                        class="required">*</span></label>
+                                                <textarea id="pf-description"
+                                                    name="description" rows="5"
+                                                    placeholder="Tell us about your project — what problem are you solving? Who is it for? What features do you need?"
+                                                    required></textarea>
+                                            </div>
+
+                                            <div class="form-row form-row-half">
+                                                <div class="form-row">
+                                                    <label
+                                                        for="pf-budget">Budget
+                                                        Range</label>
+                                                    <select id="pf-budget"
+                                                        name="budget">
+                                                        <option value>Select a
+                                                            range...</option>
+                                                        <option
+                                                            value="under-5k"
+                                                            id="budget-under-5k">Under
+                                                            R5,000</option>
+                                                        <option
+                                                            value="5k-15k">R5,000
+                                                            – R15,000</option>
+                                                        <option
+                                                            value="15k-30k">R15,000
+                                                            – R30,000</option>
+                                                        <option
+                                                            value="30k-50k">R30,000
+                                                            – R50,000</option>
+                                                        <option
+                                                            value="50k-100k">R50,000
+                                                            – R100,000</option>
+                                                        <option
+                                                            value="100k+">R100,000+</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-row">
+                                                    <label
+                                                        for="pf-timeline">Timeline</label>
+                                                    <select id="pf-timeline"
+                                                        name="timeline">
+                                                        <option value>Select a
+                                                            timeline...</option>
+                                                        <option
+                                                            value="urgent"
+                                                            id="timeline-urgent">Urgent
+                                                            (Within 2
+                                                            weeks)</option>
+                                                        <option
+                                                            value="1-month">1
+                                                            Month</option>
+                                                        <option
+                                                            value="2-3-months">2
+                                                            – 3 Months</option>
+                                                        <option
+                                                            value="3-6-months">3
+                                                            – 6 Months</option>
+                                                        <option
+                                                            value="flexible"
+                                                            id="timeline-flexible">Flexible</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <label for="pf-assets">Brand
+                                                    Assets (Optional)</label>
+                                                <div class="file-upload-wrap">
+                                                    <input type="file"
+                                                        id="pf-assets"
+                                                        name="assets"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.svg,.zip,.rar"
+                                                        multiple>
+                                                    <label for="pf-assets"
+                                                        class="file-upload-label">
+                                                        <i
+                                                            class="fas fa-cloud-upload-alt"></i>
+                                                        <span>Drop files here or
+                                                            click to
+                                                            upload</span>
+                                                        <small>PDF, DOCX, PNG,
+                                                            JPG, ZIP — max
+                                                            20MB</small>
+                                                    </label>
+                                                    <div
+                                                        class="file-upload-list"
+                                                        id="fileList"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox"
+                                                        name="agree" required>
+                                                    <span>I agree that my data
+                                                        will be stored and used
+                                                        to respond to my
+                                                        enquiry.</span>
+                                                </label>
+                                            </div>
+
+                                            <button type="submit"
+                                                class="btn btn-submit"><span>Submit
+                                                    Project Brief</span><i
+                                                    class="fas fa-paper-plane"></i></button>
+                                        </form>
+                                    </div>
+                                    <div class="contact-info-list" data-aod
+                                        data-aod-dir="right">
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-file-alt"></i></span>
+                                            <div>
+                                                <h4>What happens next?</h4>
+                                                <p
+                                                    style="font-size:0.85rem;color:var(--ink-soft);">
+                                                    1. We review your brief
+                                                    within 24 hours<br>
+                                                    2. We schedule a discovery
+                                                    call<br>
+                                                    3. We provide a proposal
+                                                    &amp; estimate<br>
+                                                    4. We build your project
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-lock"></i></span>
+                                            <div>
+                                                <h4>Your data is safe</h4>
+                                                <p
+                                                    style="font-size:0.85rem;color:var(--ink-soft);">All
+                                                    project details are
+                                                    confidential. We never share
+                                                    your data with third
+                                                    parties.</p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-phone"></i></span>
+                                            <div>
+                                                <h4>Need help?</h4>
+                                                <p><a
+                                                        href="tel:+27720786569">+27
+                                                        72 078 6569</a></p>
+                                            </div>
+                                        </div>
+                                        <div class="contact-info-card">
+                                            <span class="contact-info-icon"><i
+                                                    class="fas fa-clock"></i></span>
+                                            <div>
+                                                <h4>Response time</h4>
+                                                <p
+                                                    style="font-size:0.85rem;color:var(--ink-soft);">We
+                                                    aim to respond within 24
+                                                    business hours.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

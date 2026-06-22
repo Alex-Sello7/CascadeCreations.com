@@ -2197,6 +2197,233 @@ section {
 }
 
 /* =========================================================
+   CONTACT TABS
+   ========================================================= */
+.contact-tabs {
+    margin-top: 12px;
+}
+
+.contact-tab-headers {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+    flex-wrap: wrap;
+}
+
+.contact-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all var(--fast);
+    border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+
+.contact-tab-btn:hover {
+    color: var(--ink);
+    background: var(--canvas);
+}
+
+.contact-tab-btn.is-active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: var(--primary-tint);
+}
+
+.contact-tab-btn i {
+    font-size: 1rem;
+}
+
+.contact-tab-panel {
+    display: none;
+    animation: fadeSlideIn 0.4s var(--ease);
+}
+
+.contact-tab-panel.is-active {
+    display: block;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Project form enhancements */
+.form-divider {
+    border: none;
+    border-top: 1px solid var(--line-soft);
+    margin: 24px 0;
+}
+
+.form-row-half {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.required {
+    color: var(--acc-red);
+    font-weight: 600;
+}
+
+/* File upload */
+.file-upload-wrap {
+    position: relative;
+}
+
+.file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    border: 2px dashed var(--line);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all var(--fast);
+    background: var(--canvas);
+    text-align: center;
+}
+
+.file-upload-label:hover {
+    border-color: var(--primary);
+    background: var(--primary-tint);
+}
+
+.file-upload-label i {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.file-upload-label span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.file-upload-label small {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-top: 4px;
+}
+
+.file-upload-wrap input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.file-upload-list {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.file-upload-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    background: var(--primary-tint);
+    border-radius: var(--r-sm);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.file-upload-item i {
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+.file-upload-item .file-remove {
+    cursor: pointer;
+    color: var(--acc-red);
+    font-size: 0.75rem;
+    padding: 0 4px;
+}
+
+.file-upload-item .file-remove:hover {
+    color: var(--acc-red-dark);
+}
+
+/* Checkbox */
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    .contact-tab-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        flex: 1;
+        justify-content: center;
+    }
+    .contact-tab-btn i {
+        font-size: 0.85rem;
+    }
+    .form-row-half {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-tab-headers {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .contact-tab-btn {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        border-radius: 0 var(--r-sm) var(--r-sm) 0;
+        justify-content: flex-start;
+    }
+    .contact-tab-btn.is-active {
+        border-bottom-color: transparent;
+        border-left-color: var(--primary);
+    }
+}
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .footer {
@@ -2633,4 +2860,27 @@ section {
 }
 .footer ul li a:hover {
     color: var(--primary);
+}
+
+/* =========================================================
+   GREYED OUT OPTIONS STYLING
+   ========================================================= */
+select option:disabled,
+select option[disabled],
+select option.greyed-out {
+    color: #a0a0a0 !important;
+    background-color: #f5f5f5 !important;
+    font-style: italic;
+}
+
+select option:disabled::before,
+select option[disabled]::before,
+select option.greyed-out::before {
+    content: "⛔ ";
+}
+
+/* Style for the greyed-out class on option elements */
+select option.greyed-out {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

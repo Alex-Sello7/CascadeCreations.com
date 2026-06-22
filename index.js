@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const newIndex = (index + slides.length) % slides.length;
             if (newIndex === current) { isTransitioning = false; return; }
 
-            // Determine direction: forward = enter from right, backward = enter from left
             const dir = direction !== undefined ? direction : (newIndex > current ? 1 : -1);
             const enterFrom = dir >= 0 ? 'translateX(100%) scale(0.95)' : 'translateX(-100%) scale(0.95)';
             const exitTo    = dir >= 0 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
@@ -130,29 +129,23 @@ document.addEventListener('DOMContentLoaded', function () {
             const currentSlide = slides[current];
             const nextSlide    = slides[newIndex];
 
-            // 1. Park incoming slide off-screen instantly (no transition)
             nextSlide.style.transition = 'none';
             nextSlide.style.transform  = enterFrom;
             nextSlide.style.opacity    = '0';
             nextSlide.style.visibility = 'visible';
 
-            // 2. Force reflow so browser commits the start position
             void nextSlide.offsetWidth;
 
-            // 3. Animate incoming slide to centre
             nextSlide.style.transition = '';
             nextSlide.style.transform  = 'translateX(0) scale(1)';
             nextSlide.style.opacity    = '1';
 
-            // 4. Animate current slide out
             currentSlide.style.transition = '';
             currentSlide.style.transform  = exitTo;
             currentSlide.style.opacity    = '0';
 
-            // 5. Update dots
             dots.forEach((d, i) => d.classList.toggle('is-active', i === newIndex));
 
-            // 6. Clean up: hand control back to CSS classes
             setTimeout(() => {
                 slides.forEach(s => {
                     s.classList.remove('is-active', 'is-exiting', 'is-entering');
@@ -205,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function () {
             else if (playing) startAutoplay();
         });
 
-        // Ensure first slide is properly positioned (CSS handles the styling)
         slides.forEach((s, i) => {
             s.classList.remove('is-active', 'is-exiting', 'is-entering');
             s.style.cssText = '';
@@ -466,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(section);
     })();
 
-    // ===== FORM SUBMISSION =====
+    // ===== TAB 1: FORM SUBMISSION (General Enquiry - sends to Formspree) =====
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async function (e) {
@@ -502,7 +494,429 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== FORM VALIDATION =====
+    // ===== TAB 2: PROJECT FORM (Saves to localStorage ONLY - no Formspree) =====
+    (function initProjectForm() {
+        const projectForm = document.getElementById('projectForm');
+        if (!projectForm) return;
+
+        const projectTypeSelect = document.getElementById('pf-project-type');
+        const budgetSelect = document.getElementById('pf-budget');
+        const timelineSelect = document.getElementById('pf-timeline');
+
+        // Store references to specific options
+        let budgetUnder5k = null;
+        let timelineUrgent = null;
+        let timelineFlexible = null;
+
+        // Function to initialize option references
+        function initOptions() {
+            if (budgetSelect) {
+                budgetUnder5k = budgetSelect.querySelector('#budget-under-5k') || 
+                               Array.from(budgetSelect.options).find(opt => opt.value === 'under-5k');
+            }
+            if (timelineSelect) {
+                timelineUrgent = timelineSelect.querySelector('#timeline-urgent') || 
+                                Array.from(timelineSelect.options).find(opt => opt.value === 'urgent');
+                timelineFlexible = timelineSelect.querySelector('#timeline-flexible') || 
+                                  Array.from(timelineSelect.options).find(opt => opt.value === 'flexible');
+            }
+        }
+
+        // Function to apply restrictions based on project type
+        function applyRestrictions(projectType) {
+            if (!projectType) {
+                resetOptions();
+                return;
+            }
+
+            // Project types that require restrictions
+            const restrictedTypes = ['dashboard', 'ecommerce', 'custom-system'];
+
+            if (restrictedTypes.includes(projectType)) {
+                // Grey out budget "Under R5,000"
+                if (budgetUnder5k && budgetSelect) {
+                    budgetUnder5k.disabled = true;
+                    budgetUnder5k.classList.add('greyed-out');
+                    budgetUnder5k.textContent = '⛔ Under R5,000 (not available)';
+                    if (budgetSelect.value === 'under-5k') {
+                        budgetSelect.value = '';
+                    }
+                }
+
+                // Grey out timeline "Urgent" and "Flexible"
+                if (timelineUrgent && timelineSelect) {
+                    timelineUrgent.disabled = true;
+                    timelineUrgent.classList.add('greyed-out');
+                    timelineUrgent.textContent = '⛔ Urgent (not available)';
+                    if (timelineSelect.value === 'urgent') {
+                        timelineSelect.value = '';
+                    }
+                }
+                if (timelineFlexible && timelineSelect) {
+                    timelineFlexible.disabled = true;
+                    timelineFlexible.classList.add('greyed-out');
+                    timelineFlexible.textContent = '⛔ Flexible (not available)';
+                    if (timelineSelect.value === 'flexible') {
+                        timelineSelect.value = '';
+                    }
+                }
+
+                // Add visual hint to the select fields
+                if (budgetSelect) budgetSelect.style.borderColor = '#d4a000';
+                if (timelineSelect) timelineSelect.style.borderColor = '#d4a000';
+
+            } else {
+                resetOptions();
+            }
+        }
+
+        // Function to reset all options to enabled
+        function resetOptions() {
+            // Reset budget options
+            if (budgetUnder5k && budgetSelect) {
+                budgetUnder5k.disabled = false;
+                budgetUnder5k.classList.remove('greyed-out');
+                budgetUnder5k.textContent = 'Under R5,000';
+            }
+            
+            // Reset timeline options
+            if (timelineUrgent && timelineSelect) {
+                timelineUrgent.disabled = false;
+                timelineUrgent.classList.remove('greyed-out');
+                timelineUrgent.textContent = 'Urgent (Within 2 weeks)';
+            }
+            if (timelineFlexible && timelineSelect) {
+                timelineFlexible.disabled = false;
+                timelineFlexible.classList.remove('greyed-out');
+                timelineFlexible.textContent = 'Flexible';
+            }
+
+            // Reset select border colors
+            if (budgetSelect) budgetSelect.style.borderColor = '';
+            if (timelineSelect) timelineSelect.style.borderColor = '';
+        }
+
+        // Initialize options references
+        initOptions();
+
+        // Listen for project type changes
+        if (projectTypeSelect) {
+            projectTypeSelect.addEventListener('change', function() {
+                applyRestrictions(this.value);
+            });
+
+            // Also trigger on page load if a value is pre-selected
+            if (projectTypeSelect.value) {
+                setTimeout(() => {
+                    applyRestrictions(projectTypeSelect.value);
+                }, 100);
+            }
+        }
+
+        // File upload handling
+        const fileInput = document.getElementById('pf-assets');
+        const fileList = document.getElementById('fileList');
+        const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+        const ALLOWED_TYPES = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'image/png',
+            'image/jpeg',
+            'image/gif',
+            'image/svg+xml',
+            'application/zip',
+            'application/x-rar-compressed',
+            'application/x-rar'
+        ];
+
+        if (fileInput && fileList) {
+            let selectedFiles = [];
+
+            fileInput.addEventListener('change', function (e) {
+                const files = Array.from(e.target.files || []);
+                files.forEach(file => {
+                    if (!ALLOWED_TYPES.includes(file.type) && !file.name.match(/\.(pdf|doc|docx|png|jpg|jpeg|gif|svg|zip|rar)$/i)) {
+                        showAlert(`"${file.name}" is not a supported file type.`, 'error');
+                        return;
+                    }
+                    if (file.size > MAX_FILE_SIZE) {
+                        showAlert(`"${file.name}" exceeds the 20MB limit.`, 'error');
+                        return;
+                    }
+                    if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                        return;
+                    }
+                    selectedFiles.push(file);
+                });
+                renderFileList();
+                fileInput.value = '';
+            });
+
+            function renderFileList() {
+                fileList.innerHTML = selectedFiles.map((file, index) => {
+                    const icon = file.type.startsWith('image/') ? 'fa-image' :
+                        file.type === 'application/pdf' ? 'fa-file-pdf' :
+                        file.type.includes('word') ? 'fa-file-word' :
+                        file.type.includes('zip') || file.type.includes('rar') ? 'fa-file-archive' :
+                        'fa-file';
+                    const size = (file.size / 1024).toFixed(1) + ' KB';
+                    return `
+                            <span class="file-upload-item">
+                                <i class="fas ${icon}"></i>
+                                <span>${escapeHtml(file.name)} (${size})</span>
+                                <span class="file-remove" data-index="${index}"><i class="fas fa-times"></i></span>
+                            </span>
+                        `;
+                }).join('');
+
+                fileList.querySelectorAll('.file-remove').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const index = parseInt(this.dataset.index);
+                        selectedFiles.splice(index, 1);
+                        renderFileList();
+                    });
+                });
+            }
+
+            // Drag and drop support
+            const uploadLabel = document.querySelector('.file-upload-label');
+            if (uploadLabel) {
+                uploadLabel.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                    this.style.borderColor = 'var(--primary)';
+                    this.style.background = 'var(--primary-tint)';
+                });
+                uploadLabel.addEventListener('dragleave', function (e) {
+                    e.preventDefault();
+                    this.style.borderColor = '';
+                    this.style.background = '';
+                });
+                uploadLabel.addEventListener('drop', function (e) {
+                    e.preventDefault();
+                    this.style.borderColor = '';
+                    this.style.background = '';
+                    const files = Array.from(e.dataTransfer.files || []);
+                    const dataTransfer = new DataTransfer();
+                    files.forEach(f => dataTransfer.items.add(f));
+                    fileInput.files = dataTransfer.files;
+                    fileInput.dispatchEvent(new Event('change'));
+                });
+            }
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        // ===== PROJECT FORM SUBMISSION - Saves to localStorage ONLY =====
+        projectForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validate required fields
+            const required = this.querySelectorAll('[required]');
+            let valid = true;
+            required.forEach(field => {
+                const value = field.value.trim();
+                if (!value) {
+                    field.classList.add('error');
+                    valid = false;
+                    const parent = field.parentElement;
+                    let error = parent.querySelector('.field-error');
+                    if (!error) {
+                        error = document.createElement('span');
+                        error.className = 'field-error';
+                        error.textContent = 'This field is required';
+                        parent.appendChild(error);
+                    }
+                } else {
+                    field.classList.remove('error');
+                    const error = field.parentElement.querySelector('.field-error');
+                    if (error) error.remove();
+                }
+            });
+
+            // Validate email
+            const emailField = document.getElementById('pf-email');
+            if (emailField && emailField.value.trim()) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailField.value.trim())) {
+                    emailField.classList.add('error');
+                    const parent = emailField.parentElement;
+                    let error = parent.querySelector('.field-error');
+                    if (!error) {
+                        error = document.createElement('span');
+                        error.className = 'field-error';
+                        error.textContent = 'Please enter a valid email address';
+                        parent.appendChild(error);
+                    }
+                    valid = false;
+                }
+            }
+
+            // Check if any greyed-out options are still selected
+            if (budgetSelect && budgetUnder5k && budgetUnder5k.disabled && budgetSelect.value === 'under-5k') {
+                budgetSelect.classList.add('error');
+                valid = false;
+                const parent = budgetSelect.parentElement;
+                let error = parent.querySelector('.field-error');
+                if (!error) {
+                    error = document.createElement('span');
+                    error.className = 'field-error';
+                    error.textContent = 'This budget option is not available for the selected project type';
+                    parent.appendChild(error);
+                }
+            }
+
+            if (timelineSelect) {
+                if (timelineUrgent && timelineUrgent.disabled && timelineSelect.value === 'urgent') {
+                    timelineSelect.classList.add('error');
+                    valid = false;
+                    const parent = timelineSelect.parentElement;
+                    let error = parent.querySelector('.field-error');
+                    if (!error) {
+                        error = document.createElement('span');
+                        error.className = 'field-error';
+                        error.textContent = 'This timeline option is not available for the selected project type';
+                        parent.appendChild(error);
+                    }
+                }
+                if (timelineFlexible && timelineFlexible.disabled && timelineSelect.value === 'flexible') {
+                    timelineSelect.classList.add('error');
+                    valid = false;
+                    const parent = timelineSelect.parentElement;
+                    let error = parent.querySelector('.field-error');
+                    if (!error) {
+                        error = document.createElement('span');
+                        error.className = 'field-error';
+                        error.textContent = 'This timeline option is not available for the selected project type';
+                        parent.appendChild(error);
+                    }
+                }
+            }
+
+            if (!valid) {
+                showAlert('Please fix the highlighted fields before submitting.', 'error');
+                return;
+            }
+
+            // Get selected files
+            const fileInput = document.getElementById('pf-assets');
+            const selectedFiles = Array.from(fileInput.files || []);
+
+            // Build project data with all fields
+            const formData = new FormData(this);
+            const projectData = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+                name: formData.get('name') || '',
+                email: formData.get('email') || '',
+                phone: formData.get('phone') || '',
+                projectName: formData.get('projectName') || '',
+                projectType: formData.get('projectType') || '',
+                description: formData.get('description') || '',
+                budget: formData.get('budget') || '',
+                timeline: formData.get('timeline') || '',
+                files: selectedFiles.map(f => ({
+                    name: f.name,
+                    size: f.size,
+                    type: f.type
+                })),
+                status: 'new',
+                notes: '',
+                submittedAt: new Date().toISOString(),
+                depositPaid: false,
+                depositAmount: 0,
+                depositDate: null,
+                projectStartDate: null,
+                projectEndDate: null,
+                estimatedCompletion: null,
+                lastUpdated: new Date().toISOString()
+            };
+
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+
+            // Save to localStorage ONLY - NO Formspree
+            try {
+                const existing = JSON.parse(localStorage.getItem('cascade_project_briefs') || '[]');
+                existing.push(projectData);
+                localStorage.setItem('cascade_project_briefs', JSON.stringify(existing));
+
+                console.log('✅ Project saved to localStorage:', projectData);
+                console.log('📋 Total projects:', existing.length);
+
+                showAlert('✅ Your project brief has been submitted! We\'ll be in touch within 24 hours.', 'success');
+                this.reset();
+                
+                const fileList = document.getElementById('fileList');
+                if (fileList) fileList.innerHTML = '';
+                if (fileInput) fileInput.value = '';
+                // Clear the selectedFiles array
+                selectedFiles.length = 0;
+
+                // Reset restrictions after form reset
+                resetOptions();
+
+            } catch (error) {
+                console.error('❌ Error saving project:', error);
+                showAlert('❌ Error submitting project. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Real-time validation removal
+        projectForm.querySelectorAll('input, textarea, select').forEach(field => {
+            field.addEventListener('input', function () {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const error = this.parentElement.querySelector('.field-error');
+                    if (error) error.remove();
+                }
+            });
+            field.addEventListener('change', function () {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const error = this.parentElement.querySelector('.field-error');
+                    if (error) error.remove();
+                }
+            });
+        });
+    })();
+
+    // ===== CONTACT TAB SWITCHING =====
+    (function initContactTabs() {
+        const tabBtns = document.querySelectorAll('.contact-tab-btn');
+        const panels = document.querySelectorAll('.contact-tab-panel');
+
+        if (!tabBtns.length || !panels.length) return;
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const targetTab = this.dataset.tab;
+
+                tabBtns.forEach(b => b.classList.remove('is-active'));
+                this.classList.add('is-active');
+
+                panels.forEach(p => p.classList.remove('is-active'));
+                const targetPanel = document.getElementById(`tab-${targetTab}`);
+                if (targetPanel) targetPanel.classList.add('is-active');
+            });
+        });
+
+        if (window.location.hash === '#start-project') {
+            const projectTab = document.querySelector('[data-tab="project"]');
+            if (projectTab) projectTab.click();
+        }
+    })();
+
+    // ===== FORM VALIDATION (General Enquiry) =====
     (function initFormValidation() {
         const form = document.getElementById('contactForm');
         if (!form) return;
