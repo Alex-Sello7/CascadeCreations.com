@@ -1149,192 +1149,103 @@
                                 <div class="contact-grid">
                                     <div class="contact-form" data-aod
                                         data-aod-dir="left">
-                                        <form id="projectForm" novalidate>
-                                            <!-- Personal Details -->
-                                            <div class="form-row">
-                                                <label for="pf-name">Full Name
-                                                    <span
-                                                        class="required">*</span></label>
-                                                <input type="text" id="pf-name"
-                                                    name="name"
-                                                    placeholder="Your full name"
-                                                    required>
-                                            </div>
-                                            <div class="form-row">
-                                                <label for="pf-email">Email
-                                                    Address <span
-                                                        class="required">*</span></label>
-                                                <input type="email"
-                                                    id="pf-email" name="email"
-                                                    placeholder="you@example.com"
-                                                    required>
-                                            </div>
-                                            <div class="form-row">
-                                                <label for="pf-phone">Phone
-                                                    Number</label>
-                                                <input type="tel" id="pf-phone"
-                                                    name="phone"
-                                                    placeholder="+27 00 000 0000">
-                                            </div>
+                                        <form id="projectForm" action="api/submit_project.php" method="POST" enctype="multipart/form-data" novalidate>
+    <!-- Personal Details -->
+    <div class="form-row">
+        <label for="pf-name">Full Name <span class="required">*</span></label>
+        <input type="text" id="pf-name" name="name" placeholder="Your full name" required>
+    </div>
 
-                                            <hr class="form-divider">
+    <div class="form-row">
+        <label for="pf-email">Email Address <span class="required">*</span></label>
+        <input type="email" id="pf-email" name="email" placeholder="you@example.com" required>
+    </div>
 
-                                            <!-- Project Details -->
-                                            <div class="form-row">
-                                                <label
-                                                    for="pf-project-name">Project
-                                                    Name <span
-                                                        class="required">*</span></label>
-                                                <input type="text"
-                                                    id="pf-project-name"
-                                                    name="projectName"
-                                                    placeholder="e.g., My Awesome Website"
-                                                    required>
-                                            </div>
+    <div class="form-row">
+        <label for="pf-phone">Phone Number</label>
+        <input type="tel" id="pf-phone" name="phone" placeholder="+27 00 000 0000">
+    </div>
 
-                                            <div class="form-row">
-                                                <label
-                                                    for="pf-project-type">Project
-                                                    Type <span
-                                                        class="required">*</span></label>
-                                                <select id="pf-project-type"
-                                                    name="projectType" required>
-                                                    <option value>Select a
-                                                        project type...</option>
-                                                    <option
-                                                        value="full-build">Full
-                                                        Build (Website / Web
-                                                        App)</option>
-                                                    <option
-                                                        value="revamp">Revamp /
-                                                        Redesign</option>
-                                                    <option
-                                                        value="landing-page">Landing
-                                                        Page</option>
-                                                    <option
-                                                        value="ecommerce">E-commerce
-                                                        Store</option>
-                                                    <option
-                                                        value="dashboard">Dashboard
-                                                        / Analytics</option>
-                                                    <option
-                                                        value="custom-system">Custom
-                                                        Business System</option>
-                                                    <option
-                                                        value="other">Other</option>
-                                                </select>
-                                            </div>
+    <hr class="form-divider">
 
-                                            <div class="form-row">
-                                                <label
-                                                    for="pf-description">Project
-                                                    Description <span
-                                                        class="required">*</span></label>
-                                                <textarea id="pf-description"
-                                                    name="description" rows="5"
-                                                    placeholder="Tell us about your project — what problem are you solving? Who is it for? What features do you need?"
-                                                    required></textarea>
-                                            </div>
+    <!-- Project Details -->
+    <div class="form-row">
+        <label for="pf-project-name">Project Name <span class="required">*</span></label>
+        <input type="text" id="pf-project-name" name="projectName" placeholder="e.g., My Awesome Website" required>
+    </div>
 
-                                            <div class="form-row form-row-half">
-                                                <div class="form-row">
-                                                    <label
-                                                        for="pf-budget">Budget
-                                                        Range</label>
-                                                    <select id="pf-budget"
-                                                        name="budget">
-                                                        <option value>Select a
-                                                            range...</option>
-                                                        <option
-                                                            value="under-5k"
-                                                            id="budget-under-5k">Under
-                                                            R5,000</option>
-                                                        <option
-                                                            value="5k-15k">R5,000
-                                                            – R15,000</option>
-                                                        <option
-                                                            value="15k-30k">R15,000
-                                                            – R30,000</option>
-                                                        <option
-                                                            value="30k-50k">R30,000
-                                                            – R50,000</option>
-                                                        <option
-                                                            value="50k-100k">R50,000
-                                                            – R100,000</option>
-                                                        <option
-                                                            value="100k+">R100,000+</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-row">
-                                                    <label
-                                                        for="pf-timeline">Timeline</label>
-                                                    <select id="pf-timeline"
-                                                        name="timeline">
-                                                        <option value>Select a
-                                                            timeline...</option>
-                                                        <option
-                                                            value="urgent"
-                                                            id="timeline-urgent">Urgent
-                                                            (Within 2
-                                                            weeks)</option>
-                                                        <option
-                                                            value="1-month">1
-                                                            Month</option>
-                                                        <option
-                                                            value="2-3-months">2
-                                                            – 3 Months</option>
-                                                        <option
-                                                            value="3-6-months">3
-                                                            – 6 Months</option>
-                                                        <option
-                                                            value="flexible"
-                                                            id="timeline-flexible">Flexible</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+    <div class="form-row">
+        <label for="pf-project-type">Project Type <span class="required">*</span></label>
+        <select id="pf-project-type" name="projectType" required>
+            <option value="">Select a project type...</option>
+            <option value="full-build">Full Build (Website / Web App)</option>
+            <option value="revamp">Revamp / Redesign</option>
+            <option value="landing-page">Landing Page</option>
+            <option value="ecommerce">E-commerce Store</option>
+            <option value="dashboard">Dashboard / Analytics</option>
+            <option value="custom-system">Custom Business System</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
 
-                                            <div class="form-row">
-                                                <label for="pf-assets">Brand
-                                                    Assets (Optional)</label>
-                                                <div class="file-upload-wrap">
-                                                    <input type="file"
-                                                        id="pf-assets"
-                                                        name="assets"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.svg,.zip,.rar"
-                                                        multiple>
-                                                    <label for="pf-assets"
-                                                        class="file-upload-label">
-                                                        <i
-                                                            class="fas fa-cloud-upload-alt"></i>
-                                                        <span>Drop files here or
-                                                            click to
-                                                            upload</span>
-                                                        <small>PDF, DOCX, PNG,
-                                                            JPG, ZIP — max
-                                                            20MB</small>
-                                                    </label>
-                                                    <div
-                                                        class="file-upload-list"
-                                                        id="fileList"></div>
-                                                </div>
-                                            </div>
+    <div class="form-row">
+        <label for="pf-description">Project Description <span class="required">*</span></label>
+        <textarea id="pf-description" name="description" rows="5" 
+                  placeholder="Tell us about your project — what problem are you solving? Who is it for? What features do you need?" 
+                  required></textarea>
+    </div>
 
-                                            <div class="form-row">
-                                                <label class="checkbox-label">
-                                                    <input type="checkbox"
-                                                        name="agree" required>
-                                                    <span>I agree that my data
-                                                        will be stored and used
-                                                        to respond to my
-                                                        enquiry.</span>
-                                                </label>
-                                            </div>
+    <div class="form-row form-row-half">
+        <div class="form-row">
+            <label for="pf-budget">Budget Range</label>
+            <select id="pf-budget" name="budget">
+                <option value="">Select a range...</option>
+                <option value="under-5k">Under R5,000</option>
+                <option value="5k-15k">R5,000 – R15,000</option>
+                <option value="15k-30k">R15,000 – R30,000</option>
+                <option value="30k-50k">R30,000 – R50,000</option>
+                <option value="50k-100k">R50,000 – R100,000</option>
+                <option value="100k+">R100,000+</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label for="pf-timeline">Timeline</label>
+            <select id="pf-timeline" name="timeline">
+                <option value="">Select a timeline...</option>
+                <option value="urgent">Urgent (Within 2 weeks)</option>
+                <option value="1-month">1 Month</option>
+                <option value="2-3-months">2 – 3 Months</option>
+                <option value="3-6-months">3 – 6 Months</option>
+                <option value="flexible">Flexible</option>
+            </select>
+        </div>
+    </div>
 
-                                            <button type="submit"
-                                                class="btn btn-submit"><span>Submit
-                                                    Project Brief</span><i
-                                                    class="fas fa-paper-plane"></i></button>
-                                        </form>
+    <div class="form-row">
+        <label for="pf-assets">Brand Assets (Optional)</label>
+        <div class="file-upload-wrap">
+            <input type="file" id="pf-assets" name="assets[]" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.svg,.zip,.rar" multiple>
+            <label for="pf-assets" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Drop files here or click to upload</span>
+                <small>PDF, DOCX, PNG, JPG, ZIP — max 20MB</small>
+            </label>
+            <div class="file-upload-list" id="fileList"></div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <label class="checkbox-label">
+            <input type="checkbox" name="agree" required>
+            <span>I agree that my data will be stored and used to respond to my enquiry.</span>
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-submit">
+        <span>Submit Project Brief</span>
+        <i class="fas fa-paper-plane"></i>
+    </button>
+</form>
                                     </div>
                                     <div class="contact-info-list" data-aod
                                         data-aod-dir="right">

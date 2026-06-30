@@ -124,25 +124,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const dir = direction !== undefined ? direction : (newIndex > current ? 1 : -1);
             const enterFrom = dir >= 0 ? 'translateX(100%) scale(0.95)' : 'translateX(-100%) scale(0.95)';
-            const exitTo    = dir >= 0 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
+            const exitTo = dir >= 0 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
 
             const currentSlide = slides[current];
-            const nextSlide    = slides[newIndex];
+            const nextSlide = slides[newIndex];
 
             nextSlide.style.transition = 'none';
-            nextSlide.style.transform  = enterFrom;
-            nextSlide.style.opacity    = '0';
+            nextSlide.style.transform = enterFrom;
+            nextSlide.style.opacity = '0';
             nextSlide.style.visibility = 'visible';
 
             void nextSlide.offsetWidth;
 
             nextSlide.style.transition = '';
-            nextSlide.style.transform  = 'translateX(0) scale(1)';
-            nextSlide.style.opacity    = '1';
+            nextSlide.style.transform = 'translateX(0) scale(1)';
+            nextSlide.style.opacity = '1';
 
             currentSlide.style.transition = '';
-            currentSlide.style.transform  = exitTo;
-            currentSlide.style.opacity    = '0';
+            currentSlide.style.transform = exitTo;
+            currentSlide.style.opacity = '0';
 
             dots.forEach((d, i) => d.classList.toggle('is-active', i === newIndex));
 
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== TAB 2: PROJECT FORM (Saves to localStorage ONLY - no Formspree) =====
+    // ===== TAB 2: PROJECT FORM - SAVES TO DATABASE VIA API =====
     (function initProjectForm() {
         const projectForm = document.getElementById('projectForm');
         if (!projectForm) return;
@@ -711,8 +711,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return div.innerHTML;
         }
 
-        // ===== PROJECT FORM SUBMISSION - Saves to localStorage ONLY =====
-        projectForm.addEventListener('submit', function (e) {
+        // ===== PROJECT FORM SUBMISSION - Saves to DATABASE via API =====
+        projectForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             // Validate required fields
@@ -802,69 +802,62 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Get selected files
-            const fileInput = document.getElementById('pf-assets');
-            const selectedFiles = Array.from(fileInput.files || []);
-
-            // Build project data with all fields
-            const formData = new FormData(this);
-            const projectData = {
-                id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
-                name: formData.get('name') || '',
-                email: formData.get('email') || '',
-                phone: formData.get('phone') || '',
-                projectName: formData.get('projectName') || '',
-                projectType: formData.get('projectType') || '',
-                description: formData.get('description') || '',
-                budget: formData.get('budget') || '',
-                timeline: formData.get('timeline') || '',
-                files: selectedFiles.map(f => ({
-                    name: f.name,
-                    size: f.size,
-                    type: f.type
-                })),
-                status: 'new',
-                notes: '',
-                submittedAt: new Date().toISOString(),
-                depositPaid: false,
-                depositAmount: 0,
-                depositDate: null,
-                projectStartDate: null,
-                projectEndDate: null,
-                estimatedCompletion: null,
-                lastUpdated: new Date().toISOString()
-            };
-
             // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalHTML = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
             submitBtn.disabled = true;
 
-            // Save to localStorage ONLY - NO Formspree
             try {
-                const existing = JSON.parse(localStorage.getItem('cascade_project_briefs') || '[]');
-                existing.push(projectData);
-                localStorage.setItem('cascade_project_briefs', JSON.stringify(existing));
-
-                console.log('✅ Project saved to localStorage:', projectData);
-                console.log('📋 Total projects:', existing.length);
-
-                showAlert('✅ Your project brief has been submitted! We\'ll be in touch within 24 hours.', 'success');
-                this.reset();
+                // Get form data
+                const formData = new FormData(this);
                 
-                const fileList = document.getElementById('fileList');
-                if (fileList) fileList.innerHTML = '';
-                if (fileInput) fileInput.value = '';
-                // Clear the selectedFiles array
-                selectedFiles.length = 0;
+                // Prepare data for API
+                const projectData = {
+                    name: formData.get('name') || '',
+                    email: formData.get('email') || '',
+                    phone: formData.get('phone') || '',
+                    projectName: formData.get('projectName') || '',
+                    projectType: formData.get('projectType') || '',
+                    description: formData.get('description') || '',
+                    budget: formData.get('budget') || '',
+                    timeline: formData.get('timeline') || '',
+                    status: 'new'
+                };
 
-                // Reset restrictions after form reset
-                resetOptions();
+                console.log('📤 Submitting project to database:', projectData);
+
+                // Send to API
+                const response = await fetch('api/submit_project.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(projectData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert('✅ Your project brief has been submitted! We\'ll be in touch within 24 hours.', 'success');
+                    this.reset();
+                    
+                    // Clear file list
+                    const fileList = document.getElementById('fileList');
+                    if (fileList) fileList.innerHTML = '';
+                    if (fileInput) fileInput.value = '';
+                    
+                    // Reset restrictions
+                    resetOptions();
+                    
+                    console.log('✅ Project saved to database! ID:', result.project_id);
+                } else {
+                    throw new Error(result.message || 'Failed to submit project');
+                }
 
             } catch (error) {
-                console.error('❌ Error saving project:', error);
-                showAlert('❌ Error submitting project. Please try again.', 'error');
+                console.error('❌ Error submitting project:', error);
+                showAlert('❌ Error submitting project: ' + error.message + '. Please try again or contact us directly.', 'error');
             } finally {
                 submitBtn.innerHTML = originalHTML;
                 submitBtn.disabled = false;
