@@ -2087,19 +2087,52 @@ section {
     display: flex;
     gap: 20px;
     width: max-content;
-    animation: testimonial-scroll 32s linear infinite;
+    animation: testimonial-scroll 40s linear infinite;
 }
+
+/* Pause animation on hover */
 .testimonial-marquee:hover .testimonial-track {
     animation-play-state: paused;
 }
+
+/* 
+   The infinite scroll works by:
+   1. Duplicating the testimonials in HTML (we have 2 sets)
+   2. Moving the track left by exactly 50% of its width
+   3. When it reaches the end, it seamlessly repeats because the 2nd set 
+      is a perfect duplicate of the 1st set
+*/
 @keyframes testimonial-scroll {
-    from {
+    0% {
         transform: translateX(0);
     }
-    to {
+    100% {
         transform: translateX(-50%);
     }
 }
+
+/* For reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .testimonial-track {
+        animation: none;
+    }
+    .testimonial-marquee {
+        -webkit-mask-image: none;
+        mask-image: none;
+        overflow-x: auto;
+    }
+    .testimonial-track {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+    }
+    .testimonial-card {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
+}
+
 .testimonial-card {
     background: var(--surface);
     border: 1px solid var(--line-soft);
@@ -2110,12 +2143,14 @@ section {
     gap: 14px;
     flex: 0 0 360px;
     width: 360px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-@media (prefers-reduced-motion: reduce) {
-    .testimonial-track {
-        animation: none;
-    }
+
+.testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
 }
+
 .testimonial-mark {
     color: var(--primary);
     font-size: 1.3rem;
