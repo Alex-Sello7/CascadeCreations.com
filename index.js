@@ -273,68 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })();
 
-    // ===== LIVE STATS STRIP =====
-    (function initStats() {
-        const projectsEl = document.querySelector('[data-stat="projects"]');
-        const stackEl = document.querySelector('[data-stat="stack"]');
-        const loadEl = document.querySelector('[data-stat="load"]');
-        const statsStrip = document.getElementById('statsStrip');
-        if (!projectsEl && !stackEl && !loadEl) return;
-
-        function countUp(el, target) {
-            if (!el) return;
-            const duration = 800;
-            const start = performance.now();
-
-            function step(now) {
-                const progress = Math.min((now - start) / duration, 1);
-                el.textContent = Math.round(progress * target);
-                if (progress < 1) requestAnimationFrame(step);
-            }
-            requestAnimationFrame(step);
-        }
-
-        let counted = false;
-
-        function runCounts() {
-            if (counted) return;
-            counted = true;
-            if (projectsEl) countUp(projectsEl, document.querySelectorAll('.work-banner').length);
-            if (stackEl) countUp(stackEl, document.querySelectorAll('.stack-badge').length);
-        }
-
-        if (statsStrip) {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        runCounts();
-                        obs.disconnect();
-                    }
-                });
-            }, { threshold: 0.3 });
-            obs.observe(statsStrip);
-        } else {
-            runCounts();
-        }
-
-        function reportLoadTime() {
-            if (!loadEl) return;
-            const nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
-            let ms = null;
-            if (nav) {
-                ms = Math.round(nav.loadEventEnd - nav.startTime);
-            } else if (performance.timing) {
-                ms = Math.round(performance.timing.loadEventEnd - performance.timing.navigationStart);
-            }
-            loadEl.textContent = (ms && ms > 0) ? ms + 'ms' : '< 1s';
-        }
-        if (document.readyState === 'complete') {
-            setTimeout(reportLoadTime, 50);
-        } else {
-            window.addEventListener('load', () => setTimeout(reportLoadTime, 50));
-        }
-    })();
-
     // ===== LIVE FROM GITHUB =====
     (function initGithub() {
         const section = document.getElementById('github');
