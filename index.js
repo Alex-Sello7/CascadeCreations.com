@@ -71,6 +71,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const href = this.getAttribute('href');
             if (href && href.startsWith('#')) {
                 e.preventDefault();
+                
+                // Hide the floating CTA immediately on nav click
+                const floatingCTA = document.querySelector('.floating-cta');
+                if (floatingCTA) {
+                    floatingCTA.classList.remove('visible', 'inflate');
+                }
+                
                 navLinks.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
                 const target = document.querySelector(href);
@@ -113,56 +120,83 @@ document.addEventListener('DOMContentLoaded', function () {
         let playing = true;
         let timer = null;
         let isTransitioning = false;
-        const interval = 8000;
+        const interval = 10000; // 10 seconds per slide
 
-        function goTo(index, direction) {
+        function goTo(index) {
+            // Prevent multiple transitions at once
             if (isTransitioning) return;
+            
+            // Normalize index
+            const newIndex = ((index % slides.length) + slides.length) % slides.length;
+            
+            // If already on this slide, do nothing
+            if (newIndex === current) return;
+            
             isTransitioning = true;
-
-            const newIndex = (index + slides.length) % slides.length;
-            if (newIndex === current) { isTransitioning = false; return; }
-
-            const dir = direction !== undefined ? direction : (newIndex > current ? 1 : -1);
-            const enterFrom = dir >= 0 ? 'translateX(100%) scale(0.95)' : 'translateX(-100%) scale(0.95)';
-            const exitTo = dir >= 0 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
 
             const currentSlide = slides[current];
             const nextSlide = slides[newIndex];
 
+            // Determine direction (for animation)
+            const direction = newIndex > current ? 1 : -1;
+            const enterFrom = direction === 1 ? 'translateX(100%) scale(0.95)' : 'translateX(-100%) scale(0.95)';
+            const exitTo = direction === 1 ? 'translateX(-100%) scale(0.95)' : 'translateX(100%) scale(0.95)';
+
+            // Reset next slide and position it off-screen
             nextSlide.style.transition = 'none';
             nextSlide.style.transform = enterFrom;
             nextSlide.style.opacity = '0';
             nextSlide.style.visibility = 'visible';
 
+            // Force reflow
             void nextSlide.offsetWidth;
 
-            nextSlide.style.transition = '';
-            nextSlide.style.transform = 'translateX(0) scale(1)';
-            nextSlide.style.opacity = '1';
-
-            currentSlide.style.transition = '';
+            // Set current slide to exit
+            currentSlide.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
             currentSlide.style.transform = exitTo;
             currentSlide.style.opacity = '0';
 
-            dots.forEach((d, i) => d.classList.toggle('is-active', i === newIndex));
+            // Bring next slide in
+            nextSlide.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
+            nextSlide.style.transform = 'translateX(0) scale(1)';
+            nextSlide.style.opacity = '1';
 
+            // Update dots
+            dots.forEach((d, i) => {
+                d.classList.toggle('is-active', i === newIndex);
+                // Reset dot animation by re-adding the class
+                if (i === newIndex) {
+                    d.style.animation = 'none';
+                    void d.offsetWidth;
+                    d.style.animation = '';
+                }
+            });
+
+            // Update current index after transition
             setTimeout(() => {
+                // Clean up all slides
                 slides.forEach(s => {
                     s.classList.remove('is-active', 'is-exiting', 'is-entering');
                     s.style.cssText = '';
                 });
+                
+                // Set the new active slide
                 nextSlide.classList.add('is-active');
                 current = newIndex;
                 isTransitioning = false;
-            }, 800);
+            }, 850); // Slightly longer than the transition duration
         }
 
         function next() {
-            if (!isTransitioning) goTo(current + 1, 1);
+            if (!isTransitioning) {
+                goTo(current + 1);
+            }
         }
 
         function prev() {
-            if (!isTransitioning) goTo(current - 1, -1);
+            if (!isTransitioning) {
+                goTo(current - 1);
+            }
         }
 
         function startAutoplay() {
@@ -177,36 +211,233 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        if (nextBtn) nextBtn.addEventListener('click', () => { next();
-            startAutoplay(); });
-        if (prevBtn) prevBtn.addEventListener('click', () => { prev();
-            startAutoplay(); });
+        // Event listeners
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                next();
+                startAutoplay(); // Reset timer on manual interaction
+            });
+        }
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                prev();
+                startAutoplay(); // Reset timer on manual interaction
+            });
+        }
 
         dots.forEach((dot, i) => {
-            dot.addEventListener('click', () => { goTo(i);
-                startAutoplay(); });
+            dot.addEventListener('click', () => {
+                goTo(i);
+                startAutoplay(); // Reset timer on manual interaction
+            });
         });
 
+        // Pause on hover
         const carousel = document.querySelector('.hero-carousel');
         if (carousel) {
             carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', () => { if (playing) startAutoplay(); });
+            carousel.addEventListener('mouseleave', () => {
+                if (playing) startAutoplay();
+            });
         }
 
+        // Pause when tab is hidden
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) stopAutoplay();
-            else if (playing) startAutoplay();
+            if (document.hidden) {
+                stopAutoplay();
+            } else if (playing) {
+                startAutoplay();
+            }
         });
 
+        // Initialize first slide
         slides.forEach((s, i) => {
             s.classList.remove('is-active', 'is-exiting', 'is-entering');
             s.style.cssText = '';
             if (i === 0) {
                 s.classList.add('is-active');
+                s.style.transform = 'translateX(0) scale(1)';
+                s.style.opacity = '1';
+                s.style.visibility = 'visible';
+            } else {
+                s.style.transform = 'translateX(100%) scale(0.95)';
+                s.style.opacity = '0';
+                s.style.visibility = 'hidden';
             }
         });
 
+        // Start autoplay
         startAutoplay();
+
+        // Handle window resize - ensure slides maintain correct positioning
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Reset current slide position if needed
+                const activeSlide = slides[current];
+                if (activeSlide) {
+                    activeSlide.style.transform = 'translateX(0) scale(1)';
+                    activeSlide.style.opacity = '1';
+                }
+            }, 200);
+        });
+    })();
+
+    // ===== FLOATING CTA - Hide on hero, contact, and footer =====
+    (function initFloatingCTA() {
+        const floatingCTA = document.querySelector('.floating-cta');
+        if (!floatingCTA) return;
+
+        let hasAnimated = false;
+        let isVisible = false;
+        let isNavClicking = false;
+        let navClickTimeout = null;
+
+        function checkScrollPosition() {
+            // Don't check during nav click animation
+            if (isNavClicking) return;
+
+            const hero = document.querySelector('.hero-carousel');
+            const contact = document.getElementById('contact');
+            const footer = document.querySelector('.footer');
+            
+            if (!hero) {
+                // Fallback: show after 100px scroll but hide on contact/footer
+                const isAtContact = contact && isElementInViewport(contact);
+                const isAtFooter = footer && isElementInViewport(footer);
+                
+                if (window.scrollY > 100 && !isAtContact && !isAtFooter && !isVisible) {
+                    showCTA();
+                } else if ((window.scrollY <= 100 || isAtContact || isAtFooter) && isVisible) {
+                    hideCTA();
+                }
+                return;
+            }
+
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+
+            // Check if we're on the hero section
+            const heroBottom = hero.offsetTop + hero.offsetHeight;
+            const isOnHero = scrollY < heroBottom - 100;
+
+            // Check if we're on the contact section
+            let isOnContact = false;
+            if (contact) {
+                const contactTop = contact.offsetTop;
+                const contactBottom = contactTop + contact.offsetHeight;
+                // Consider the contact section as active when it's in view or near it
+                isOnContact = scrollY + windowHeight * 0.3 > contactTop && scrollY < contactBottom - 100;
+            }
+
+            // Check if we're on the footer
+            let isOnFooter = false;
+            if (footer) {
+                const footerTop = footer.offsetTop;
+                isOnFooter = scrollY + windowHeight * 0.3 > footerTop;
+            }
+
+            // Check if we should show the CTA
+            const shouldShow = !isOnHero && !isOnContact && !isOnFooter;
+
+            if (shouldShow && !isVisible) {
+                showCTA();
+            } else if (!shouldShow && isVisible) {
+                hideCTA();
+            }
+        }
+
+        // Helper function to check if an element is in the viewport
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            const buffer = 100; // Buffer to account for partial visibility
+            return rect.top < window.innerHeight + buffer && rect.bottom > -buffer;
+        }
+
+        function showCTA() {
+            if (isVisible || isNavClicking) return;
+            isVisible = true;
+            
+            // Remove any existing classes first
+            floatingCTA.classList.remove('inflate');
+            
+            // Force reflow
+            void floatingCTA.offsetWidth;
+            
+            // Add visible class to show it, then trigger inflate animation
+            floatingCTA.classList.add('visible');
+            
+            // If this is the first time showing, add the inflate animation
+            if (!hasAnimated) {
+                hasAnimated = true;
+                // Small delay to ensure the visible class is applied
+                setTimeout(() => {
+                    floatingCTA.classList.add('inflate');
+                }, 50);
+            }
+            
+            // Remove the inflate class after animation completes
+            setTimeout(() => {
+                floatingCTA.classList.remove('inflate');
+            }, 1000);
+        }
+
+        function hideCTA() {
+            if (!isVisible) return;
+            isVisible = false;
+            floatingCTA.classList.remove('visible', 'inflate');
+        }
+
+        // Function to handle nav clicks
+        function handleNavClick() {
+            // Immediately hide the CTA
+            hideCTA();
+            
+            // Set flag to prevent scroll checks during animation
+            isNavClicking = true;
+            
+            // Clear any existing timeout
+            if (navClickTimeout) {
+                clearTimeout(navClickTimeout);
+            }
+            
+            // After the smooth scroll completes (check after animation)
+            navClickTimeout = setTimeout(() => {
+                isNavClicking = false;
+                // Force a check after the scroll completes
+                setTimeout(checkScrollPosition, 100);
+            }, 800); // Slightly longer than the smooth scroll
+        }
+
+        // Hook into nav link clicks
+        document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Only handle internal hash links
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#') && href !== '#') {
+                    // Small delay to let the nav click event propagate
+                    setTimeout(handleNavClick, 10);
+                }
+            });
+        });
+
+        // Throttled scroll listener
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    checkScrollPosition();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // Check on load
+        setTimeout(checkScrollPosition, 100);
+        window.addEventListener('resize', checkScrollPosition, { passive: true });
     })();
 
     // ===== WORK PORTFOLIO: ACCORDION + FILTERING =====
@@ -1010,36 +1241,88 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    // ===== ANIMATE ON DISPLAY =====
+    // ===== ANIMATE ON DISPLAY - Enhanced with direction support =====
     (function initAOD() {
         const aodElements = document.querySelectorAll('[data-aod]');
         if (!aodElements.length) return;
+
+        // Set initial states based on direction
+        aodElements.forEach(el => {
+            const dir = el.dataset.aodDir || 'up';
+            const delay = parseInt(el.dataset.aodDelay || 0);
+            
+            // Apply initial transform based on direction
+            switch(dir) {
+                case 'left':
+                    el.style.transform = 'translateX(-40px)';
+                    break;
+                case 'right':
+                    el.style.transform = 'translateX(40px)';
+                    break;
+                case 'scale':
+                    el.style.transform = 'scale(0.92)';
+                    break;
+                case 'up-scale':
+                    el.style.transform = 'translateY(30px) scale(0.96)';
+                    break;
+                default: // 'up' or any other
+                    el.style.transform = 'translateY(30px)';
+                    break;
+            }
+            
+            // Apply delay if not already set
+            if (delay > 0) {
+                el.style.transitionDelay = delay + 'ms';
+            }
+        });
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const el = entry.target;
                     const delay = parseInt(el.dataset.aodDelay || 0);
-                    setTimeout(() => el.classList.add('aod-in'), delay);
+                    
+                    setTimeout(() => {
+                        el.classList.add('aod-in');
+                        // Clear inline transform after animation
+                        setTimeout(() => {
+                            el.style.transform = '';
+                            el.style.transitionDelay = '';
+                        }, 800);
+                    }, delay);
+                    
                     observer.unobserve(el);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+        }, { 
+            threshold: 0.08, 
+            rootMargin: '0px 0px -50px 0px' 
+        });
 
         aodElements.forEach(el => observer.observe(el));
 
+        // Fallback: reveal any visible elements on load
         function revealVisible() {
             document.querySelectorAll('[data-aod]:not(.aod-in)').forEach(el => {
                 const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    el.classList.add('aod-in');
+                const threshold = window.innerHeight * 0.85;
+                if (rect.top < threshold) {
+                    const delay = parseInt(el.dataset.aodDelay || 0);
+                    setTimeout(() => {
+                        el.classList.add('aod-in');
+                        setTimeout(() => {
+                            el.style.transform = '';
+                            el.style.transitionDelay = '';
+                        }, 800);
+                    }, delay);
                     observer.unobserve(el);
                 }
             });
         }
+        
         window.addEventListener('scroll', () => requestAnimationFrame(revealVisible), { passive: true });
         window.addEventListener('resize', revealVisible);
-        setTimeout(revealVisible, 800);
+        setTimeout(revealVisible, 200);
     })();
 
     // ===== SET CURRENT YEAR =====

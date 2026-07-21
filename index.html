@@ -322,54 +322,6 @@
 
                 </div>
 
-                <div class="hero-controls">
-                    <button class="hero-arrow" id="heroPrev"
-                        aria-label="Previous slide"><i
-                            class="fas fa-chevron-left"></i></button>
-
-                    <div class="hero-dots" id="heroDots">
-                        <button class="hero-dot is-active" data-goto="0"
-                            aria-label="Go to slide 1"></button>
-                        <button class="hero-dot" data-goto="1"
-                            aria-label="Go to slide 2"></button>
-                        <button class="hero-dot" data-goto="2"
-                            aria-label="Go to slide 3"></button>
-                    </div>
-                    <button class="hero-arrow" id="heroNext"
-                        aria-label="Next slide"><i
-                            class="fas fa-chevron-right"></i></button>
-                </div>
-            </section>
-
-            <!-- ============ QUICK LINKS ROW ============ -->
-            <section class="quicklinks">
-                <div class="container">
-                    <div class="quicklinks-grid">
-                        <a href="#solutions" class="quicklink">
-                            <span class="quicklink-icon"><i
-                                    class="fas fa-laptop-code"
-                                    aria-hidden="true"></i></span>
-                            <span>Websites</span>
-                        </a>
-                        <a href="#solutions" class="quicklink">
-                            <span class="quicklink-icon"><i
-                                    class="fas fa-chart-line"
-                                    aria-hidden="true"></i></span>
-                            <span>Dashboards</span>
-                        </a>
-                        <a href="#solutions" class="quicklink">
-                            <span class="quicklink-icon"><i class="fas fa-gears"
-                                    aria-hidden="true"></i></span>
-                            <span>Custom Systems</span>
-                        </a>
-                        <a href="#contact" class="quicklink">
-                            <span class="quicklink-icon"><i
-                                    class="fas fa-comment-dollar"
-                                    aria-hidden="true"></i></span>
-                            <span>Get a Quote</span>
-                        </a>
-                    </div>
-                </div>
             </section>
 
             <!-- ============ SOLUTIONS CAROUSEL ============ -->
@@ -387,8 +339,8 @@
                             project <i class="fas fa-arrow-right"></i></a>
                     </div>
 
-                    <div class="solutions-track" id="solutionsTrack">
-                        <div class="solution-card">
+                    <div class="solutions-track"  id="solutionsTrack">
+                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="0">
                             <div class="solution-visual sv-1">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -411,7 +363,7 @@
                             </div>
                         </div>
 
-                        <div class="solution-card">
+                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="100">
                             <div class="solution-visual sv-5">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -434,7 +386,7 @@
                             </div>
                         </div>
 
-                        <div class="solution-card">
+                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="200">
                             <div class="solution-visual sv-3">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -455,7 +407,7 @@
                             </div>
                         </div>
 
-                        <div class="solution-card">
+                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="0">
                             <div class="solution-visual sv-2">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -476,7 +428,7 @@
                             </div>
                         </div>
 
-                        <div class="solution-card">
+                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="80">
                             <div class="solution-visual sv-4">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -654,6 +606,21 @@
                 </div>
             </section>
 
+            <!-- ============ CTA BAND ============ -->
+            <section class="cta-band">
+                <div class="container">
+                    <h2>Have a project in mind?</h2>
+                    <p>Tell us what you're trying to build — we'll help you
+                        figure out how to get there.</p>
+                    <div class="cta-actions">
+                        <a href="#contact" class="btn btn-primary">Get in
+                            touch</a>
+                        <a href="#work" class="btn btn-outline-light">View our
+                            work</a>
+                    </div>
+                </div>
+            </section>
+
             <!-- ============ WHY US — FEATURE ROWS ============ -->
             <section id="why-us" class="features-section">
                 <div class="container">
@@ -664,7 +631,7 @@
                             time</h2>
                     </div>
 
-                    <div class="feature-row" data-aod>
+                    <div class="feature-row" data-aod data-aod-dir="left">
                         <div class="feature-visual fv-1"><img
                                 src="imgs/webdesign.webp" alt="Design"
                                 width="560" height="420"
@@ -688,7 +655,7 @@
                         </div>
                     </div>
 
-                    <div class="feature-row reverse" data-aod>
+                    <div class="feature-row reverse" data-aod data-aod-dir="right">
                         <div class="feature-visual fv-2"><img
                                 src="imgs/webperfomanca.png" alt="Performance"
                                 width="560" height="420"
@@ -887,7 +854,8 @@
                         </div>
 
                         <div class="work-banner" tabindex="0" role="button"
-                            aria-expanded="false" data-bg="imgs/herosectionimg.jpg"
+                            aria-expanded="false"
+                            data-bg="imgs/herosectionimg.jpg"
                             data-category="construction">
                             <div class="work-banner-main">
                                 <span
@@ -988,7 +956,7 @@
             <!-- ============ TESTIMONIALS ============ -->
             <section class="testimonials-section">
                 <div class="container">
-                     <div class="section-header" data-aod>
+                    <div class="section-header" data-aod>
                         <span class="section-eyebrow">What clients say</span>
                         <h2 class="section-title">Feedback from people we've
                             built for</h2>
@@ -1087,21 +1055,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============ CTA BAND ============ -->
-            <section class="cta-band">
-                <div class="container">
-                    <h2>Have a project in mind?</h2>
-                    <p>Tell us what you're trying to build — we'll help you
-                        figure out how to get there.</p>
-                    <div class="cta-actions">
-                        <a href="#contact" class="btn btn-primary">Get in
-                            touch</a>
-                        <a href="#work" class="btn btn-outline-light">View our
-                            work</a>
                     </div>
                 </div>
             </section>
