@@ -91,6 +91,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    width: 100%;
 }
 
 img {
@@ -107,6 +108,13 @@ a {
     margin: 0 auto;
     padding: 0 var(--gutter);
     width: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 16px;
+    }
 }
 
 /* =========================================================
@@ -661,7 +669,7 @@ section {
 
 .hero-slide {
     position: absolute;
-    inset: 0; /* Changed from 'inset: 0 0 56px 0' to just 'inset: 0' */
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -741,7 +749,7 @@ section {
     background-image: url('imgs/heroslide1.avif');
 }
 .hero-slide[data-slide="1"]::before {
-    background-image: url('imgs/heroslide3.jpg');
+    background-image: url('imgs/4slide.avif');
 }
 .hero-slide[data-slide="2"]::before {
     background-image: url('imgs/heroslide2.jpg');
@@ -1536,33 +1544,40 @@ section {
 }
 
 /* =========================================================
-   STACK STRIP
+   STACK STRIP - REDESIGNED with Individual Colors
    ========================================================= */
 .stack-section {
     position: relative;
     overflow: hidden;
+    background: linear-gradient(160deg, var(--canvas) 0%, var(--surface) 100%);
+    padding: 72px 0;
 }
+
+/* Decorative gradient orbs */
 .stack-section::before,
 .stack-section::after {
     content: '';
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
 }
 .stack-section::before {
-    width: 320px;
-    height: 320px;
-    top: -120px;
-    left: -80px;
+    width: 400px;
+    height: 400px;
+    top: -150px;
+    right: -100px;
+    background: rgba(0, 102, 204, 0.06);
 }
 .stack-section::after {
-    width: 260px;
-    height: 260px;
+    width: 300px;
+    height: 300px;
     bottom: -100px;
-    right: -60px;
+    left: -80px;
+    background: rgba(0, 150, 136, 0.06);
 }
+
 .stack-section .container {
     position: relative;
     z-index: 1;
@@ -1570,19 +1585,21 @@ section {
 
 .stack-intro {
     max-width: 700px;
-    margin: -10px 0 40px;
+    margin: -10px 0 48px;
     font-size: 1.05rem;
     color: var(--ink-soft);
     line-height: 1.7;
+    padding: 0 4px;
 }
 .stack-intro strong {
     color: var(--primary);
+    font-weight: 600;
 }
 
 .stack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
 }
 
 .stack-tile {
@@ -1593,156 +1610,295 @@ section {
     align-items: center;
     justify-content: center;
     border-radius: var(--r-lg);
-    background: rgba(255, 255, 255, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 24px rgba(15, 20, 25, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    background: transparent;
+    border: 2px solid var(--line-soft);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     overflow: hidden;
     cursor: default;
-    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    padding: 16px;
 }
+
+/* Subtle gradient overlay on hover */
 .stack-tile::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), transparent 60%);
-    opacity: 0.6;
+    background: linear-gradient(135deg, transparent 60%, rgba(255, 255, 255, 0.4));
+    opacity: 0;
+    transition: opacity 0.4s ease;
     pointer-events: none;
 }
+
+.stack-tile:hover::before {
+    opacity: 1;
+}
+
 .stack-tile i {
     position: relative;
-    font-size: 2.1rem;
-    transition: transform 0.35s var(--ease), color 0.25s ease;
+    z-index: 1;
+    font-size: 2.6rem;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-bottom: 8px;
 }
+
 .stack-tile-name {
-    position: absolute;
-    bottom: 14px;
-    left: 0;
-    right: 0;
-    text-align: center;
+    position: relative;
+    z-index: 1;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--ink);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    transition: all 0.3s ease;
 }
+
+/* Hover state */
 .stack-tile:hover,
 .stack-tile:focus-visible {
-    transform: translateY(-6px);
-    background: rgba(255, 255, 255, 0.65);
-    border-color: rgba(0, 102, 204, 0.35);
-    box-shadow: 0 16px 36px rgba(0, 102, 204, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-.stack-tile:hover i,
-.stack-tile:focus-visible i {
-    transform: translateY(-10px) scale(1.04);
-}
-.stack-tile:hover .stack-tile-name,
-.stack-tile:focus-visible .stack-tile-name {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* Individual hover colors */
-.stack-tile .fa-html5 {
+.stack-tile:hover i {
+    transform: translateY(-4px) scale(1.12);
+}
+
+/* =========================================================
+   INDIVIDUAL TILE COLORS
+   ========================================================= */
+
+/* HTML5 - Orange */
+
+.stack-tile.html i {
     color: #e34f26;
 }
-.stack-tile:hover .fa-html5 {
+.stack-tile.html:hover {
+    border-color: #d3421e3a;
+    background: #fce8e0;
+    box-shadow: 0 16px 48px rgba(227, 79, 38, 0.20), 0 4px 16px rgba(227, 79, 38, 0.08);
+}
+.stack-tile.html:hover i {
     color: #d3431e;
-    filter: drop-shadow(0 4px 12px rgba(227, 79, 38, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(227, 79, 38, 0.4));
+}
+.stack-tile.html:hover .stack-tile-name {
+    color: #e34f26;
 }
 
-.stack-tile .fa-css3-alt {
+/* CSS3 - Blue */
+.stack-tile.css i {
     color: #1572b6;
 }
-.stack-tile:hover .fa-css3-alt {
+.stack-tile.css:hover {
+    border-color: #0f69a157;
+    background: #e0efff;
+    box-shadow: 0 16px 48px rgba(21, 114, 182, 0.20), 0 4px 16px rgba(21, 114, 182, 0.08);
+}
+.stack-tile.css:hover i {
     color: #0f6aa1;
-    filter: drop-shadow(0 4px 12px rgba(21, 114, 182, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(21, 114, 182, 0.4));
+}
+.stack-tile.css:hover .stack-tile-name {
+    color: #1572b6;
 }
 
-.stack-tile .fa-js {
+/* JavaScript - Yellow */
+.stack-tile.js i {
     color: #d6b800;
 }
-.stack-tile:hover .fa-js {
+.stack-tile.js:hover {
+    border-color: #c0a60056;
+    background:  #fffad0;
+    box-shadow: 0 16px 48px rgba(214, 184, 0, 0.20), 0 4px 16px rgba(214, 184, 0, 0.08);
+}
+.stack-tile.js:hover i {
     color: #c0a500;
-    filter: drop-shadow(0 4px 12px rgba(214, 184, 0, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(214, 184, 0, 0.4));
+}
+.stack-tile.js:hover .stack-tile-name {
+    color: #d6b800;
 }
 
-.stack-tile .fa-react {
+/* React - Cyan/Teal */
+.stack-tile.react i {
     color: #149eca;
 }
-.stack-tile:hover .fa-react {
+.stack-tile.react:hover {
+    border-color: #0e87b352;
+    background:  #daf0fb;
+    box-shadow: 0 16px 48px rgba(20, 158, 202, 0.20), 0 4px 16px rgba(20, 158, 202, 0.08);
+}
+.stack-tile.react:hover i {
     color: #0e86b3;
-    filter: drop-shadow(0 4px 12px rgba(20, 158, 202, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(20, 158, 202, 0.4));
+}
+.stack-tile.react:hover .stack-tile-name {
+    color: #149eca;
 }
 
-.stack-tile .fa-database {
-    color: var(--primary);
+/* SQL - Primary Blue */
+.stack-tile.sql i {
+    color: #0066cc;
 }
-.stack-tile:hover .fa-database {
+.stack-tile.sql:hover {
+    border-color: #0052a54f;
+    background: #d4e4f5;
+    box-shadow: 0 16px 48px rgba(0, 102, 204, 0.20), 0 4px 16px rgba(0, 102, 204, 0.08);
+}
+.stack-tile.sql:hover i {
     color: #0052a5;
-    filter: drop-shadow(0 4px 12px rgba(0, 102, 204, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(0, 102, 204, 0.4));
+}
+.stack-tile.sql:hover .stack-tile-name {
+    color: #0066cc;
 }
 
-.stack-tile .fa-java {
+/* C# - Purple */
+.stack-tile.csharp i {
+    color: #178600;
+}
+.stack-tile.csharp:hover {
+    border-color: #0e6a004b;
+    background: #daf0d0;
+    box-shadow: 0 16px 48px rgba(23, 134, 0, 0.20), 0 4px 16px rgba(23, 134, 0, 0.08);
+}
+.stack-tile.csharp:hover i {
+    color: #0f6a00;
+    filter: drop-shadow(0 4px 20px rgba(23, 134, 0, 0.4));
+}
+.stack-tile.csharp:hover .stack-tile-name {
+    color: #178600;
+}
+
+/* Java - Orange/Brown */
+.stack-tile.java i {
     color: #d6822a;
 }
-.stack-tile:hover .fa-java {
+.stack-tile.java:hover {
+    border-color: #c0751f50;
+    background: #fce8d4;
+    box-shadow: 0 16px 48px rgba(214, 130, 42, 0.20), 0 4px 16px rgba(214, 130, 42, 0.08);
+}
+.stack-tile.java:hover i {
     color: #c0741f;
-    filter: drop-shadow(0 4px 12px rgba(214, 130, 42, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(214, 130, 42, 0.4));
+}
+.stack-tile.java:hover .stack-tile-name {
+    color: #d6822a;
 }
 
-.stack-tile .fa-php {
+/* PHP - Purple/Blue */
+.stack-tile.php i {
     color: #777bb4;
 }
-.stack-tile:hover .fa-php {
+.stack-tile.php:hover {
+    border-color: #6368a348;
+    background: #e8e6f5;
+    box-shadow: 0 16px 48px rgba(119, 123, 180, 0.20), 0 4px 16px rgba(119, 123, 180, 0.08);
+}
+.stack-tile.php:hover i {
     color: #6368a3;
-    filter: drop-shadow(0 4px 12px rgba(119, 123, 180, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(119, 123, 180, 0.4));
+}
+.stack-tile.php:hover .stack-tile-name {
+    color: #777bb4;
 }
 
-.stack-tile .fa-python {
+/* Python - Blue */
+.stack-tile.python i {
     color: #3776ab;
 }
-.stack-tile:hover .fa-python {
+.stack-tile.python:hover {
+    border-color: #2b65944f;
+    background: #dce8f2;
+    box-shadow: 0 16px 48px rgba(55, 118, 171, 0.20), 0 4px 16px rgba(55, 118, 171, 0.08);
+}
+.stack-tile.python:hover i {
     color: #2b6594;
-    filter: drop-shadow(0 4px 12px rgba(55, 118, 171, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(55, 118, 171, 0.4));
+}
+.stack-tile.python:hover .stack-tile-name {
+    color: #3776ab;
 }
 
-.stack-tile .fa-code {
-    color: var(--primary-dark);
+/* Code (C# generic) - Dark Blue */
+.stack-tile.code i {
+    color: #003366;
 }
-.stack-tile:hover .fa-code {
-    color: #003d80;
-    filter: drop-shadow(0 4px 12px rgba(0, 77, 153, 0.35));
+.stack-tile.code:hover {
+    border-color: #00224446;
+    background: #d4dce8;
+    box-shadow: 0 16px 48px rgba(0, 51, 102, 0.20), 0 4px 16px rgba(0, 51, 102, 0.08);
+}
+.stack-tile.code:hover i {
+    color: #002244;
+    filter: drop-shadow(0 4px 20px rgba(0, 51, 102, 0.4));
+}
+.stack-tile.code:hover .stack-tile-name {
+    color: #003366;
 }
 
-.stack-tile .fa-node-js {
+/* Node.js - Green */
+.stack-tile.node i {
     color: #3c873a;
 }
-.stack-tile:hover .fa-node-js {
+.stack-tile.node:hover {
+    border-color: #2f702d31;
+    background: #dcecd9;
+    box-shadow: 0 16px 48px rgba(60, 135, 58, 0.20), 0 4px 16px rgba(60, 135, 58, 0.08);
+}
+.stack-tile.node:hover i {
     color: #2f702d;
-    filter: drop-shadow(0 4px 12px rgba(60, 135, 58, 0.35));
+    filter: drop-shadow(0 4px 20px rgba(60, 135, 58, 0.4));
+}
+.stack-tile.node:hover .stack-tile-name {
+    color: #3c873a;
 }
 
-@media (max-width: 640px) {
+/* Responsive */
+@media (max-width: 1024px) {
+    .stack-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (max-width: 768px) {
     .stack-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
     }
     .stack-tile i {
-        font-size: 1.7rem;
+        font-size: 2rem;
     }
     .stack-tile-name {
         font-size: 0.62rem;
-        bottom: 10px;
     }
     .stack-intro {
         font-size: 0.95rem;
-        margin-bottom: 28px;
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stack-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .stack-tile {
+        aspect-ratio: 1 / 1;
+        padding: 12px;
+        border-radius: var(--r-md);
+    }
+    .stack-tile i {
+        font-size: 1.8rem;
+    }
+    .stack-tile-name {
+        font-size: 0.55rem;
+    }
+    .stack-section {
+        padding: 48px 0;
     }
 }
 

@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===== TAB 2: PROJECT FORM - SAVES TO DATABASE VIA API =====
+    // ===== TAB 2: PROJECT FORM - Sends to Formspree with proper labels =====
     (function initProjectForm() {
         const projectForm = document.getElementById('projectForm');
         if (!projectForm) return;
@@ -681,13 +681,13 @@ document.addEventListener('DOMContentLoaded', function () {
         function initOptions() {
             if (budgetSelect) {
                 budgetUnder5k = budgetSelect.querySelector('#budget-under-5k') || 
-                               Array.from(budgetSelect.options).find(opt => opt.value === 'under-5k');
+                               Array.from(budgetSelect.options).find(opt => opt.value === 'Under R5,000');
             }
             if (timelineSelect) {
                 timelineUrgent = timelineSelect.querySelector('#timeline-urgent') || 
-                                Array.from(timelineSelect.options).find(opt => opt.value === 'urgent');
+                                Array.from(timelineSelect.options).find(opt => opt.value === 'Urgent (Within 2 weeks)');
                 timelineFlexible = timelineSelect.querySelector('#timeline-flexible') || 
-                                  Array.from(timelineSelect.options).find(opt => opt.value === 'flexible');
+                                  Array.from(timelineSelect.options).find(opt => opt.value === 'Flexible');
             }
         }
 
@@ -707,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     budgetUnder5k.disabled = true;
                     budgetUnder5k.classList.add('greyed-out');
                     budgetUnder5k.textContent = '⛔ Under R5,000 (not available)';
-                    if (budgetSelect.value === 'under-5k') {
+                    if (budgetSelect.value === 'Under R5,000') {
                         budgetSelect.value = '';
                     }
                 }
@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     timelineUrgent.disabled = true;
                     timelineUrgent.classList.add('greyed-out');
                     timelineUrgent.textContent = '⛔ Urgent (not available)';
-                    if (timelineSelect.value === 'urgent') {
+                    if (timelineSelect.value === 'Urgent (Within 2 weeks)') {
                         timelineSelect.value = '';
                     }
                 }
@@ -725,7 +725,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     timelineFlexible.disabled = true;
                     timelineFlexible.classList.add('greyed-out');
                     timelineFlexible.textContent = '⛔ Flexible (not available)';
-                    if (timelineSelect.value === 'flexible') {
+                    if (timelineSelect.value === 'Flexible') {
                         timelineSelect.value = '';
                     }
                 }
@@ -785,6 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // File upload handling
         const fileInput = document.getElementById('pf-assets');
         const fileList = document.getElementById('fileList');
+        const agreeCheckbox = document.getElementById('pf-agree');
         const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
         const ALLOWED_TYPES = [
             'application/pdf',
@@ -799,9 +800,23 @@ document.addEventListener('DOMContentLoaded', function () {
             'application/x-rar'
         ];
 
-        if (fileInput && fileList) {
-            let selectedFiles = [];
+        let selectedFiles = [];
 
+        // Track if files are selected
+        function hasFilesSelected() {
+            return selectedFiles.length > 0;
+        }
+
+        // Update checkbox requirement based on files
+        function updateCheckboxRequirement() {
+            if (!agreeCheckbox) return;
+            const hasFiles = hasFilesSelected();
+            // We don't make it required in HTML, but we'll validate in JS
+            // Just add a data attribute for validation
+            agreeCheckbox.dataset.requiredWhenFiles = hasFiles ? 'true' : 'false';
+        }
+
+        if (fileInput && fileList) {
             fileInput.addEventListener('change', function (e) {
                 const files = Array.from(e.target.files || []);
                 files.forEach(file => {
@@ -820,6 +835,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 renderFileList();
                 fileInput.value = '';
+                updateCheckboxRequirement();
             });
 
             function renderFileList() {
@@ -844,6 +860,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const index = parseInt(this.dataset.index);
                         selectedFiles.splice(index, 1);
                         renderFileList();
+                        updateCheckboxRequirement();
                     });
                 });
             }
@@ -880,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return div.innerHTML;
         }
 
-        // ===== PROJECT FORM SUBMISSION - Saves to DATABASE via API =====
+        // ===== PROJECT FORM SUBMISSION - Sends to Formspree =====
         projectForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -926,7 +943,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Check if any greyed-out options are still selected
-            if (budgetSelect && budgetUnder5k && budgetUnder5k.disabled && budgetSelect.value === 'under-5k') {
+            if (budgetSelect && budgetUnder5k && budgetUnder5k.disabled && budgetSelect.value === 'Under R5,000') {
                 budgetSelect.classList.add('error');
                 valid = false;
                 const parent = budgetSelect.parentElement;
@@ -940,7 +957,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (timelineSelect) {
-                if (timelineUrgent && timelineUrgent.disabled && timelineSelect.value === 'urgent') {
+                if (timelineUrgent && timelineUrgent.disabled && timelineSelect.value === 'Urgent (Within 2 weeks)') {
                     timelineSelect.classList.add('error');
                     valid = false;
                     const parent = timelineSelect.parentElement;
@@ -952,7 +969,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         parent.appendChild(error);
                     }
                 }
-                if (timelineFlexible && timelineFlexible.disabled && timelineSelect.value === 'flexible') {
+                if (timelineFlexible && timelineFlexible.disabled && timelineSelect.value === 'Flexible') {
                     timelineSelect.classList.add('error');
                     valid = false;
                     const parent = timelineSelect.parentElement;
@@ -964,6 +981,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         parent.appendChild(error);
                     }
                 }
+            }
+
+            // NEW: Check if files are selected and checkbox is NOT checked
+            if (hasFilesSelected() && agreeCheckbox && !agreeCheckbox.checked) {
+                agreeCheckbox.classList.add('error');
+                const parent = agreeCheckbox.parentElement;
+                let error = parent.querySelector('.field-error');
+                if (!error) {
+                    error = document.createElement('span');
+                    error.className = 'field-error';
+                    error.textContent = 'Please agree to the data storage terms before uploading files';
+                    parent.appendChild(error);
+                }
+                valid = false;
+            } else if (agreeCheckbox) {
+                agreeCheckbox.classList.remove('error');
+                const error = agreeCheckbox.parentElement.querySelector('.field-error');
+                if (error) error.remove();
             }
 
             if (!valid) {
@@ -981,33 +1016,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Get form data
                 const formData = new FormData(this);
                 
-                // Prepare data for API
-                const projectData = {
-                    name: formData.get('name') || '',
-                    email: formData.get('email') || '',
-                    phone: formData.get('phone') || '',
-                    projectName: formData.get('projectName') || '',
-                    projectType: formData.get('projectType') || '',
-                    description: formData.get('description') || '',
-                    budget: formData.get('budget') || '',
-                    timeline: formData.get('timeline') || '',
-                    status: 'new'
-                };
+                // Add file count info
+                if (hasFilesSelected()) {
+                    formData.append('Number of Files Uploaded', selectedFiles.length + ' files');
+                    // Add file names as a comma-separated list
+                    const fileNames = selectedFiles.map(f => f.name).join(', ');
+                    formData.append('Uploaded Files', fileNames);
+                }
 
-                console.log('📤 Submitting project to database:', projectData);
+                console.log('📤 Submitting project to Formspree...');
 
-                // Send to API
-                const response = await fetch('api/submit_project.php', {
+                // Send to Formspree
+                const response = await fetch(this.action, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(projectData)
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
                 });
 
-                const result = await response.json();
-
-                if (result.success) {
+                if (response.ok) {
                     showAlert('✅ Your project brief has been submitted! We\'ll be in touch within 24 hours.', 'success');
                     this.reset();
                     
@@ -1015,13 +1041,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     const fileList = document.getElementById('fileList');
                     if (fileList) fileList.innerHTML = '';
                     if (fileInput) fileInput.value = '';
+                    selectedFiles = [];
+                    updateCheckboxRequirement();
                     
                     // Reset restrictions
                     resetOptions();
                     
-                    console.log('✅ Project saved to database! ID:', result.project_id);
+                    console.log('✅ Project submitted successfully!');
                 } else {
-                    throw new Error(result.message || 'Failed to submit project');
+                    const result = await response.json().catch(() => ({}));
+                    const msg = (result.errors && result.errors.map(e => e.message).join(', ')) || 'Failed to submit project';
+                    throw new Error(msg);
                 }
 
             } catch (error) {
@@ -1050,6 +1080,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
+
+        // Real-time checkbox validation removal
+        if (agreeCheckbox) {
+            agreeCheckbox.addEventListener('change', function () {
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const error = this.parentElement.querySelector('.field-error');
+                    if (error) error.remove();
+                }
+            });
+        }
     })();
 
     // ===== CONTACT TAB SWITCHING =====
@@ -1241,12 +1282,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    // ===== ANIMATE ON DISPLAY - Enhanced with direction support =====
+    // ===== ANIMATE ON DISPLAY - Fixed with proper delays =====
     (function initAOD() {
         const aodElements = document.querySelectorAll('[data-aod]');
         if (!aodElements.length) return;
 
-        // Set initial states based on direction
+        // Set initial states
         aodElements.forEach(el => {
             const dir = el.dataset.aodDir || 'up';
             const delay = parseInt(el.dataset.aodDelay || 0);
@@ -1270,59 +1311,81 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
             
-            // Apply delay if not already set
+            el.style.opacity = '0';
+            
+            // Store the delay for later use
             if (delay > 0) {
-                el.style.transitionDelay = delay + 'ms';
+                el.dataset._delay = delay;
             }
         });
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const delay = parseInt(el.dataset.aodDelay || 0);
+        // Check if element is in viewport
+        function isInViewport(el, threshold = 0.1) {
+            const rect = el.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+            
+            const vertInView = rect.top <= windowHeight - (rect.height * threshold) && rect.bottom >= 0;
+            const horInView = rect.left <= windowWidth && rect.right >= 0;
+            
+            return vertInView && horInView;
+        }
+
+        // Reveal elements that are in viewport
+        function revealInView() {
+            aodElements.forEach(el => {
+                if (el.classList.contains('aod-in')) return;
+                
+                if (isInViewport(el, 0.08)) {
+                    const delay = parseInt(el.dataset._delay || 0);
                     
                     setTimeout(() => {
                         el.classList.add('aod-in');
-                        // Clear inline transform after animation
+                        // Clear inline styles after animation
                         setTimeout(() => {
                             el.style.transform = '';
+                            el.style.opacity = '';
                             el.style.transitionDelay = '';
                         }, 800);
                     }, delay);
-                    
-                    observer.unobserve(el);
-                }
-            });
-        }, { 
-            threshold: 0.08, 
-            rootMargin: '0px 0px -50px 0px' 
-        });
-
-        aodElements.forEach(el => observer.observe(el));
-
-        // Fallback: reveal any visible elements on load
-        function revealVisible() {
-            document.querySelectorAll('[data-aod]:not(.aod-in)').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const threshold = window.innerHeight * 0.85;
-                if (rect.top < threshold) {
-                    const delay = parseInt(el.dataset.aodDelay || 0);
-                    setTimeout(() => {
-                        el.classList.add('aod-in');
-                        setTimeout(() => {
-                            el.style.transform = '';
-                            el.style.transitionDelay = '';
-                        }, 800);
-                    }, delay);
-                    observer.unobserve(el);
                 }
             });
         }
-        
-        window.addEventListener('scroll', () => requestAnimationFrame(revealVisible), { passive: true });
-        window.addEventListener('resize', revealVisible);
-        setTimeout(revealVisible, 200);
+
+        // Initial reveal
+        setTimeout(revealInView, 100);
+
+        // Throttled scroll handler
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) return;
+            scrollTimeout = setTimeout(() => {
+                requestAnimationFrame(revealInView);
+                scrollTimeout = null;
+            }, 10);
+        }, { passive: true });
+
+        // Also check on resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                requestAnimationFrame(revealInView);
+            }, 200);
+        }, { passive: true });
+
+        // Force check after fonts and images load
+        window.addEventListener('load', () => {
+            setTimeout(revealInView, 500);
+        });
+
+        // Observe DOM changes
+        if (window.MutationObserver) {
+            const observer = new MutationObserver(() => {
+                requestAnimationFrame(revealInView);
+            });
+            observer.observe(document.body, { childList: true, subtree: true, attributes: false });
+        }
     })();
 
     // ===== SET CURRENT YEAR =====

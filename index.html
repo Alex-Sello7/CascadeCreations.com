@@ -97,6 +97,8 @@
                 background: #ffffff;
                 color: var(--ink);
                 line-height: 1.55;
+                overflow-x: hidden;
+                width: 100%;
             }
             .loading-screen {
                 position: fixed;
@@ -132,6 +134,21 @@
             }
             .form-row select option.greyed-out::before {
                 content: "⛔ ";
+            }
+
+            /* Container fix for mobile */
+            .container {
+                max-width: 1440px;
+                margin: 0 auto;
+                padding: 0 24px;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            @media (max-width: 640px) {
+                .container {
+                    padding: 0 16px;
+                }
             }
         </style>
 
@@ -327,7 +344,8 @@
             <!-- ============ SOLUTIONS CAROUSEL ============ -->
             <section id="solutions" class="solutions-section">
                 <div class="container">
-                    <div class="section-header section-header--split" data-aod>
+                    <div class="section-header section-header--split" data-aod
+                        data-aod-delay="0">
                         <div>
                             <span class="section-eyebrow">What we build</span>
                             <h2 class="section-title">Solutions, end to end</h2>
@@ -339,8 +357,8 @@
                             project <i class="fas fa-arrow-right"></i></a>
                     </div>
 
-                    <div class="solutions-track"  id="solutionsTrack">
-                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="0">
+                    <div class="solutions-track" id="solutionsTrack">
+                        <div class="solution-card" data-aod data-aod-delay="80">
                             <div class="solution-visual sv-1">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -363,7 +381,8 @@
                             </div>
                         </div>
 
-                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="100">
+                        <div class="solution-card" data-aod
+                            data-aod-delay="160">
                             <div class="solution-visual sv-5">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -386,7 +405,8 @@
                             </div>
                         </div>
 
-                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="200">
+                        <div class="solution-card" data-aod
+                            data-aod-delay="240">
                             <div class="solution-visual sv-3">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -407,7 +427,7 @@
                             </div>
                         </div>
 
-                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="0">
+                        <div class="solution-card" data-aod data-aod-delay="80">
                             <div class="solution-visual sv-2">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -428,7 +448,8 @@
                             </div>
                         </div>
 
-                        <div class="solution-card" data-aod data-aod-dir ="up-scale" data-aod-delay="80">
+                        <div class="solution-card" data-aod
+                            data-aod-delay="160">
                             <div class="solution-visual sv-4">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -449,7 +470,8 @@
                             </div>
                         </div>
 
-                        <div class="solution-card">
+                        <div class="solution-card" data-aod
+                            data-aod-delay="240">
                             <div class="solution-visual sv-6">
                                 <div
                                     class="browser-chrome"><span></span><span></span><span></span></div>
@@ -476,7 +498,7 @@
             <!-- ============ CAPABILITY MOSAIC ============ -->
             <section id="capabilities" class="mosaic-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">How we work</span>
                         <h2 class="section-title">One team, every layer of the
                             build</h2>
@@ -487,35 +509,30 @@
 
                     <div class="mosaic-grid">
                         <div class="mosaic-tile mosaic-tile--1" data-aod
-                            data-aod-delay="0">
-
+                            data-aod-delay="80">
                             <h3>Front to back, under one roof</h3>
                             <p>Interfaces, APIs, and databases designed together
                                 from day one — not bolted on afterwards.</p>
                         </div>
                         <div class="mosaic-tile mosaic-tile--2" data-aod
-                            data-aod-delay="80">
-
+                            data-aod-delay="160">
                             <h3>Built to hold up</h3>
                             <p>Secure, well-structured code that's easy to
                                 maintain and extend as your needs change.</p>
                         </div>
                         <div class="mosaic-tile mosaic-tile--3" data-aod
-                            data-aod-delay="160">
-
+                            data-aod-delay="240">
                             <h3>Performance first</h3>
                             <p>Fast load times, by default.</p>
                         </div>
                         <div class="mosaic-tile mosaic-tile--4" data-aod
-                            data-aod-delay="240">
-
+                            data-aod-delay="320">
                             <h3>Data done right</h3>
                             <p>Reporting stays accurate as you scale.</p>
                         </div>
                     </div>
                     <div class="mosaic-band mosaic-tile--5" data-aod
-                        data-aod-delay="320">
-
+                        data-aod-delay="120">
                         <div class="mosaic-band-copy">
                             <h3>Direct collaboration</h3>
                             <p>You work with the people actually building your
@@ -528,75 +545,97 @@
             <!-- ============ TECH STACK STRIP ============ -->
             <section class="stack-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">Technology</span>
                         <h2 class="section-title">The stack behind it</h2>
                     </div>
-                    <p class="stack-intro" data-aod>
+                    <p class="stack-intro" data-aod data-aod-delay="80">
                         <strong>Tools we lean on</strong> — a carefully chosen
                         set of technologies that we use daily to bring your
                         ideas to life. From front-end frameworks to back-end
                         logic and databases, we pick what's right for the job.
                     </p>
-                    <div class="stack-grid" data-aod>
-                        <div class="stack-tile"><i
-                                class="fab fa-html5"></i><span
-                                class="stack-tile-name">HTML5</span></div>
-                        <div class="stack-tile"><i
-                                class="fab fa-css3-alt"></i><span
-                                class="stack-tile-name">CSS3</span></div>
-                        <div class="stack-tile"><i class="fab fa-js"></i><span
-                                class="stack-tile-name">JavaScript</span></div>
-                        <div class="stack-tile"><i
-                                class="fab fa-react"></i><span
-                                class="stack-tile-name">React.js</span></div>
-                        <div class="stack-tile"><i
-                                class="fas fa-database"></i><span
-                                class="stack-tile-name">SQL</span></div>
-                        <div class="stack-tile"><i class="fas fa-code"></i><span
-                                class="stack-tile-name">C#</span></div>
-                        <div class="stack-tile"><i class="fab fa-java"></i><span
-                                class="stack-tile-name">Java</span></div>
-                        <div class="stack-tile"><i class="fab fa-php"></i><span
-                                class="stack-tile-name">PHP</span></div>
-                        <div class="stack-tile"><i
-                                class="fab fa-python"></i><span
-                                class="stack-tile-name">Python</span></div>
-                        <div class="stack-tile"><i
-                                class="fab fa-node-js"></i><span
-                                class="stack-tile-name">Node.js</span></div>
+                    <div class="stack-grid">
+                        <div class="stack-tile html" data-aod
+                            data-aod-delay="0">
+                            <i class="fab fa-html5"></i>
+                            <span class="stack-tile-name">HTML5</span>
+                        </div>
+                        <div class="stack-tile css" data-aod
+                            data-aod-delay="40">
+                            <i class="fab fa-css3-alt"></i>
+                            <span class="stack-tile-name">CSS3</span>
+                        </div>
+                        <div class="stack-tile js" data-aod data-aod-delay="80">
+                            <i class="fab fa-js"></i>
+                            <span class="stack-tile-name">JavaScript</span>
+                        </div>
+                        <div class="stack-tile react" data-aod
+                            data-aod-delay="120">
+                            <i class="fab fa-react"></i>
+                            <span class="stack-tile-name">React.js</span>
+                        </div>
+                        <div class="stack-tile sql" data-aod
+                            data-aod-delay="160">
+                            <i class="fas fa-database"></i>
+                            <span class="stack-tile-name">SQL</span>
+                        </div>
+                        <div class="stack-tile csharp" data-aod
+                            data-aod-delay="200">
+                            <i class="fas fa-code"></i>
+                            <span class="stack-tile-name">C#</span>
+                        </div>
+                        <div class="stack-tile java" data-aod
+                            data-aod-delay="240">
+                            <i class="fab fa-java"></i>
+                            <span class="stack-tile-name">Java</span>
+                        </div>
+                        <div class="stack-tile php" data-aod
+                            data-aod-delay="280">
+                            <i class="fab fa-php"></i>
+                            <span class="stack-tile-name">PHP</span>
+                        </div>
+                        <div class="stack-tile python" data-aod
+                            data-aod-delay="320">
+                            <i class="fab fa-python"></i>
+                            <span class="stack-tile-name">Python</span>
+                        </div>
+                        <div class="stack-tile node" data-aod
+                            data-aod-delay="360">
+                            <i class="fab fa-node-js"></i>
+                            <span class="stack-tile-name">Node.js</span>
+                        </div>
                     </div>
                 </div>
             </section>
-
             <!-- ============ PROCESS ============ -->
             <section id="process" class="process-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">The process</span>
                         <h2 class="section-title">From idea to launch, in four
                             stages</h2>
                     </div>
                     <div class="process-grid">
-                        <div class="process-card" data-aod data-aod-delay="0">
+                        <div class="process-card" data-aod data-aod-delay="80">
                             <div class="process-step-num">STAGE 1</div>
                             <h3>Discover</h3>
                             <p>We map out what you need, who it's for, and what
                                 success looks like.</p>
                         </div>
-                        <div class="process-card" data-aod data-aod-delay="80">
+                        <div class="process-card" data-aod data-aod-delay="160">
                             <div class="process-step-num">STAGE 2</div>
                             <h3>Design</h3>
                             <p>Wireframes and visuals take shape, refined with
                                 your input before a line of code is written.</p>
                         </div>
-                        <div class="process-card" data-aod data-aod-delay="160">
+                        <div class="process-card" data-aod data-aod-delay="240">
                             <div class="process-step-num">STAGE 3</div>
                             <h3>Build</h3>
                             <p>Front end, back end, and database come together —
                                 tested as we go, not just at the end.</p>
                         </div>
-                        <div class="process-card" data-aod data-aod-delay="240">
+                        <div class="process-card" data-aod data-aod-delay="320">
                             <div class="process-step-num">STAGE 4</div>
                             <h3>Launch & Support</h3>
                             <p>We deploy, monitor, and stay on hand for updates
@@ -609,10 +648,11 @@
             <!-- ============ CTA BAND ============ -->
             <section class="cta-band">
                 <div class="container">
-                    <h2>Have a project in mind?</h2>
-                    <p>Tell us what you're trying to build — we'll help you
+                    <h2 data-aod data-aod-delay="0">Have a project in mind?</h2>
+                    <p data-aod data-aod-delay="80">Tell us what you're trying
+                        to build — we'll help you
                         figure out how to get there.</p>
-                    <div class="cta-actions">
+                    <div class="cta-actions" data-aod data-aod-delay="160">
                         <a href="#contact" class="btn btn-primary">Get in
                             touch</a>
                         <a href="#work" class="btn btn-outline-light">View our
@@ -624,14 +664,14 @@
             <!-- ============ WHY US — FEATURE ROWS ============ -->
             <section id="why-us" class="features-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">Why Cascade
                             Creations</span>
                         <h2 class="section-title">What you can expect, every
                             time</h2>
                     </div>
 
-                    <div class="feature-row" data-aod data-aod-dir="left">
+                    <div class="feature-row" data-aod data-aod-delay="80">
                         <div class="feature-visual fv-1"><img
                                 src="imgs/webdesign.webp" alt="Design"
                                 width="560" height="420"
@@ -655,7 +695,8 @@
                         </div>
                     </div>
 
-                    <div class="feature-row reverse" data-aod data-aod-dir="right">
+                    <div class="feature-row reverse" data-aod
+                        data-aod-delay="80">
                         <div class="feature-visual fv-2"><img
                                 src="imgs/webperfomanca.png" alt="Performance"
                                 width="560" height="420"
@@ -676,7 +717,7 @@
                         </div>
                     </div>
 
-                    <div class="feature-row" data-aod>
+                    <div class="feature-row" data-aod data-aod-delay="80">
                         <div class="feature-visual fv-3"><img
                                 src="imgs/webcolab.jpg" alt="Collaboration"
                                 width="560" height="420"
@@ -707,7 +748,7 @@
                     style="background-image:url('imgs/madid.jpg')"></div>
                 <div class="work-bg-overlay"></div>
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">What we did so far</span>
                         <h2 class="section-title">Projects we're proud of</h2>
                         <p class="section-description">A selection of real
@@ -716,7 +757,8 @@
                             live site.</p>
                     </div>
 
-                    <div class="work-filters" id="workFilters" data-aod>
+                    <div class="work-filters" id="workFilters" data-aod
+                        data-aod-delay="80">
                         <button class="work-filter is-active"
                             data-filter="all">All projects</button>
                         <button class="work-filter" data-filter="web">Web
@@ -732,7 +774,8 @@
                     <div class="work-list" id="workList">
                         <div class="work-banner is-active" tabindex="0"
                             role="button" aria-expanded="true"
-                            data-bg="imgs/madid.jpg" data-category="web">
+                            data-bg="imgs/madid.jpg" data-category="web"
+                            data-aod data-aod-delay="120">
                             <div class="work-banner-main">
                                 <span class="work-banner-tag"><span
                                         class="sw"></span> Revamp Concept</span>
@@ -772,7 +815,8 @@
 
                         <div class="work-banner" tabindex="0" role="button"
                             aria-expanded="false" data-bg="imgs/ousadia.png"
-                            data-category="branding">
+                            data-category="branding" data-aod
+                            data-aod-delay="160">
                             <div class="work-banner-main">
                                 <span class="work-banner-tag"><span
                                         class="sw"></span> Full Build</span>
@@ -812,7 +856,8 @@
 
                         <div class="work-banner" tabindex="0" role="button"
                             aria-expanded="false" data-bg="imgs/hero1.jpg"
-                            data-category="construction">
+                            data-category="construction" data-aod
+                            data-aod-delay="200">
                             <div class="work-banner-main">
                                 <span
                                     class="work-banner-tag work-banner-tag--amber"><span
@@ -856,7 +901,8 @@
                         <div class="work-banner" tabindex="0" role="button"
                             aria-expanded="false"
                             data-bg="imgs/herosectionimg.jpg"
-                            data-category="construction">
+                            data-category="construction" data-aod
+                            data-aod-delay="240">
                             <div class="work-banner-main">
                                 <span
                                     class="work-banner-tag work-banner-tag--amber"><span
@@ -906,7 +952,8 @@
 
                         <div class="work-banner" tabindex="0" role="button"
                             aria-expanded="false" data-bg="imgs/about1.jpg"
-                            data-category="revamp">
+                            data-category="revamp" data-aod
+                            data-aod-delay="280">
                             <div class="work-banner-main">
                                 <span
                                     class="work-banner-tag work-banner-tag--green"><span
@@ -956,7 +1003,7 @@
             <!-- ============ TESTIMONIALS ============ -->
             <section class="testimonials-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">What clients say</span>
                         <h2 class="section-title">Feedback from people we've
                             built for</h2>
@@ -964,7 +1011,8 @@
                 </div>
                 <div class="testimonial-marquee">
                     <div class="testimonial-track" id="testimonialTrack">
-                        <div class="testimonial-card">
+                        <div class="testimonial-card" data-aod
+                            data-aod-delay="80">
                             <i class="fas fa-quote-left testimonial-mark"></i>
                             <p class="testimonial-quote">They translated a vague
                                 brief into a site that actually matched how our
@@ -979,7 +1027,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="testimonial-card">
+                        <div class="testimonial-card" data-aod
+                            data-aod-delay="160">
                             <i class="fas fa-quote-left testimonial-mark"></i>
                             <p class="testimonial-quote">The website looks like
                                 it
@@ -995,7 +1044,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="testimonial-card">
+                        <div class="testimonial-card" data-aod
+                            data-aod-delay="240">
                             <i class="fas fa-quote-left testimonial-mark"></i>
                             <p class="testimonial-quote">Revamping a
                                 five-year-old site usually means starting from
@@ -1062,7 +1112,7 @@
             <!-- ============ CONTACT ============ -->
             <section id="contact" class="contact-section">
                 <div class="container">
-                    <div class="section-header" data-aod>
+                    <div class="section-header" data-aod data-aod-delay="0">
                         <span class="section-eyebrow">Get in touch</span>
                         <h2 class="section-title">Tell us about your
                             project</h2>
@@ -1072,7 +1122,7 @@
                     </div>
 
                     <!-- Contact Tabs -->
-                    <div class="contact-tabs" data-aod>
+                    <div class="contact-tabs" data-aod data-aod-delay="80">
                         <div class="contact-tab-headers">
                             <button class="contact-tab-btn is-active"
                                 data-tab="general">
@@ -1089,7 +1139,7 @@
                                 id="tab-general">
                                 <div class="contact-grid">
                                     <div class="contact-form" data-aod
-                                        data-aod-dir="left">
+                                        data-aod-delay="120">
                                         <form id="contactForm"
                                             action="https://formspree.io/f/xjknerpq"
                                             method="POST">
@@ -1137,7 +1187,7 @@
                                         </form>
                                     </div>
                                     <div class="contact-info-list" data-aod
-                                        data-aod-dir="right">
+                                        data-aod-delay="160">
                                         <div class="contact-info-card">
                                             <span class="contact-info-icon"><i
                                                     class="fas fa-map-marker-alt"></i></span>
@@ -1183,19 +1233,27 @@
                             <div class="contact-tab-panel" id="tab-project">
                                 <div class="contact-grid">
                                     <div class="contact-form" data-aod
-                                        data-aod-dir="left">
+                                        data-aod-delay="120">
                                         <form id="projectForm"
-                                            action="api/submit_project.php"
+                                            action="https://formspree.io/f/xjknerpq"
                                             method="POST"
                                             enctype="multipart/form-data"
                                             novalidate>
+                                            <!-- Formspree hidden fields -->
+                                            <input type="hidden" name="_subject"
+                                                value="New Project Brief from Cascade Creations">
+                                            <input type="text" name="_gotcha"
+                                                style="display:none"
+                                                tabindex="-1"
+                                                autocomplete="off">
+
                                             <!-- Personal Details -->
                                             <div class="form-row">
                                                 <label for="pf-name">Full Name
                                                     <span
                                                         class="required">*</span></label>
                                                 <input type="text" id="pf-name"
-                                                    name="name"
+                                                    name="Full Name"
                                                     placeholder="Your full name"
                                                     required>
                                             </div>
@@ -1205,7 +1263,7 @@
                                                     Address <span
                                                         class="required">*</span></label>
                                                 <input type="email"
-                                                    id="pf-email" name="email"
+                                                    id="pf-email" name="Email"
                                                     placeholder="you@example.com"
                                                     required>
                                             </div>
@@ -1214,7 +1272,7 @@
                                                 <label for="pf-phone">Phone
                                                     Number</label>
                                                 <input type="tel" id="pf-phone"
-                                                    name="phone"
+                                                    name="Phone"
                                                     placeholder="+27 00 000 0000">
                                             </div>
 
@@ -1228,7 +1286,7 @@
                                                         class="required">*</span></label>
                                                 <input type="text"
                                                     id="pf-project-name"
-                                                    name="projectName"
+                                                    name="Project Name"
                                                     placeholder="e.g., My Awesome Website"
                                                     required>
                                             </div>
@@ -1239,7 +1297,8 @@
                                                     Type <span
                                                         class="required">*</span></label>
                                                 <select id="pf-project-type"
-                                                    name="projectType" required>
+                                                    name="Project Type"
+                                                    required>
                                                     <option value>Select a
                                                         project type...</option>
                                                     <option
@@ -1272,7 +1331,8 @@
                                                     Description <span
                                                         class="required">*</span></label>
                                                 <textarea id="pf-description"
-                                                    name="description" rows="5"
+                                                    name="Project Description"
+                                                    rows="5"
                                                     placeholder="Tell us about your project — what problem are you solving? Who is it for? What features do you need?"
                                                     required></textarea>
                                             </div>
@@ -1283,53 +1343,53 @@
                                                         for="pf-budget">Budget
                                                         Range</label>
                                                     <select id="pf-budget"
-                                                        name="budget">
+                                                        name="Budget Range">
                                                         <option value>Select a
                                                             range...</option>
                                                         <option
                                                             id="budget-under-5k"
-                                                            value="under-5k">Under
+                                                            value="Under R5,000">Under
                                                             R5,000</option>
                                                         <option
-                                                            value="5k-15k">R5,000
+                                                            value="R5,000 – R15,000">R5,000
                                                             – R15,000</option>
                                                         <option
-                                                            value="15k-30k">R15,000
+                                                            value="R15,000 – R30,000">R15,000
                                                             – R30,000</option>
                                                         <option
-                                                            value="30k-50k">R30,000
+                                                            value="R30,000 – R50,000">R30,000
                                                             – R50,000</option>
                                                         <option
-                                                            value="50k-100k">R50,000
+                                                            value="R50,000 – R100,000">R50,000
                                                             – R100,000</option>
                                                         <option
-                                                            value="100k+">R100,000+</option>
+                                                            value="R100,000+">R100,000+</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-row">
                                                     <label
                                                         for="pf-timeline">Timeline</label>
                                                     <select id="pf-timeline"
-                                                        name="timeline">
+                                                        name="Timeline">
                                                         <option value>Select a
                                                             timeline...</option>
                                                         <option
                                                             id="timeline-urgent"
-                                                            value="urgent">Urgent
+                                                            value="Urgent (Within 2 weeks)">Urgent
                                                             (Within 2
                                                             weeks)</option>
                                                         <option
-                                                            value="1-month">1
+                                                            value="1 Month">1
                                                             Month</option>
                                                         <option
-                                                            value="2-3-months">2
+                                                            value="2 – 3 Months">2
                                                             – 3 Months</option>
                                                         <option
-                                                            value="3-6-months">3
+                                                            value="3 – 6 Months">3
                                                             – 6 Months</option>
                                                         <option
                                                             id="timeline-flexible"
-                                                            value="flexible">Flexible</option>
+                                                            value="Flexible">Flexible</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -1363,7 +1423,8 @@
                                             <div class="form-row">
                                                 <label class="checkbox-label">
                                                     <input type="checkbox"
-                                                        name="agree" required>
+                                                        id="pf-agree"
+                                                        name="Agree to data storage">
                                                     <span>I agree that my data
                                                         will be stored and used
                                                         to respond to my
@@ -1381,7 +1442,7 @@
                                         </form>
                                     </div>
                                     <div class="contact-info-list" data-aod
-                                        data-aod-dir="right">
+                                        data-aod-delay="160">
                                         <div class="contact-info-card">
                                             <span class="contact-info-icon"><i
                                                     class="fas fa-file-alt"></i></span>
